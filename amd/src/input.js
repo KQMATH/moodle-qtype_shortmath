@@ -1,4 +1,4 @@
-define(['plugin_name/visual-math-input'], function (VisualMath) {
+define(['qtype_shortname/visual-math-input'], function (VisualMath) {
    return {
       initialize: () => {
 	 let input = new VisualMath.Input('.shortmath .answer input', '.answer');
