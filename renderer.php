@@ -35,7 +35,9 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
 
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
         global $PAGE;
-        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize');
+        // The following line imports the visual-math-input.js directly.
+        // README file says to call input instead
+        $PAGE->requires->js_call_amd('qtype_shortmath/visual-math-input', 'initialize');
         return parent::formulation_and_controls($qa, $options);
     }
 
