@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+
+
 require_once($CFG->dirroot . '/question/type/shortanswer/renderer.php');
 
 /**
@@ -35,9 +37,7 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
 
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
         global $PAGE;
-        // The following line imports the visual-math-input.js directly.
-        // README file says to call input instead
-        $PAGE->requires->js_call_amd('qtype_shortmath/visual-math-input', 'initialize');
+        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize');
         return parent::formulation_and_controls($qa, $options);
     }
 
