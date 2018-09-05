@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>amd/src/mathquill.js</location>
+        <name>MathQuill</name>
+        <version>0.10.1</version>
+        <license>MPL</license>
+        <licenseversion>2</licenseversion>
+    </library>
+    <library>
+        <location>amd/src/visual-math-input.js</location>
+        <name>Visual math input</name>
+        <version>1.0.0</version>
+        <license>GPL</license>
+        <licenseversion>3</licenseversion>
+    </library>
+</libraries>
