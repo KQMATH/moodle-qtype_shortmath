@@ -41,4 +41,12 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
         return parent::formulation_and_controls($qa, $options);
     }
 
+    public function head_code(question_attempt $qa) {
+        global $PAGE;
+
+        parent::head_code($qa);
+
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
+    }
 }
