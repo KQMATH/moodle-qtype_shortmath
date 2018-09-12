@@ -2,9 +2,8 @@
     background: #fcfcfc;
     border: 1px solid #bbb;
     min-height: 32px;
-    min-width: 320px;
-    width: 100%;
     max-width: 100%;
+    min-width: unset;
     padding: 8px;
 }
 
@@ -22,7 +21,7 @@
 
 .visual-math-input-controls {
     width: 90%;
-    margin-bottom: 2px;
+    margin-bottom: 2px; 
 }
 
 .visual-math-input-control {
