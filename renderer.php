@@ -17,7 +17,7 @@
 /**
  * @package    qtype
  * @subpackage shortmath
- * @author     Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,8 +37,19 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
 
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
         global $PAGE;
+        $result = '';
+        $result .= html_writer::div('', '', ['id' => 'controls_wrapper']);
+        $result .= parent::formulation_and_controls($qa, $options);
         $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize');
-        return parent::formulation_and_controls($qa, $options);
+        return $result;
     }
 
+    public function head_code(question_attempt $qa) {
+        global $PAGE;
+
+        parent::head_code($qa);
+
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
+    }
 }
