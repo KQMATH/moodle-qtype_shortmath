@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2018091200;
+$plugin->version  = 2018091300;
 $plugin->requires = 2015051100; // Moodle version.
 $plugin->component = 'qtype_shortmath';
 $plugin->maturity  = MATURITY_STABLE;
