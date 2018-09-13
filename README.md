@@ -16,9 +16,9 @@ ShortMath has been designed for use with JazzQuiz, where auto-grading is
 not used.  Thus auto-grading has not been tested, and syntactic matching
 of maths formulæ may or may not be practical.
 
-**See also** JazzQuiz at
-+ [github](https://github.com/KQMATH/moodle-mod_jazzquiz)
-+ [Moodle](https://moodle.org/plugins/mod_jazzquiz)
+**See also** 
++ [JazzQuiz at github](https://github.com/KQMATH/moodle-mod_jazzquiz)
++ [JazzQuiz in the Moodle plugin repository](https://moodle.org/plugins/mod_jazzquiz)
 
 ## Installation:  
 ### Moodle plugins directory
