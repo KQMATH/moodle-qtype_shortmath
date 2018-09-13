@@ -2,19 +2,23 @@
 A simple question for simple mathematical expressions using MathQuill
 
 ## What is it?
-The plugin is based on the short answer question type, Adding MathQuill
-as a front-end to the answer interface to provide a WYSIWYG maths editor. 
+The plugin is based on the short answer question type, but the students
+enter their response in a maths editor.  The studen interface is WYSIWYG
+(what you see is what you get).
 
-It has been designed for use with JazzQuiz, where auto-grading is not used.  
-It may be possible to auto-grade, taking advantage of the syntactic 
-string match of short answer and taking into account that MathQuill
-produces LaTeX output.  
+The editor interface is provided by MathQuill, which produces LaTeX
+code which is used as the internal representation.  Rendering relies
+on MathJax which provides mathematically correct visual rendering.
+Auto-grading, if desired, is based on syntactic string match on the
+LaTeX code.
 
-In a JazzQuiz activity, only the visual representation of the mathematical
-expressions are considered.  Behind the scenes LaTeX code is used.
-MathJax renders this in the output, and MathQuill handles input.
-The teacher will need to use LaTeX in the question text, relying on 
-MathJax to render it.
+ShortMath has been designed for use with JazzQuiz, where auto-grading is 
+not used.  Thus auto-grading has not been tested, and syntactic matching
+of maths formulæ may or may not be practical.
+
+**See also** JazzQuiz at
++ [github](https://github.com/KQMATH/moodle-mod_jazzquiz)
++ [Moodle](https://moodle.org/plugins/mod_jazzquiz)
 
 ## Installation:  
 ### Moodle plugins directory
