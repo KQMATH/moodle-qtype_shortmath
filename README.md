@@ -37,6 +37,8 @@ Delete the module from the **Activities** module list in the admin section.
 ## Feedback:
 **Project lead:** Hans Georg Schaathun: <hasc@ntnu.no>
 
+**Developer:** [André Storhaug](https://github.com/andstor) <andr3.storhaug@gmail.com>
+
 ## License
 ShortMath is Licensed under the [GNU General Public, License Version 3](https://github.com/KQMATH/moodle-qtype_shortmath/LICENSE).
 
