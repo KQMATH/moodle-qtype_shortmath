@@ -23,7 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['qtype_shortmath/visual-math-input'], function (VisualMath) {
+define(['jquery', 'qtype_shortmath/visual-math-input'], function ($, VisualMath) {
     return {
         initialize: () => {
 
