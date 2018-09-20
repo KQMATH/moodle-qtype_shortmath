@@ -23,7 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['qtype_shortmath/visual-math-input'], function (VisualMath) {
+define(['jquery', 'qtype_shortmath/visual-math-input'], function ($, VisualMath) {
     return {
         initialize: () => {
 
@@ -38,9 +38,7 @@ define(['qtype_shortmath/visual-math-input'], function (VisualMath) {
 
             if (!input.$input.prop('readonly')) {
                 input.onEdit = ($input, field) => {
-                    // $input.val(field.latex());
                     $input.val('\\[' + field.latex() + '\\]');
-                    console.log($input.val());
                     $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
                 };
 
@@ -51,8 +49,8 @@ define(['qtype_shortmath/visual-math-input'], function (VisualMath) {
 
             if ($shortanswerInput.val()) {
                 input.field.write(
-                   $shortanswerInput.val().slice(2,-2) 
-                   );
+                    $shortanswerInput.val().slice(2, -2)
+                );
             }
 
             if (!readOnly) {
