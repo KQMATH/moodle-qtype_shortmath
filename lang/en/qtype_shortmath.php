@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Simple Mathematics';
+$string['pluginname'] = 'ShortMath';
 $string['pluginname_help'] = 'Short answer question type for mathematical expressions using MathQuill, resulting in LaTeX answers.';
 $string['pluginname_link'] = 'question/type/shortmath';
 $string['pluginnameadding'] = 'Adding a ShortMath question';

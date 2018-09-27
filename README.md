@@ -1,4 +1,4 @@
-# Shortmath
+# ShortMath
 A simple question for simple mathematical expressions using MathQuill
 
 ## What is it?
