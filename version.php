@@ -28,3 +28,4 @@ $plugin->version  = 2018091300;
 $plugin->requires = 2015051100; // Moodle version.
 $plugin->component = 'qtype_shortmath';
 $plugin->maturity  = MATURITY_STABLE;
+$plugin->release = '0.1.0';
