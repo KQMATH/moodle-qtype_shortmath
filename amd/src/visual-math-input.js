@@ -10,7 +10,7 @@ define(['jquery', './mathquill'], function ($, MathQuill) {
             this.$input = $(input);
             this.$parent = $(parent);
             let wrapper = document.createElement('div');
-            $(wrapper).addClass('visual-math-input-field');
+            this.wrapper = $(wrapper).addClass('visual-math-input-field');
             let MQ = MathQuill.getInterface(2);
             this.field = MQ.MathField(wrapper, {
                 spaceBehavesLikeTab: true,
@@ -102,7 +102,6 @@ define(['jquery', './mathquill'], function ($, MathQuill) {
 
             let sqrt = '<span class="mq-root-block">&radic;</span>';
             let int = '<span class="mq-root-block">&int;</span>';
-            let dint = '<span class="mq-root-block">&int;<sub>0</sub><sup>1</sup></span>';
             let sum = '<span class="mq-root-block"><span class="mq-large-operator mq-non-leaf">&sum;</span></span>';
             let lim = '<span class="mq-root-block">lim</span>';
 
@@ -135,7 +134,6 @@ define(['jquery', './mathquill'], function ($, MathQuill) {
 
             this.define('sqrt', sqrt, field => field.cmd('\\sqrt'));
             this.define('int', int, field => field.cmd('\\int'));
-            this.define('dint', dint, field => field.write('\\int_0^1'));
             this.define('sum', sum, field => field.cmd('\\sum'));
             this.define('lim', lim, field => {
                 field.cmd('\\lim').typedText('_').write('x').cmd('\\to').write('0').moveToRightEnd();
