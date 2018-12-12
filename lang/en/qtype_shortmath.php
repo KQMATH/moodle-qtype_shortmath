@@ -30,3 +30,4 @@ $string['pluginname_link'] = 'question/type/shortmath';
 $string['pluginnameadding'] = 'Adding a ShortMath question';
 $string['pluginnameediting'] = 'Editing a ShortMath question';
 $string['pluginnamesummary'] = 'Short answer question type for mathematical expressions using MathQuill, resulting in LaTeX answers.';
+$string['privacy:metadata'] = 'The ShortMath question type plugin does not store any personal data.';
