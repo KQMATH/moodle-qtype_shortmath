@@ -1,11 +1,11 @@
 /* Visual math input */
 .que.shortmath .visual-math-input-wrapper {
-  margin: -12px -20px 20px -20px;
-  background-color: #1177d1;
+    margin: -12px -20px 20px -20px;
+    background-color: #1177d1;
 }
 
 .que.shortmath .ablock {
-  padding: 0.3em;
-  display: block;
-  max-width: 100%;
+    padding: 0.3em;
+    display: block;
+    max-width: 100%;
 }
