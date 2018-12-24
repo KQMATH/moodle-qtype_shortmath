@@ -37,7 +37,6 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
         $field2 = new xmldb_field('usehint');
         $field3 = new xmldb_field('studentshowalternate');
 
-
         // Delete fields.
         if ($dbman->field_exists($table, $field1)) {
             $dbman->drop_field($table, $field1);
