@@ -34,5 +34,4 @@ require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
 class qtype_shortmath_question extends qtype_shortanswer_question {
 
 
-
 }
