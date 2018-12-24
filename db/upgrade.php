@@ -48,7 +48,7 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
             $dbman->drop_field($table, $field3);
         }
 
-        // Rename table
+        // Rename table.
         if ($dbman->table_exists($table)) {
             $dbman->rename_table($table, "qtype_shortmath_options");
         }

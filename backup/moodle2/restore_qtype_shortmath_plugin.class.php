@@ -42,7 +42,7 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
         $paths[] = new restore_path_element($elename, $elepath);
         return $paths; // And we return the interesting paths.
     }
-    
+
     /**
      * Process the qtype/shortmath element
      */
