@@ -15,9 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    moodlecore
- * @subpackage backup-moodle2
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @package    qtype
+ * @subpackage shortmath
+ * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
