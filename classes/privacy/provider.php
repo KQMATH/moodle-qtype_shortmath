@@ -31,7 +31,8 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Privacy Subsystem for qtype_shortmath implementing null_provider.
  *
- * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
+ *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
