@@ -23,7 +23,7 @@
  */
 
 function xmldb_qtype_shortmath_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
 
     $dbman = $DB->get_manager();
     $result = true;

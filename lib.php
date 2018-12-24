@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool
  */
 function qtype_shortmath_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = []) {
-    global $DB, $CFG;
+    global $CFG;
     require_once($CFG->libdir . '/questionlib.php');
     question_pluginfile($course, $context, 'qtype_shortmath', $filearea, $args, $forcedownload, $options);
 }
