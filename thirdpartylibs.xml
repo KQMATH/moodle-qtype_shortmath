@@ -15,7 +15,7 @@
         <licenseversion>3</licenseversion>
     </library>
     <library>
-        <location>visualmathinput/</location>
+        <location>visualmathinput</location>
         <name>Visual math input support files</name>
         <version>1.0.0</version>
         <license>GPL</license>
