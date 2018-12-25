@@ -23,21 +23,21 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input'], function ($, VisualMath) {
+define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
     return {
-        initialize: () => {
+        initialize: function() {
 
-            let readOnly = false;
-            let $shortanswerInput = $('.shortmath .answer input');
+            var readOnly = false;
+            var $shortanswerInput = $('.shortmath .answer input');
 
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $shortanswerInput.removeClass('d-inline');
 
-            let input = new VisualMath.Input($shortanswerInput, '.answer');
+            var input = new VisualMath.Input($shortanswerInput, '.answer');
             input.$input.hide();
 
             if (!input.$input.prop('readonly')) {
-                input.onEdit = ($input, field) => {
+                input.onEdit = function($input, field) {
                     $input.val('\\[' + field.latex() + '\\]');
                     $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
                 };
@@ -54,7 +54,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function ($, VisualMath)
             }
 
             if (!readOnly) {
-                let controls = new VisualMath.ControlList('#controls_wrapper');
+                var controls = new VisualMath.ControlList('#controls_wrapper');
                 controls.enableAll();
             }
         }
