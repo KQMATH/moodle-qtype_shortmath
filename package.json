@@ -1,0 +1,36 @@
+{
+  "name": "moodle-qtype_shortmath",
+  "version": "1.0.0",
+  "description": "A simple question for simple mathematical expressions using MathQuill",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^5.11.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-promise": "^4.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/KQMATH/moodle-qtype_shortmath.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "André Storhaug",
+    "email": "andr3.storhaug@gmail.com",
+    "url": "https://github.com/andstor"
+  },
+  "contributors": [
+    {
+      "name": "Hans Georg Schaathun",
+      "email": "hasc@ntnu.no"
+    }
+  ],
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/KQMATH/moodle-qtype_shortmath/issues"
+  },
+  "homepage": "https://github.com/KQMATH/moodle-qtype_shortmath#readme"
+}
