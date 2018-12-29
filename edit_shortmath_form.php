@@ -33,10 +33,28 @@ require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.p
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form  {
+class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
     public function qtype() {
         return 'shortmath';
     }
 
+    protected function definition_inner($mform) {
+        $menu = array(
+            get_string('caseno', 'qtype_shortanswer'),
+            get_string('caseyes', 'qtype_shortanswer')
+        );
+        $mform->addElement('select', 'usecase',
+            get_string('casesensitive', 'qtype_shortanswer'), $menu);
+
+        $mform->addElement('static', 'answersinstruct',
+            get_string('correctanswers', 'qtype_shortanswer'),
+            get_string('filloutoneanswer', 'qtype_shortmath'));
+        $mform->closeHeaderBefore('answersinstruct');
+
+        $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_shortanswer', '{no}'),
+            question_bank::fraction_options());
+
+        $this->add_interactive_settings();
+    }
 }
