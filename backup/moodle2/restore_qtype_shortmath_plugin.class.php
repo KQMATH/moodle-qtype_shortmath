@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * ShortMath question type restore code.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Provides the necessary information needed to restore one shortmath qtype plugin
+ * Provides the necessary information needed to restore one ShortMath qtype plugin
+ *
+ * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @copyright  2018 NTNU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
 
@@ -45,6 +50,7 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
 
     /**
      * Process the qtype/shortmath element
+     * @param array/object $data the data from the backup file.
      */
     public function process_shortmath($data) {
         global $DB;

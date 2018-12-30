@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * Serve question type files
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
@@ -26,6 +27,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Checks file access for short answer questions.
+ *
  * @package  qtype_shortmath
  * @category files
  * @param stdClass $course course object
