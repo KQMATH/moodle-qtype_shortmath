@@ -31,3 +31,5 @@ $string['pluginnameadding'] = 'Adding a ShortMath question';
 $string['pluginnameediting'] = 'Editing a ShortMath question';
 $string['pluginnamesummary'] = 'Short answer question type for mathematical expressions using MathQuill, resulting in LaTeX answers.';
 $string['privacy:metadata'] = 'The ShortMath question type plugin does not store any personal data.';
+
+$string['filloutoneanswer'] = 'You must provide at least one possible answer, written in a valid latex math format. Answers left blank will not be used. \'*\' can be used as a wildcard to match any characters. The first matching answer will be used to determine the score and feedback.';

@@ -22,8 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 function xmldb_qtype_shortmath_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
 
     $dbman = $DB->get_manager();
     $result = true;
@@ -34,7 +36,6 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
         $field1 = new xmldb_field('answers');
         $field2 = new xmldb_field('usehint');
         $field3 = new xmldb_field('studentshowalternate');
-
 
         // Delete fields.
         if ($dbman->field_exists($table, $field1)) {
@@ -47,7 +48,7 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
             $dbman->drop_field($table, $field3);
         }
 
-        // Rename table
+        // Rename table.
         if ($dbman->table_exists($table)) {
             $dbman->rename_table($table, "qtype_shortmath_options");
         }

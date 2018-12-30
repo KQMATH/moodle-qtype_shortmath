@@ -1,22 +1,24 @@
 # ShortMath
-A simple question for simple mathematical expressions using MathQuill
+A simple question for mathematical expressions using MathQuill.
+
+[![Build Status](https://travis-ci.org/KQMATH/moodle-qtype_shortmath.svg?branch=master)](https://travis-ci.org/KQMATH/moodle-qtype_shortmath)
 
 ## What is it?
 The plugin is based on the short answer question type, but the students
-enter their response in a maths editor.  The studen interface is WYSIWYG
+enter their response in a maths editor. The studen interface is WYSIWYG
 (what you see is what you get).
 
 The editor interface is provided by MathQuill, which produces LaTeX
-code which is used as the internal representation.  Rendering relies
+code that is used as the internal representation. Rendering relies
 on MathJax which provides mathematically correct visual rendering.
-Auto-grading, if desired, is based on syntactic string match on the
-LaTeX code.
+
 
 ShortMath has been designed for use with JazzQuiz, where auto-grading is 
-not used.  Thus auto-grading has not been tested, and syntactic matching
-of maths formulæ may or may not be practical.
+not used. However, if desired, auto-grading based on syntactic string match on the
+LaTeX code is supported.
 
 **See also** 
++ [ShortMath in the Moodle plugin repository](https://moodle.org/plugins/qtype_shortmath)
 + [JazzQuiz at github](https://github.com/KQMATH/moodle-mod_jazzquiz)
 + [JazzQuiz in the Moodle plugin repository](https://moodle.org/plugins/mod_jazzquiz)
 
@@ -35,10 +37,10 @@ block.
 Delete the module from the **Activities** module list in the admin section.
 
 ## Feedback:
-**Project lead:** Hans Georg Schaathun: <hasc@ntnu.no>
+**Project lead:** Hans Georg Schaathun <hasc@ntnu.no>
 
 **Developer:** [André Storhaug](https://github.com/andstor) <andr3.storhaug@gmail.com>
 
 ## License
-ShortMath is Licensed under the [GNU General Public, License Version 3](https://github.com/KQMATH/moodle-qtype_shortmath/LICENSE).
+ShortMath is licensed under the [GNU General Public, License Version 3](https://github.com/KQMATH/moodle-qtype_shortmath/LICENSE).
 

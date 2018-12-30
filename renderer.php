@@ -17,7 +17,8 @@
 /**
  * @package    qtype
  * @subpackage shortmath
- * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
+ *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,11 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-
 require_once($CFG->dirroot . '/question/type/shortanswer/renderer.php');
 
 /**
- * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
+ *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

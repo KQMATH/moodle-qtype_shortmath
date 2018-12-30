@@ -15,9 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    moodlecore
- * @subpackage backup-moodle2
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @package    qtype
+ * @subpackage shortmath
+ * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,11 +38,11 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
         $this->add_question_question_answers($paths);
         // Add own qtype stuff.
         $elename = 'shortmath';
-        $elepath = $this->get_pathfor('/shortmath'); // We used get_recommended_name() so this works.
+        $elepath = $this->get_pathfor('/shortmath');
         $paths[] = new restore_path_element($elename, $elepath);
         return $paths; // And we return the interesting paths.
     }
-    
+
     /**
      * Process the qtype/shortmath element
      */
@@ -68,7 +69,6 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
             }
             $data->answers = implode(',', $answersarr);
             // Insert record.
-            // JR changed table name to match new table name system in moodle 2.1 DEC 2011.
             $newitemid = $DB->insert_record('qtype_shortmath', $data);
             // Create mapping.
             $this->set_mapping('qtype_shortmath', $oldid, $newitemid);

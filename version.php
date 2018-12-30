@@ -17,15 +17,16 @@
 /**
  * @package    qtype
  * @subpackage shortmath
- * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
+ *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2018121200;
-$plugin->requires = 2018051700; // Moodle version.
+$plugin->version  = 2018123000;
+$plugin->requires = 2018051700; // Moodle version 3.5
 $plugin->component = 'qtype_shortmath';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release = '0.2.0';
+$plugin->release = '0.3.0';
