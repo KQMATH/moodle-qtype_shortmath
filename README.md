@@ -5,7 +5,7 @@ A simple question for mathematical expressions using MathQuill.
 
 ## What is it?
 The plugin is based on the short answer question type, but the students
-enter their response in a maths editor. The studen interface is WYSIWYG
+enter their response in a maths editor. The student interface is WYSIWYG
 (what you see is what you get).
 
 The editor interface is provided by MathQuill, which produces LaTeX
