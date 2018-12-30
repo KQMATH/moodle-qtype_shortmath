@@ -1,7 +1,7 @@
 {
   "name": "moodle-qtype_shortmath",
-  "version": "1.0.0",
-  "description": "A simple question for simple mathematical expressions using MathQuill",
+  "version": "0.2.0",
+  "description": "A simple question for mathematical expressions using MathQuill",
   "main": "index.js",
   "dependencies": {
     "eslint": "^5.11.0"
