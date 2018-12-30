@@ -1,6 +1,6 @@
 {
   "name": "moodle-qtype_shortmath",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A simple question for mathematical expressions using MathQuill",
   "main": "index.js",
   "dependencies": {

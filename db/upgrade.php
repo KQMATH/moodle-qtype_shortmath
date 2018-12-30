@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * ShortMath question type upgrade code.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -24,6 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Upgrade code for the ShortMath question type.
+ * @param int $oldversion the version we are upgrading from.
+ */
 function xmldb_qtype_shortmath_upgrade($oldversion) {
     global $DB;
 

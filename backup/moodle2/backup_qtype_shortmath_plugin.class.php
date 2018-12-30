@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * ShortMath question type backup code.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Provides the information to backup shortmath questions
+ * Provides the information to backup ShortMath questions
+ *
+ * @author     André Storhaug <andr3.storhaug@gmail.com> and Hans Georg Schaathun <hasc@ntnu.no>
+ * @copyright  2018 NTNU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_qtype_shortmath_plugin extends backup_qtype_plugin {
 

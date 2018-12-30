@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * Defines the editing form for the ShortMath question type.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
@@ -28,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.php');
 
 /**
+ * ShortMath question editing form definition.
+ *
  * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU

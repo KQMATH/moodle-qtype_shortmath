@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * ShortMath question renderer class.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
@@ -29,6 +30,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/question/type/shortanswer/renderer.php');
 
 /**
+ * Generates the output for ShortMath questions.
+ *
  * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU

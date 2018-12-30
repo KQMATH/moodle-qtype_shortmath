@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    qtype
- * @subpackage shortmath
+ * Question type class for the ShortMath question type.
+ *
+ * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>,Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
@@ -28,15 +29,15 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/question/type/shortanswer/questiontype.php');
 
 /**
+ * The ShortMath question type class.
+ *
  * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
  *             and Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath extends qtype_shortanswer {
-
     public function extra_question_fields() {
         return ['qtype_shortmath_options', 'usecase'];
     }
-
 }
