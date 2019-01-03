@@ -1,7 +1,7 @@
 # ShortMath
 [![Build Status](https://travis-ci.org/KQMATH/moodle-qtype_shortmath.svg?branch=master)](https://travis-ci.org/KQMATH/moodle-qtype_shortmath)
 
-A simple question for mathematical expressions using MathQuill.
+A simple question type for mathematical expressions using MathQuill.
 
 ## What is it?
 The plugin is based on the short answer question type, but the students
