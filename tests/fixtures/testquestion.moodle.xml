@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 0  -->
+  <question type="category">
+    <category>
+      <text>$course$/Test questions</text>
+    </category>
+    <info format="moodle_auto_format">
+      <text></text>
+    </info>
+  </question>
+
+<!-- question: 300  -->
+  <question type="shortmath">
+    <name>
+      <text>Integrate</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[Evaluate the integral \( \int _1^2x\sin \left(x^2\right)dx \)]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[\frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <usecase>0</usecase>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>\frac{1}{2}\left(\cos(1)-\cos(4)\right)</text>
+      <feedback format="html">
+        <text><![CDATA[\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.]]></text>
+      </feedback>
+    </answer>
+    <answer fraction="80" format="moodle_auto_format">
+      <text>0.597</text>
+      <feedback format="html">
+        <text><![CDATA[Answer in three decimals is an OK approximation.]]></text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="moodle_auto_format">
+      <text>*</text>
+      <feedback format="html">
+        <text><![CDATA[That is a bad answer.]]></text>
+      </feedback>
+    </answer>
+  </question>
+
+</quiz>
