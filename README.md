@@ -1,5 +1,6 @@
 # ShortMath
 [![Build Status](https://travis-ci.org/KQMATH/moodle-qtype_shortmath.svg?branch=master)](https://travis-ci.org/KQMATH/moodle-qtype_shortmath)
+[![Coverage Status](https://coveralls.io/repos/github/KQMATH/moodle-qtype_shortmath/badge.svg?branch=develop)](https://coveralls.io/github/KQMATH/moodle-qtype_shortmath?branch=develop)
 
 A simple question type for mathematical expressions using MathQuill.
 
