@@ -32,7 +32,7 @@ require_once($CFG->dirroot . '/question/type/shortmath/question.php');
 
 
 /**
- * Unit tests for the shortmath question definition class.
+ * Unit tests for the ShortMath question definition class.
  *
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU

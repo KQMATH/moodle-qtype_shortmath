@@ -44,8 +44,9 @@ class qtype_shortmath_test_helper extends question_test_helper {
     }
 
     /**
-     * Makes a ShortMath question with correct ansewer 'frog', partially
-     * correct answer 'toad' and defaultmark 1. This question also has a
+     * Makes a ShortMath question with correct answer
+     * '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', partially
+     * correct answer '0.597' and defaultmark 1. This question also has a
      * '*' match anything answer.
      * @return qtype_shortmath_question
      */
@@ -69,7 +70,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
 
     /**
      * Gets the question data for a shortmath question with with correct
-     * ansewer 'frog', partially correct answer 'toad' and defaultmark 1.
+     * ansewer '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', partially
+     * correct answer '0.597' and defaultmark 1.
      * This question also has a '*' match anything answer.
      * @return stdClass
      */
@@ -95,7 +97,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
 
     /**
      * Gets the question form data for a shortmath question with with correct
-     * answer 'frog', partially correct answer 'toad' and defaultmark 1.
+     * answer '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', partially
+     * correct answer '0.597' and defaultmark 1.
      * This question also has a '*' match anything answer.
      * @return stdClass
      */
@@ -119,7 +122,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
     }
 
     /**
-     * Makes a shortmath question with just the correct ansewer 'frog', and
+     * Makes a shortmath question with just the correct answer
+     * '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', and
      * no other answer matching.
      * @return qtype_shortmath_question
      */
@@ -140,8 +144,10 @@ class qtype_shortmath_test_helper extends question_test_helper {
     }
 
     /**
-     * Gets the question data for a shortmath questionwith just the correct
-     * ansewer 'frog', and no other answer matching.
+     * Gets the question data for a shortmath question
+     * with just the correct answer
+     * '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', and
+     * no other answer matching.
      * @return stdClass
      */
     public function get_shortmath_question_data_integration_exact() {
@@ -163,7 +169,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
     }
 
     /**
-     * Makes a shortmath question with just the correct ansewer 'frog', and
+     * Makes a shortmath question with just the correct answer
+     * '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', and
      * no other answer matching.
      * @return qtype_shortmath_question
      */
