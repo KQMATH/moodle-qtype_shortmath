@@ -19,10 +19,9 @@
  *
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,7 +34,7 @@ require_once($CFG->dirroot . '/question/type/shortmath/question.php');
  * Unit tests for the ShortMath question definition class.
  *
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath_question_test extends advanced_testcase {

@@ -19,19 +19,17 @@
  *
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * Test helper class for the ShortMath question type.
  *
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath_test_helper extends question_test_helper {
