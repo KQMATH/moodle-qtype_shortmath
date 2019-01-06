@@ -26,6 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.php');
 
 /**
