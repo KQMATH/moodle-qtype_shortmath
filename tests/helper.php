@@ -91,7 +91,7 @@ class qtype_shortmath_test_helper extends question_test_helper {
             13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)',
                 1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.', FORMAT_HTML),
             14 => new question_answer(14, '0.597',
-                0.8,'Answer in three decimals is an OK approximation.', FORMAT_HTML),
+                0.8, 'Answer in three decimals is an OK approximation.', FORMAT_HTML),
             15 => new question_answer(15, '*',
                 0.0, 'That is a bad answer.', FORMAT_HTML),
         );
@@ -113,7 +113,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $form->questiontext = array('text' => 'Evaluate the integral \( \int _1^2x\sin \left(x^2\right)dx \)',
             'format' => FORMAT_HTML);
         $form->defaultmark = 1.0;
-        $form->generalfeedback = array('text' => 'Generalfeedback: \frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.',
+        $form->generalfeedback = array(
+            'text' => 'Generalfeedback: \frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.',
             'format' => FORMAT_HTML);
         $form->usecase = false;
         $form->answer = array('integration', 'integration_exact', '*');
