@@ -57,9 +57,12 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $q->generalfeedback = 'Generalfeedback: \frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.';
         $q->usecase = false;
         $q->answers = array(
-            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', 1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.', FORMAT_HTML),
-            14 => new question_answer(14, '0.597', 0.8, 'Answer in three decimals is an OK approximation.', FORMAT_HTML),
-            15 => new question_answer(15, '*', 0.0, 'That is a bad answer.', FORMAT_HTML),
+            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)',
+                1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.', FORMAT_HTML),
+            14 => new question_answer(14, '0.597',
+                0.8, 'Answer in three decimals is an OK approximation.', FORMAT_HTML),
+            15 => new question_answer(15, '*',
+                0.0, 'That is a bad answer.', FORMAT_HTML),
         );
         $q->qtype = question_bank::get_qtype('shortmath');
 
@@ -85,9 +88,12 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $qdata->options = new stdClass();
         $qdata->options->usecase = 0;
         $qdata->options->answers = array(
-            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', 1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.', FORMAT_HTML),
-            14 => new question_answer(14, '0.597', 0.8, 'Answer in three decimals is an OK approximation.', FORMAT_HTML),
-            15 => new question_answer(15, '*', 0.0, 'That is a bad answer.', FORMAT_HTML),
+            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)',
+                1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is a very good answer.', FORMAT_HTML),
+            14 => new question_answer(14, '0.597',
+                0.8,'Answer in three decimals is an OK approximation.', FORMAT_HTML),
+            15 => new question_answer(15, '*',
+                0.0, 'That is a bad answer.', FORMAT_HTML),
         );
 
         return $qdata;
@@ -104,9 +110,11 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $form = new stdClass();
 
         $form->name = 'Integration';
-        $form->questiontext = array('text' => 'Evaluate the integral \( \int _1^2x\sin \left(x^2\right)dx \)', 'format' => FORMAT_HTML);
+        $form->questiontext = array('text' => 'Evaluate the integral \( \int _1^2x\sin \left(x^2\right)dx \)',
+            'format' => FORMAT_HTML);
         $form->defaultmark = 1.0;
-        $form->generalfeedback = array('text' => 'Generalfeedback: \frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.', 'format' => FORMAT_HTML);
+        $form->generalfeedback = array('text' => 'Generalfeedback: \frac{1}{2}\left(\cos(1)-\cos(4)\right) or 0.597 would have been OK.',
+            'format' => FORMAT_HTML);
         $form->usecase = false;
         $form->answer = array('integration', 'integration_exact', '*');
         $form->fraction = array('1.0', '0.8', '0.0');
@@ -134,7 +142,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $q->generalfeedback = 'Generalfeedback: You should have said \frac{1}{2}\left(\cos(1)-\cos(4)\right).';
         $q->usecase = false;
         $q->answers = array(
-            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', 1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is correct.', FORMAT_HTML),
+            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)',
+                1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is correct.', FORMAT_HTML),
         );
         $q->qtype = question_bank::get_qtype('shortmath');
 
@@ -160,7 +169,8 @@ class qtype_shortmath_test_helper extends question_test_helper {
         $qdata->options = new stdClass();
         $qdata->options->usecase = false;
         $qdata->options->answers = array(
-            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)', 1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is correct.', FORMAT_HTML),
+            13 => new question_answer(13, '\frac{1}{2}\left(\cos(1)-\cos(4)\right)',
+                1.0, '\frac{1}{2}\left(\cos(1)-\cos(4)\right) is correct.', FORMAT_HTML),
         );
 
         return $qdata;
