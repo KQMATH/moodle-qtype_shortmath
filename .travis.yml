@@ -19,13 +19,13 @@ php:
  - 7.1
  - 7.2
 
-env:
- global:
-  - MOODLE_BRANCH=MOODLE_35_STABLE
-  - MOODLE_BRANCH=MOODLE_36_STABLE
- matrix:
-  - DB=pgsql
-  - DB=mysqli
+matrix:
+  include:
+    - env: MOODLE_BRANCH=MOODLE_35_STABLE   DB=pgsql
+    - env: MOODLE_BRANCH=MOODLE_35_STABLE   DB=mysqli
+
+    - env: MOODLE_BRANCH=MOODLE_36_STABLE   DB=pgsql
+    - env: MOODLE_BRANCH=MOODLE_36_STABLE   DB=mysqli
 
 before_install:
   - phpenv config-rm xdebug.ini
