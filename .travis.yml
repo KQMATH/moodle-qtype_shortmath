@@ -20,7 +20,7 @@ php:
  - 7.2
 
 env:
- matrix:
+  matrix:
   - MOODLE_BRANCH=MOODLE_35_STABLE   DB=pgsql
   - MOODLE_BRANCH=MOODLE_35_STABLE   DB=mysqli
 
