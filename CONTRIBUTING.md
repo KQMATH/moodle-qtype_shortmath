@@ -43,10 +43,7 @@ and choose branch you want to patch (usually master).
 
 ## Style guide
 
-* This repository uses [Markdown](https://daringfireball.net/projects/markdown/)
-  syntax and follows
-  [cirosantilli/markdown-style-guide](http://www.cirosantilli.com/markdown-style-guide/)
-  style guide.
+* This repository uses [Markdown](https://daringfireball.net/projects/markdown/) syntax.
 * The preferred spelling of English words is the [American
   English](https://en.wikipedia.org/wiki/American_English) (e.g. behavior, not
   behaviour).
