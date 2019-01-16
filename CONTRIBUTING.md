@@ -18,7 +18,7 @@ Thank you for your interest in contributing to the ShortMath project.
 
 ## Making changes
 
-* Fork this repository on GitHub
+* Fork this repository on [GitHub](https://github.com/KQMATH/moodle-qtype_shortmath)
 * All development work should follow the [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/) branching model.
 * Make sure you have added the necessary tests for your changes.
 * If applicable, include a link to the issue in the commit message body.
@@ -27,7 +27,7 @@ Thank you for your interest in contributing to the ShortMath project.
 
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository in the [KQMATH GitHub organization](https://github.com/KQMATH)
-and choose branch you want to patch (usually master).
+and choose branch you want to patch (usually develop).
 * Add detail about the change to the pull request including screenshots
   if the change affects the UI.
 
