@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "moodle-qtype_shortmath",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Moodle question type for writing mathematical expressions using MathQuill",
   "main": "index.js",
   "dependencies": {
