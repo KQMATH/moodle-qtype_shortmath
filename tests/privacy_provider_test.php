@@ -15,33 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * ShortMath question definition class.
+ * Privacy tests for shortmath question type.
  *
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
+use core_privacy\tests\provider_testcase;
+use qtype_shortmath\privacy\provider;
 
 /**
- * Represents a ShortMath question.
+ * Test case for privacy implementation.
  *
  * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @copyright  2019 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_shortmath_question extends qtype_shortanswer_question {
-
-    public function summarise_response(array $response) {
-        if (isset($response['answer'])) {
-            return '\\[' . $response['answer'] . '\\]';
-        } else {
-            return null;
-        }
+class qtype_shortmath_privacy_testcase extends provider_testcase {
+    /**
+     * Test returning metadata.
+     */
+    public function test_get_metadata() {
+        $this->resetAfterTest(true);
+        $collection = new \core_privacy\local\metadata\collection('qtype_shortmath');
+        $reason = provider::get_reason($collection);
+        $this->assertEquals($reason, 'privacy:metadata');
+        $str = 'The ShortMath question type plugin does not store any personal data.';
+        $this->assertEquals($str, get_string($reason, 'qtype_shortmath'));
     }
 }

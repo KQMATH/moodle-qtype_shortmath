@@ -1,7 +1,8 @@
 # ShortMath
-A simple question for mathematical expressions using MathQuill.
-
 [![Build Status](https://travis-ci.org/KQMATH/moodle-qtype_shortmath.svg?branch=master)](https://travis-ci.org/KQMATH/moodle-qtype_shortmath)
+[![Coverage Status](https://coveralls.io/repos/github/KQMATH/moodle-qtype_shortmath/badge.svg?branch=master)](https://coveralls.io/github/KQMATH/moodle-qtype_shortmath?branch=master)
+
+A simple question type for mathematical expressions using MathQuill.
 
 ## What is it?
 The plugin is based on the short answer question type, but the students
@@ -22,19 +23,8 @@ LaTeX code is supported.
 + [JazzQuiz at github](https://github.com/KQMATH/moodle-mod_jazzquiz)
 + [JazzQuiz in the Moodle plugin repository](https://moodle.org/plugins/mod_jazzquiz)
 
-## Installation:  
-### Moodle plugins directory
-Click on **Install now** within the plugins directory, and then select your site from the list of "My sites"
-
-### Manually
-Unzip all the files into a temporary directory.
-Rename the **moodle-qtype_shortmath** folder to **shortmath**, and move it into **moodle/question/type**.
-The system administrator should then log in to moodle and click on the **Notifications** link in the Site administration
-block.
-
-
-## Uninstalling:
-Delete the module from the **Activities** module list in the admin section.
+## Documentation
+Documentation is available [here](https://github.com/KQMATH/moodle-qtype_shortmath/wiki), including [installation instructions](https://github.com/KQMATH/moodle-qtype_shortmath/wiki/Installation-instructions).
 
 ## Feedback:
 **Project lead:** Hans Georg Schaathun <hasc@ntnu.no>
