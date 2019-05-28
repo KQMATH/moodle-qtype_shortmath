@@ -42,9 +42,21 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
         global $PAGE;
         $result = '';
-        $result .= html_writer::div('', '', ['id' => 'controls_wrapper']);
+        $inputname = $qa->get_qt_field_name('answer');
+
+        $result .= html_writer::div('', '', ['class' => 'controls_wrapper']);
         $result .= parent::formulation_and_controls($qa, $options);
-        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize');
+
+        $params = array(
+            'inputname' => $inputname,
+            'readonly' => false,
+        );
+
+        if ($options->readonly) {
+            $params['readonly'] = true;
+        }
+
+        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize', $params);
         return $result;
     }
 
