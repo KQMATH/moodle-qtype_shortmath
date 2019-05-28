@@ -25,18 +25,17 @@
  */
 define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
     return {
-        initialize: function() {
-
-            var readOnly = false;
-            var $shortanswerInput = $('.shortmath .answer input');
-
+        initialize: function(inputname, readonly) {
+            var readOnly = readonly;
+            var $shortanswerInput = $('#' + $.escapeSelector(inputname));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $shortanswerInput.removeClass('d-inline');
+            var $parent = $('#' + $.escapeSelector(inputname)).parent('.answer');
 
-            var input = new VisualMath.Input($shortanswerInput, '.answer');
+            var input = new VisualMath.Input($shortanswerInput, $parent);
             input.$input.hide();
 
-            if (!input.$input.prop('readonly')) {
+            if (!readonly) {
                 input.onEdit = function($input, field) {
                     $input.val(field.latex());
                     $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
@@ -54,7 +53,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             }
 
             if (!readOnly) {
-                var controls = new VisualMath.ControlList('#controls_wrapper');
+                var controlsWrapper = $('#' + $.escapeSelector(inputname)).parents('.shortmath').find('.controls_wrapper');
+                var controls = new VisualMath.ControlList(controlsWrapper);
                 controls.enableAll();
             }
         }
