@@ -52,9 +52,7 @@ class backup_qtype_shortmath_plugin extends backup_qtype_plugin {
         // Now the own qtype tree.
         $pluginwrapper->add_child($shortmath);
         // Set source to populate the data.
-        // JR changed table name to match new table name system in moodle 2.1 DEC 2011.
-        // JR changed field name question to questionid JAN 2012.
-        $shortmath->set_source_table('qtype_shortmath', ['questionid' => backup::VAR_PARENTID]);
+        $shortmath->set_source_table('qtype_shortmath_option', ['questionid' => backup::VAR_PARENTID]);
         // Don't need to annotate ids nor files.
         return $plugin;
     }

@@ -75,9 +75,9 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
             }
             $data->answers = implode(',', $answersarr);
             // Insert record.
-            $newitemid = $DB->insert_record('qtype_shortmath', $data);
+            $newitemid = $DB->insert_record('qtype_shortmath_option', $data);
             // Create mapping.
-            $this->set_mapping('qtype_shortmath', $oldid, $newitemid);
+            $this->set_mapping('qtype_shortmath_option', $oldid, $newitemid);
         }
     }
 }
