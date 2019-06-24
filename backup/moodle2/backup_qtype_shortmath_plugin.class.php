@@ -52,7 +52,7 @@ class backup_qtype_shortmath_plugin extends backup_qtype_plugin {
         // Now the own qtype tree.
         $pluginwrapper->add_child($shortmath);
         // Set source to populate the data.
-        $shortmath->set_source_table('qtype_shortmath_option', ['questionid' => backup::VAR_PARENTID]);
+        $shortmath->set_source_table('qtype_shortmath_options', ['questionid' => backup::VAR_PARENTID]);
         // Don't need to annotate ids nor files.
         return $plugin;
     }
