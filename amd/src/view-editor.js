@@ -41,24 +41,27 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
         save($btnInput, $expInput, controlsWrapper) {
             let btnText = $btnInput.val().replace(/[{}\s]/g, '');
             let expText = $expInput.val().replace(/[{}\s]/g, '');
+            if(btnText === '' || expText === '') {
+                return;
+            }
             console.log(btnText);
             console.log(expText);
             let control;
-            let caret = '';
+            let html = '';
             let chars;
             if(expText.replace(/[{}a-z0-9A-Z\s]/g, '') === '^'){
                 let chars = btnText.split('^');
                 console.log(chars[0]+' '+chars[1]);
-                caret += '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
+                let caret = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
                 caret += '<span class="mq-root-block">';
-                caret += '<var>${chars[0]}</var>';
+                caret += '<var>x</var>';
                 caret += '<span class="mq-supsub mq-non-leaf mq-sup-only">';
                 caret += '<span class="mq-sup">';
-                caret += '<var>${chars[1]}</var>';
+                caret += '<var>y</var>';
                 caret += '</span></span></span></div>';
             }
             else if(expText.includes('lim_')){
-                let lim = '<span class="mq-root-block">lim</span>';
+                html = '<span class="mq-root-block">lim</span>';
                 console.log('lim');
                 let chars = expText.split('\\');
                 console.log(chars);
@@ -66,10 +69,38 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     field.cmd('\\lim').typedText('_').write(chars[1].split('_')[1])
                         .cmd('\\to').write(expText.split('to')[1]).moveToRightEnd();
                 });
+            }else if(expText.includes('binom')){
+                let nchoosek = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
+                nchoosek += '<span class="mq-root-block">';
+                nchoosek += '<span class="mq-non-leaf">';
+                nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);">(</span>';
+                nchoosek += '<span class="mq-non-leaf" style="margin-top:0;">';
+                nchoosek += '<span class="mq-array mq-non-leaf">';
+                nchoosek += '<span style="font-size: 14px;"><var>n</var></span>';
+                nchoosek += '<span style="font-size: 14px;"><var>k</var></span>';
+                nchoosek += '</span></span>';
+                nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);">)</span></span>';
+                nchoosek += '</span></div>';
+                control = new VisualMath.Control('nchoosek', html, field => field.cmd('\\choose'));
             }
-            /*control = new VisualMath.Control('caret', caret, field => field.cmd('^'));*/
-            control.enable();
-            controlsWrapper.append(control.$element);
+            else if(expText.includes('sqrt')){
+                let sqrt = '<span class="mq-root-block">&radic;</span>';
+                control = new VisualMath.Control('sqrt', sqrt, field => field.cmd('\\sqrt'));
+            }/*else {
+                let int = '<span class="mq-root-block">&int;</span>';
+                control = new VisualMath.Control('int', int, field => field.cmd('\\int'));
+                let sum = '<span class="mq-root-block"><span class="mq-large-operator mq-non-leaf">&sum;</span></span>';
+                control = new VisualMath.Control('sum', sum, field => field.cmd('\\sum'));
+                let lim = '<span class="mq-root-block">lim</span>';
+                control = new VisualMath.Control('divide', divide, field => field.cmd('\\frac'));
+                control = new VisualMath.Control('plusminus', plusminus, field => field.cmd('\\pm'));
+                control = new VisualMath.Control('theta', theta, field => field.cmd('\\theta'));
+                control = new VisualMath.Control('pi', pi, field => field.cmd('\\pi'));
+                control = new VisualMath.Control('infinity', infinity, field => field.cmd('\\infinity'));
+                /!*control = new VisualMath.Control('caret', caret, field => field.cmd('^'));*!/
+            }*/
+            //control.enable();
+            //controlsWrapper.append(control.$element);
 
         }
     }
@@ -111,10 +142,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
             // if (!readOnly) {
                 var controlsWrapper = $('#' + $.escapeSelector(inputName)).parents('.shortmath').find('.controls_wrapper');
-                var controls = new VisualMath.ControlList(controlsWrapper);
-                controls.enableAll();
+                // var controls = new VisualMath.ControlList(controlsWrapper);
+                // controls.enableAll();
             // }
             // let controlsWrapper = $('#' + $.escapeSelector(inputName)).parents('.shortmath').find('.controls_wrapper');
+            controlsWrapper.addClass('visual-math-input-wrapper');
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
