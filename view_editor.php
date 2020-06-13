@@ -63,7 +63,7 @@ echo html_writer::start_tag('div', array('class' => 'que shortmath'));
 echo html_writer::tag('div', '', array('class' => 'controls_wrapper'));
 //echo html_writer::tag('div', '', array('class' => 'qtext'));
 echo html_writer::start_tag('div', array('class' => 'ablock form-inline'));
-//echo html_writer::tag('label', get_string('answercolon', 'qtype_numerical'), array('for' => 'test'));
+echo html_writer::tag('label', 'Test:', array('for' => 'test'));
 echo html_writer::tag('span', $input, array('class' => 'answer'));
 echo html_writer::end_tag('div');
 //echo html_writer::end_tag('div');
