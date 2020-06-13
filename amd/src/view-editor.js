@@ -49,9 +49,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
     }
 
     class EditorControl extends VisualMath.Control {
+
         constructor(name, text, onClick) {
             super(name, text, onClick);
         }
+
         enable() {
             super.enable();
             this.$element.off('click');
@@ -63,7 +65,13 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     testInput.field.focus();
                 }
             });
-
+            this.$element.attr('draggable', true);
+            this.$element.on('dragstart', event => {
+                console.log('dragstart');
+                // Add the target element's id to the data transfer object
+                event.originalEvent.dataTransfer.setData("text", event.target.id);
+                event.originalEvent.dataTransfer.dropEffect = "move";
+            });
         }
 
     }
@@ -144,6 +152,17 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 control = new EditorControl('infinity', infinity, field => field.cmd('\\infinity'));
             }
             control.enable();
+            /*let element = document.createElement('div');
+            let div = $(element);
+            div.attr('draggable', true);
+            div.on('dragstart', event => {
+                console.log(event);
+                // Add the target element's id to the data transfer object
+                event.originalEvent.dataTransfer.setData("text", event.target.id);
+                event.originalEvent.dataTransfer.dropEffect = "move";
+            });
+            div.append(control.$element);
+            this.$wrapper.append(div);*/
             this.$wrapper.append(control.$element);
         }
 
@@ -201,6 +220,20 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             // }
             // let controlsWrapper = $('#' + $.escapeSelector(inputName)).parents('.shortmath').find('.controls_wrapper');
             controlsWrapper.addClass('visual-math-input-wrapper');
+            controlsWrapper.attr('id', 'target');
+            controlsWrapper.on('drop', event =>{
+                console.log('dropped');
+                event.preventDefault();
+                // Get the id of the target and add the moved element to the target's DOM
+                const data = event.originalEvent.dataTransfer.getData("text");
+                console.log(data);
+                //event.target.appendChild(document.getElementById(data));
+                // event.target.innerHTML = document.getElementById(data).innerHTML;
+            });
+            controlsWrapper.on('dragover', event => {
+               event.preventDefault();
+               event.originalEvent.dataTransfer.dropEffect = "move"
+            });
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
