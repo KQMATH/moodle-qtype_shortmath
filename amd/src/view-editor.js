@@ -69,13 +69,20 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             this.$element.attr('draggable', true);
             this.$element.on('dragstart', event => {
                 console.log('dragstart from: '+event.target.id);
+                dragged = event.target;
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
+                event.target.style.opacity = 0;
+            });
+            this.$element.on('dragend', event => {
+                event.target.style.opacity = "";
             });
         }
 
     }
+    let dragged;
+    let target;
 
     class EditorControlList {
 
@@ -223,9 +230,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             controlsWrapper.addClass('visual-math-input-wrapper');
             controlsWrapper.attr('id', 'target');
             controlsWrapper.on('drop', event =>{
+                event.preventDefault();
                 let targetId;
                 let _target;
                 const data = event.originalEvent.dataTransfer.getData("text");
+                let button = document.getElementById(data);
                 if(event.target.tagName === 'SPAN'){
                     targetId = event.target.parentElement.id;
                 } else {
@@ -236,8 +245,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 console.log(_target);
                 if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
                     console.log('button: '+targetId);
-                    event.preventDefault();
-                    let button = document.getElementById(data);
                     let target = document.getElementById(targetId);
                     let nodes = Array.from(target.parentNode.children);
                     if(nodes.indexOf(button) < nodes.indexOf(target)) {
@@ -247,16 +254,48 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     }
                 }else {
                     console.log('dropped');
-                    event.preventDefault();
                     // Get the id of the target and add the moved element to the target's DOM
                     // const data = event.originalEvent.dataTransfer.getData("text");
                     // console.log(data);
-                    event.target.appendChild(document.getElementById(data));
+                    event.target.appendChild(button);
                 }
+                event.originalEvent.dataTransfer.clearData();
             });
             controlsWrapper.on('dragover', event => {
                event.preventDefault();
-               event.originalEvent.dataTransfer.dropEffect = "move"
+               event.originalEvent.dataTransfer.dropEffect = "move";
+            });
+            controlsWrapper.on('dragenter', event => {
+                event.preventDefault();
+                console.log(event.target.parentElement);
+                console.log('drop detected');
+                /*let targetId;
+                let _target;
+                /!*const data = event.originalEvent.dataTransfer.getData("text");
+                console.log('data: '+data);
+                let button = document.getElementById(data);*!/
+                let empty = document.createElement('button');
+                $(empty).html('');
+                $(empty).addClass('visual-math-input-control btn btn-primary');
+                $(empty).attr('id', 'placeholder');
+                if(event.target.tagName === 'SPAN'){
+                    targetId = event.target.parentElement.id;
+                } else {
+                    targetId =  event.target.id;
+                    _target = $('#' + $.escapeSelector(targetId));
+                }
+                console.log('dropping: '+targetId);
+                console.log(_target);
+                if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
+                    console.log('button: '+targetId);
+                    target = document.getElementById(targetId);
+                    let nodes = Array.from(target.parentNode.children);
+                    if(nodes.indexOf(dragged) < nodes.indexOf(target)) {
+                        target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                    }else {
+                        target.parentNode.insertBefore(empty, target); //right to left
+                    }
+                }*/
             });
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
