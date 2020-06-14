@@ -65,9 +65,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     testInput.field.focus();
                 }
             });
+            this.$element.attr('id', new Date().getTime());
             this.$element.attr('draggable', true);
             this.$element.on('dragstart', event => {
-                console.log('dragstart');
+                console.log('dragstart from: '+event.target.id);
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
@@ -222,13 +223,36 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             controlsWrapper.addClass('visual-math-input-wrapper');
             controlsWrapper.attr('id', 'target');
             controlsWrapper.on('drop', event =>{
-                console.log('dropped');
-                event.preventDefault();
-                // Get the id of the target and add the moved element to the target's DOM
+                let targetId;
+                let _target;
                 const data = event.originalEvent.dataTransfer.getData("text");
-                console.log(data);
-                //event.target.appendChild(document.getElementById(data));
-                // event.target.innerHTML = document.getElementById(data).innerHTML;
+                if(event.target.tagName === 'SPAN'){
+                    targetId = event.target.parentElement.id;
+                } else {
+                    targetId =  event.target.id;
+                    _target = $('#' + $.escapeSelector(targetId));
+                }
+                console.log('dropping: '+targetId);
+                console.log(_target);
+                if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
+                    console.log('button: '+targetId);
+                    event.preventDefault();
+                    let button = document.getElementById(data);
+                    let target = document.getElementById(targetId);
+                    let nodes = Array.from(target.parentNode.children);
+                    if(nodes.indexOf(button) < nodes.indexOf(target)) {
+                        target.parentNode.insertBefore(button, target.nextSibling); //left to right
+                    }else {
+                        target.parentNode.insertBefore(button, target); //right to left
+                    }
+                }else {
+                    console.log('dropped');
+                    event.preventDefault();
+                    // Get the id of the target and add the moved element to the target's DOM
+                    // const data = event.originalEvent.dataTransfer.getData("text");
+                    // console.log(data);
+                    event.target.appendChild(document.getElementById(data));
+                }
             });
             controlsWrapper.on('dragover', event => {
                event.preventDefault();
