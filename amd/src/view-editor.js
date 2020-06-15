@@ -70,6 +70,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             this.$element.on('dragstart', event => {
                 console.log('dragstart from: '+event.target.id);
                 dragged = event.target;
+                nodes = Array.from(dragged.parentNode.children);
+                draggedIndex = nodes.indexOf(dragged);
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
@@ -83,6 +85,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
     }
     let dragged;
     let target;
+    let nodes;
+    let draggedIndex;
 
     class EditorControlList {
 
@@ -244,14 +248,19 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 console.log('dropping: '+targetId);
                 console.log(_target);
                 if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
-                    console.log('button: '+targetId);
+                    /*console.log('button: '+targetId);
                     let target = document.getElementById(targetId);
                     let nodes = Array.from(target.parentNode.children);
                     if(nodes.indexOf(button) < nodes.indexOf(target)) {
-                        target.parentNode.insertBefore(button, target.nextSibling); //left to right
+                        // target.parentNode.insertBefore(button, target.nextSibling); //left to right
                     }else {
-                        target.parentNode.insertBefore(button, target); //right to left
+                        // target.parentNode.insertBefore(button, target); //right to left
+                    }*/
+                    if(targetId === dragged.id){
+                        console.log('dont');
+                        return;
                     }
+                    document.getElementById('placeholder').replaceWith(dragged);
                 }else {
                     console.log('dropped');
                     // Get the id of the target and add the moved element to the target's DOM
@@ -264,39 +273,99 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             controlsWrapper.on('dragover', event => {
                event.preventDefault();
                event.originalEvent.dataTransfer.dropEffect = "move";
-            });
-            controlsWrapper.on('dragenter', event => {
-                event.preventDefault();
-                console.log(event.target.parentElement);
                 console.log('drop detected');
-                /*let targetId;
+                let targetId;
                 let _target;
-                /!*const data = event.originalEvent.dataTransfer.getData("text");
-                console.log('data: '+data);
-                let button = document.getElementById(data);*!/
-                let empty = document.createElement('button');
-                $(empty).html('');
-                $(empty).addClass('visual-math-input-control btn btn-primary');
-                $(empty).attr('id', 'placeholder');
                 if(event.target.tagName === 'SPAN'){
                     targetId = event.target.parentElement.id;
                 } else {
                     targetId =  event.target.id;
                     _target = $('#' + $.escapeSelector(targetId));
                 }
-                console.log('dropping: '+targetId);
-                console.log(_target);
+                let empty = document.createElement('button');
+                $(empty).html('');
+                $(empty).addClass('visual-math-input-control btn btn-primary');
+                $(empty).attr('draggable', true);
+                $(empty).attr('id', 'placeholder');
+                $(empty).css('border', '1px solid yellow');
                 if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
-                    console.log('button: '+targetId);
+                    console.log('targetId: '+targetId);
+                    if(targetId === 'placeholder'){
+                        console.log('done');
+                        return;
+                    }
                     target = document.getElementById(targetId);
-                    let nodes = Array.from(target.parentNode.children);
-                    if(nodes.indexOf(dragged) < nodes.indexOf(target)) {
-                        target.parentNode.insertBefore(empty, target.nextSibling); //left to right
-                    }else {
+                    /*$(empty).attr('id', targetId);
+                    $(_target).attr('id', dragged.id);*/
+                    /*if(nodes === undefined) {
+                        nodes = Array.from(target.parentNode.children);
+                        draggedIndex = nodes.indexOf(dragged);
+                    }*/
+                    let targetIndex =  nodes.indexOf(target);
+                    if(draggedIndex === targetIndex){ //movement within button
+                        target = undefined;
+                        return;
+                    }
+                    console.log( draggedIndex+' to '+targetIndex);
+                    if(target.parentNode.contains(dragged)) {
+                        target.parentNode.removeChild(dragged);
+                    }else{
+                        target.parentNode.removeChild(document.getElementById('placeholder'));
+                    }
+                    console.log( draggedIndex+' to '+targetIndex);
+                    if(draggedIndex < targetIndex) {
+                        console.log('last:'+target.parentNode.lastChild)
+                        if(target.parentNode.lastChild !== target) {
+                            target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                        }else{
+                            target.parentNode.appendChild(empty);
+                        }
+                    } else {
+                        console.log('here:');
                         target.parentNode.insertBefore(empty, target); //right to left
                     }
-                }*/
+                    nodes = Array.from(target.parentNode.children);
+                    draggedIndex = nodes.indexOf(empty);
+                    console.log('draggedIndex after: '+draggedIndex);
+                }
             });
+            /*controlsWrapper.on('dragenter', event => {
+                // event.preventDefault();
+                console.log('drop detected');
+                let targetId;
+                let _target;
+                if(event.target.tagName === 'SPAN'){
+                    targetId = event.target.parentElement.id;
+                } else {
+                    targetId =  event.target.id;
+                    _target = $('#' + $.escapeSelector(targetId));
+                }
+                let empty = document.createElement('button');
+                $(empty).html('');
+                $(empty).addClass('visual-math-input-control btn btn-primary');
+                /!*$(empty).attr('id', 'placeholder');*!/
+                /!*if(event.target.tagName === 'SPAN'){
+                    targetId = event.target.parentElement.id;
+                } else {
+                    targetId =  event.target.id;
+                    _target = $('#' + $.escapeSelector(targetId));
+                }*!/
+                if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
+                    if(target !== undefined && targetId === target.id){
+                        console.log('same');
+                        return;
+                    }
+                    target = document.getElementById(targetId);
+                    $(empty).attr('id', targetId);
+                    $(_target).attr('id', dragged.id);
+                    let nodes = Array.from(target.parentNode.children);
+                    if(nodes.indexOf(dragged) < nodes.indexOf(target)) {
+                        // target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                    }else {
+                        // target.parentNode.insertBefore(empty, target); //right to left
+                    }
+                }
+            });*/
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
