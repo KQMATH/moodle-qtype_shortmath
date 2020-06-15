@@ -75,10 +75,16 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
-                event.target.style.opacity = 0;
+                // event.target.style.opacity = 0;
             });
             this.$element.on('dragend', event => {
-                event.target.style.opacity = "";
+                // event.target.style.opacity = "";
+                console.log('end');
+                console.log($(':focus').blur());
+                console.log(document.getElementById('placeholder'));
+                if(document.getElementById('placeholder') !== null) {
+                    document.getElementById('placeholder').replaceWith(dragged);
+                }
             });
         }
 
@@ -329,43 +335,43 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     console.log('draggedIndex after: '+draggedIndex);
                 }
             });
-            /*controlsWrapper.on('dragenter', event => {
-                // event.preventDefault();
-                console.log('drop detected');
-                let targetId;
-                let _target;
-                if(event.target.tagName === 'SPAN'){
-                    targetId = event.target.parentElement.id;
-                } else {
-                    targetId =  event.target.id;
-                    _target = $('#' + $.escapeSelector(targetId));
-                }
-                let empty = document.createElement('button');
-                $(empty).html('');
-                $(empty).addClass('visual-math-input-control btn btn-primary');
-                /!*$(empty).attr('id', 'placeholder');*!/
-                /!*if(event.target.tagName === 'SPAN'){
-                    targetId = event.target.parentElement.id;
-                } else {
-                    targetId =  event.target.id;
-                    _target = $('#' + $.escapeSelector(targetId));
-                }*!/
-                if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
-                    if(target !== undefined && targetId === target.id){
-                        console.log('same');
-                        return;
-                    }
-                    target = document.getElementById(targetId);
-                    $(empty).attr('id', targetId);
-                    $(_target).attr('id', dragged.id);
-                    let nodes = Array.from(target.parentNode.children);
-                    if(nodes.indexOf(dragged) < nodes.indexOf(target)) {
-                        // target.parentNode.insertBefore(empty, target.nextSibling); //left to right
-                    }else {
-                        // target.parentNode.insertBefore(empty, target); //right to left
-                    }
-                }
-            });*/
+           /*controlsWrapper.on('dragenter', event => {
+               // event.preventDefault();
+               console.log('drop detected');
+               let targetId;
+               let _target;
+               if(event.target.tagName === 'SPAN'){
+                   targetId = event.target.parentElement.id;
+               } else {
+                   targetId =  event.target.id;
+                   _target = $('#' + $.escapeSelector(targetId));
+               }
+               let empty = document.createElement('button');
+               $(empty).html('');
+               $(empty).addClass('visual-math-input-control btn btn-primary');
+               /!*$(empty).attr('id', 'placeholder');*!/
+               /!*if(event.target.tagName === 'SPAN'){
+                   targetId = event.target.parentElement.id;
+               } else {
+                   targetId =  event.target.id;
+                   _target = $('#' + $.escapeSelector(targetId));
+               }*!/
+               if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
+                   if(target !== undefined && targetId === target.id){
+                       console.log('same');
+                       return;
+                   }
+                   target = document.getElementById(targetId);
+                   $(empty).attr('id', targetId);
+                   $(_target).attr('id', dragged.id);
+                   let nodes = Array.from(target.parentNode.children);
+                   if(nodes.indexOf(dragged) < nodes.indexOf(target)) {
+                       // target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                   }else {
+                       // target.parentNode.insertBefore(empty, target); //right to left
+                   }
+               }
+           });*/
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
