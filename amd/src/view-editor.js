@@ -75,10 +75,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
-                // event.target.style.opacity = 0;
+                event.target.style.opacity = 0.5;
             });
             this.$element.on('dragend', event => {
-                // event.target.style.opacity = "";
+                event.target.style.opacity = "";
                 console.log('end');
                 console.log($(':focus').blur());
                 console.log(document.getElementById('placeholder'));
