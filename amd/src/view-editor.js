@@ -26,6 +26,8 @@
 define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
 
     let testInput = null;
+    let commandText = null;
+
     class EditorInput extends VisualMath.Input {
 
         constructor(input, parent) {
@@ -36,6 +38,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
         change() {
             super.onEdit = ($input, field) => {
                 console.log("changed ");
+                /*if($input.parent('.answer').children('div').children('.mq-root-block').children('.mq-latex-command-input')
+                    .attr('class') !== undefined){
+                    commandText = $input.parent('.answer').children('div').children('.mq-root-block').text();
+                }*/
+                console.log($input.parent('.answer').children('div').children('.mq-root-block').text());
                 $input.val(field.latex());
                 $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
             };
@@ -65,7 +72,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             this.$element.on('dragstart', event => {
                 console.log('dragstart from: '+event.target.id);
                 dragged = event.target;
-                nodes = Array.from(dragged.parentNode.children);
+                nodes = Array.from(dragged.parentNode.children); //buttons on the control list
                 draggedIndex = nodes.indexOf(dragged);
                 // Add the target element's id to the data transfer object
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
@@ -98,30 +105,53 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             // this.defineDefault();
         }
 
-        add($btnInput, $expInput) {
-            let btnText = $btnInput.val().replace(/[{}\s]/g, '');
-            let expText = $expInput.val().replace(/[{}\s]/g, '');
-            console.log('expText: '+ expText);
-            if (btnText === '' || expText === '') {
+        add($btnInput, $expInput, expEditorInput) {
+            /*let btnText = $btnInput.val().replace(/[{}\s]/g, '');
+            let expText = $expInput.val().replace(/[{}\s]/g, '');*/
+            if ($btnInput.val() === '' || $expInput.val() === '') {
                 return;
             }
 
+            console.log($btnInput.parent('.answer').children('div').html());
+            console.log($expInput.parent('.answer').children('div').children('.mq-root-block').html());
+
+            // let test = $btnInput.parent('.answer').children('div').remove();
+            // console.log(test.html());
+
+            console.log($btnInput.parent('.answer').children('div').children('.mq-root-block').html());
+
             let control;
-            if (expText.replace(/[{}a-z0-9A-Z\s]/g, '') === '^') {
-                let chars = btnText.split('^');
+            let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
+            html += '<span class="mq-root-block">';
+            html += $btnInput.parent('.answer').children('div').children('.mq-root-block').html();
+            html += '</span></div>';
+
+            let command = expEditorInput.field.latex();
+            console.log('latex: '+command);
+            // command = command.trim().replace(/[{}]/g, '');
+
+            control = new EditorControl('', html, field => field.latex(command.trim()));
+            // control = new EditorControl('', html, field => field.cmd(command));
+            control.enable();
+            this.$wrapper.append(control.$element);
+
+            expEditorInput.field.latex('');
+
+            /*if (expText.replace(/[{}a-z0-9A-Z\s]/g, '') === '^') {
+                chars = btnText.split('^');
                 console.log(chars[0] + ' ' + chars[1]);
                 let caret = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
                 caret += '<span class="mq-root-block">';
-                caret += '<var>x</var>';
+                caret += '<var>'+chars[0]+'</var>';
                 caret += '<span class="mq-supsub mq-non-leaf mq-sup-only">';
                 caret += '<span class="mq-sup">';
-                caret += '<var>y</var>';
+                caret += '<var>'+chars[1]+'</var>';
                 caret += '</span></span></span></div>';
                 control = new EditorControl('caret', caret, field => field.cmd('^'));
             } else if (expText.includes('lim_')) {
+                chars = expText.split('\\');
                 let lim = '<span class="mq-root-block">lim</span>';
                 console.log('lim');
-                let chars = expText.split('\\');
                 console.log(chars);
                 control = new EditorControl('lim', lim, field => {
                     field.cmd('\\lim').typedText('_').write(chars[1].split('_')[1])
@@ -166,7 +196,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 control = new EditorControl('infinity', infinity, field => field.cmd('\\infinity'));
             }
             control.enable();
-            this.$wrapper.append(control.$element);
+            this.$wrapper.append(control.$element);*/
         }
 
     }
@@ -207,87 +237,94 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
             controlsWrapper.addClass('visual-math-input-wrapper');
             controlsWrapper.attr('id', 'target');
+
             controlsWrapper.on('drop', event =>{
                 event.preventDefault();
-                let targetId;
-                let _target;
-                const data = event.originalEvent.dataTransfer.getData("text");
-                let button = document.getElementById(data);
-                if(event.target.tagName === 'SPAN'){
-                    targetId = event.target.parentElement.id;
-                } else {
-                    targetId =  event.target.id;
-                    _target = $('#' + $.escapeSelector(targetId));
+                // let targetId;
+                // let _target;
+                // const data = event.originalEvent.dataTransfer.getData("text");
+                // let button = document.getElementById(data);
+                console.log('dropping to: '+target.id);
+                if (target.id === dragged.id) {
+                    console.log('dont');
+                    event.originalEvent.dataTransfer.clearData();
+                    return;
                 }
-                console.log('dropping: '+targetId);
-                console.log(_target);
-                if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
-                    if(targetId === dragged.id){
-                        console.log('dont');
-                        return;
-                    }
-                    document.getElementById('placeholder').replaceWith(dragged);
-                }else {
+                if ($(event.target).hasClass('visual-math-input-wrapper')) {
                     console.log('dropped');
-                    event.target.appendChild(button);
+                    event.target.appendChild(dragged);
+                } else {
+                    document.getElementById('placeholder').replaceWith(dragged);
                 }
                 event.originalEvent.dataTransfer.clearData();
             });
+
             controlsWrapper.on('dragover', event => {
                event.preventDefault();
                event.originalEvent.dataTransfer.dropEffect = "move";
             });
+
            controlsWrapper.on('dragenter', event => {
                // event.preventDefault();
                console.log('drop detected');
+               console.log(event.target);
+               if ($(event.target).hasClass('visual-math-input-wrapper')) {
+                   target = event.target;
+                   return;
+               }
                let targetId;
-               let _target;
-               if(event.target.tagName === 'SPAN'){
-                   targetId = event.target.parentElement.id;
+               if(event.target.nodeName !== 'BUTTON'){
+                   console.log($(event.target).parents('button'));
+                   targetId = $(event.target).parents('button').attr('id');
+               } else {
+                   targetId =  event.target.id;
+               }
+               // let _target = $('#' + $.escapeSelector(targetId));
+               /*if(event.target.tagName === 'SPAN'){
+                   targetId = event.target.parentElement.parentElement.id; //button --> div --> span
                } else {
                    targetId =  event.target.id;
                    _target = $('#' + $.escapeSelector(targetId));
-               }
+               }*/
                let empty = document.createElement('button');
                $(empty).html('');
                $(empty).addClass('visual-math-input-control btn btn-primary');
                $(empty).attr('draggable', true);
                $(empty).attr('id', 'placeholder');
                $(empty).css('border', '1px solid yellow');
-               if(_target === 'undefined' || !$(_target).hasClass('visual-math-input-wrapper')){
-                   console.log('targetId: '+targetId);
-                   if(targetId === 'placeholder'){
-                       console.log('done');
-                       return;
-                   }
-                   target = document.getElementById(targetId);
-                   let targetIndex =  nodes.indexOf(target);
-                   if(draggedIndex === targetIndex){ //movement within button
-                       target = undefined;
-                       return;
-                   }
-                   console.log( draggedIndex+' to '+targetIndex);
-                   if(target.parentNode.contains(dragged)) {
-                       target.parentNode.removeChild(dragged);
-                   }else{
-                       target.parentNode.removeChild(document.getElementById('placeholder'));
-                   }
-                   console.log( draggedIndex+' to '+targetIndex);
-                   if(draggedIndex < targetIndex) {
-                       console.log('last:'+target.parentNode.lastChild)
-                       if(target.parentNode.lastChild !== target) {
-                           target.parentNode.insertBefore(empty, target.nextSibling); //left to right
-                       }else{
-                           target.parentNode.appendChild(empty);
-                       }
-                   } else {
-                       console.log('here:');
-                       target.parentNode.insertBefore(empty, target); //right to left
-                   }
-                   nodes = Array.from(target.parentNode.children);
-                   draggedIndex = nodes.indexOf(empty);
-                   console.log('draggedIndex after: '+draggedIndex);
+               console.log('targetId: ' + targetId);
+               if (targetId === 'placeholder') {
+                   console.log('done');
+                   return;
                }
+               target = document.getElementById(targetId);
+               console.log('target: ' + target);
+               let targetIndex = nodes.indexOf(target);
+               if (draggedIndex === targetIndex) { //movement within button
+                   // target = undefined;
+                   return;
+               }
+               console.log(draggedIndex + ' to ' + targetIndex);
+               if (target.parentNode.contains(dragged)) {
+                   target.parentNode.removeChild(dragged);
+               } else {
+                   target.parentNode.removeChild(document.getElementById('placeholder'));
+               }
+               console.log(draggedIndex + ' to ' + targetIndex);
+               if (draggedIndex < targetIndex) {
+                   console.log('last:' + target.parentNode.lastChild);
+                   if (target.parentNode.lastChild !== target) {
+                       target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                   } else {
+                       target.parentNode.appendChild(empty);
+                   }
+               } else {
+                   console.log('here:');
+                   target.parentNode.insertBefore(empty, target); //right to left
+               }
+               nodes = Array.from(target.parentNode.children);
+               draggedIndex = nodes.indexOf(empty);
+               console.log('draggedIndex after: ' + draggedIndex);
            });
 
             let $btnInput = $('#' + $.escapeSelector(btnName));
@@ -315,7 +352,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 event.preventDefault();
                 console.log("save");
                 let controls = new EditorControlList(controlsWrapper);
-                controls.add($btnInput, $expInput);
+                controls.add($btnInput, $expInput, input);
                 $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
                 $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
             });
