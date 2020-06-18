@@ -240,22 +240,16 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
             controlsWrapper.on('drop', event =>{
                 event.preventDefault();
-                // let targetId;
-                // let _target;
-                // const data = event.originalEvent.dataTransfer.getData("text");
-                // let button = document.getElementById(data);
+
                 console.log('dropping to: '+target.id);
                 if (target.id === dragged.id) {
                     console.log('dont');
                     event.originalEvent.dataTransfer.clearData();
                     return;
                 }
-                if ($(event.target).hasClass('visual-math-input-wrapper')) {
-                    console.log('dropped');
-                    event.target.appendChild(dragged);
-                } else {
-                    document.getElementById('placeholder').replaceWith(dragged);
-                }
+
+                console.log('dropped');
+                document.getElementById('placeholder').replaceWith(dragged);
                 event.originalEvent.dataTransfer.clearData();
             });
 
@@ -265,52 +259,47 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             });
 
            controlsWrapper.on('dragenter', event => {
-               // event.preventDefault();
                console.log('drop detected');
                console.log(event.target);
-               if ($(event.target).hasClass('visual-math-input-wrapper')) {
-                   target = event.target;
-                   return;
-               }
+
                let targetId;
-               if(event.target.nodeName !== 'BUTTON'){
+               if ($(event.target).hasClass('visual-math-input-wrapper')){
+                   targetId = event.target.lastChild.id;
+               }else if(event.target.nodeName !== 'BUTTON'){
                    console.log($(event.target).parents('button'));
                    targetId = $(event.target).parents('button').attr('id');
                } else {
                    targetId =  event.target.id;
                }
-               // let _target = $('#' + $.escapeSelector(targetId));
-               /*if(event.target.tagName === 'SPAN'){
-                   targetId = event.target.parentElement.parentElement.id; //button --> div --> span
-               } else {
-                   targetId =  event.target.id;
-                   _target = $('#' + $.escapeSelector(targetId));
-               }*/
+
+               console.log('targetId: ' + targetId);
+               if (targetId === 'placeholder') {
+                   console.log('done');
+                   return;
+               }
+
+               target = document.getElementById(targetId);
+               console.log('target: ' + target);
+
+               let targetIndex = nodes.indexOf(target);
+               if (draggedIndex === targetIndex) { //movement within button
+                   return;
+               }
+
                let empty = document.createElement('button');
                $(empty).html('');
                $(empty).addClass('visual-math-input-control btn btn-primary');
                $(empty).attr('draggable', true);
                $(empty).attr('id', 'placeholder');
                $(empty).css('border', '1px solid yellow');
-               console.log('targetId: ' + targetId);
-               if (targetId === 'placeholder') {
-                   console.log('done');
-                   return;
-               }
-               target = document.getElementById(targetId);
-               console.log('target: ' + target);
-               let targetIndex = nodes.indexOf(target);
-               if (draggedIndex === targetIndex) { //movement within button
-                   // target = undefined;
-                   return;
-               }
+
                console.log(draggedIndex + ' to ' + targetIndex);
                if (target.parentNode.contains(dragged)) {
                    target.parentNode.removeChild(dragged);
                } else {
                    target.parentNode.removeChild(document.getElementById('placeholder'));
                }
-               console.log(draggedIndex + ' to ' + targetIndex);
+
                if (draggedIndex < targetIndex) {
                    console.log('last:' + target.parentNode.lastChild);
                    if (target.parentNode.lastChild !== target) {
@@ -319,9 +308,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                        target.parentNode.appendChild(empty);
                    }
                } else {
-                   console.log('here:');
                    target.parentNode.insertBefore(empty, target); //right to left
                }
+
                nodes = Array.from(target.parentNode.children);
                draggedIndex = nodes.indexOf(empty);
                console.log('draggedIndex after: ' + draggedIndex);
