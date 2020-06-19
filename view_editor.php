@@ -49,11 +49,10 @@ $inputattributes = array(
     'name' => 'test',
 //    'value' => '',
     'id' => 'test',
-    'size' => 30,
-    //'class' => 'form-control d-inline'
+//    'class' => 'form-control d-inline',
+    'size' => 30
 );
 
-//$input = html_writer::empty_tag('input', array('id' => 'test'));
 $input = html_writer::empty_tag('input', $inputattributes);
 
 // Test
