@@ -38,13 +38,7 @@ $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 
-
-// render page
-//echo html_writer::tag('div', "Edit the file under moodle/question/type/shortmath/amd/src/view-edit.js");
-
-//echo html_writer::tag('input', "", array('type' => 'text', 'id' => 'smath'));
-
-$inputattributes = array(
+$test_inputattributes = array(
     'type' => 'text',
     'name' => 'test',
 //    'value' => '',
@@ -53,37 +47,61 @@ $inputattributes = array(
     'size' => 30
 );
 
-$input = html_writer::empty_tag('input', $inputattributes);
+$test_input = html_writer::empty_tag('input', $test_inputattributes);
+$test_span = html_writer::tag('span', $test_input, array('class' => 'answer'));
+$test_label = html_writer::tag('label', 'Test:', array('for' => 'test'));
+
+$btn_inputattributes = array('type' => 'text', 'name' => 'btn', 'id' => 'btn', 'size' => 30);
+$btn_input = html_writer::empty_tag('input', $btn_inputattributes);
+$btn_span = html_writer::tag('span', $btn_input, array('class' => 'answer'));
+$btn_label = html_writer::tag('label', 'Button:', array('for' => 'btn'));;
+
+$exp_inputattributes = array('type' => 'text', 'name' => 'exp', 'id' => 'exp', 'size' => 30);
+$exp_input = html_writer::empty_tag('input', $exp_inputattributes);
+$exp_span = html_writer::tag('span', $exp_input, array('class' => 'answer'));
+$exp_label = html_writer::tag('label', 'Expression:', array('for' => 'exp'));
+
+$save_buttonattributes = array('type' => 'button', 'name' => 'save',
+    'id' => 'save', 'class' => 'btn btn-primary', 'value' => 'Save');
+$save_button = html_writer::empty_tag('input', $save_buttonattributes);
+
+$tr_start = html_writer::start_tag('tr');
+$td_start =  html_writer::start_tag('td');
+$tr_end =  html_writer::end_tag('tr');
+$td_end = html_writer::end_tag('td');
+
+$div_start = html_writer::start_tag('div');
+$input_div_start = html_writer::start_tag('div', array('class' => 'ablock form-inline'));
+$div_end =  html_writer::end_tag('div');
+
+// render page
+//echo html_writer::tag('div', "Edit the file under moodle/question/type/shortmath/amd/src/view-edit.js");
+
+// Controls
+$output = html_writer::start_tag('div', array('class' => 'que shortmath'));
+$output .= html_writer::tag('div', '', array('class' => 'controls_wrapper'));
+
+// Table
+$output .= html_writer::start_tag('table');
 
 // Test
-echo html_writer::start_tag('div', array('class' => 'que shortmath'));
-//echo html_writer::tag('div', '', array('class' => 'info'));
-//echo html_writer::start_tag('div', array('class' => 'content'));
-echo html_writer::tag('div', '', array('class' => 'controls_wrapper'));
-//echo html_writer::tag('div', '', array('class' => 'qtext'));
-echo html_writer::start_tag('div', array('class' => 'ablock form-inline'));
-echo html_writer::tag('label', 'Test:', array('for' => 'test'));
-echo html_writer::tag('span', $input, array('class' => 'answer'));
-echo html_writer::end_tag('div');
-//echo html_writer::end_tag('div');
-//echo html_writer::end_tag('div');
+$output .= $tr_start .$td_start .$test_label .$td_end .$td_start .$input_div_start
+    .$test_span. $div_end .$td_end .$tr_end;
 
+// Button
+$output .= $tr_start .$td_start .$btn_label .$td_end .$td_start .$input_div_start
+    .$btn_span .$div_end .$td_end .$tr_end;
 
-echo html_writer::start_tag('div', array('class' => 'ablock form-inline'));
-echo html_writer::tag('label', 'Button:', array('for' => 'btn'));
-echo html_writer::tag('span', html_writer::empty_tag('input',
-    array('type' => 'text', 'name' => 'btn', 'id' => 'btn', 'size' => 30)),
-    array('class' => 'answer'));
-echo html_writer::tag('label', 'Expression:', array('for' => 'exp'));
-echo html_writer::tag('span', html_writer::empty_tag('input',
-    array('type' => 'text', 'name' => 'exp', 'id' => 'exp', 'size' => 30)),
-    array('class' => 'answer'));
-echo html_writer::end_tag('div');
+// Expression
+$output .= $tr_start .$td_start .$exp_label .$td_end .$td_start .$input_div_start
+    .$exp_span .$div_end .$td_end .$tr_end;
 
-echo html_writer::start_tag('div', array());
-echo html_writer::tag('input', '', array('type' => 'button', 'name' => 'save',
-    'id' => 'save', 'class' => 'btn btn-primary', 'value' => 'Save'));
-echo html_writer::end_tag('div');
+// Save
+$output .= $tr_start .$td_start .$div_start .$save_button .$div_end .$td_end .$tr_end;
+
+$output .= html_writer::end_tag('table') .$div_end;
+
+echo $output;
 
 // Execute js script
 $params = ['test', 'btn', 'exp']; // JS params passed here...
