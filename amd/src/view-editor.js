@@ -26,7 +26,6 @@
 define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
 
     let testInput = null;
-    let commandText = null;
 
     class EditorInput extends VisualMath.Input {
 
@@ -37,12 +36,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
         change() {
             super.onEdit = ($input, field) => {
-                console.log("changed ");
-                /*if($input.parent('.answer').children('div').children('.mq-root-block').children('.mq-latex-command-input')
-                    .attr('class') !== undefined){
-                    commandText = $input.parent('.answer').children('div').children('.mq-root-block').text();
-                }*/
-                console.log($input.parent('.answer').children('div').children('.mq-root-block').text());
                 $input.val(field.latex());
                 $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
             };
@@ -52,17 +45,18 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
     class EditorControl extends VisualMath.Control {
 
-        constructor(name, text, onClick) {
-            super(name, text, onClick);
+        constructor(text, onClick) {
+            super('', text, onClick);
         }
 
         enable() {
             super.enable();
             this.$element.off('click');
             this.$element.on('click', event => {
-                console.log($(':focus'));
                 event.preventDefault();
+                console.log($(':focus'));
                 if (testInput !== null) {
+                    console.log(testInput.field.latex())
                     this.onClick(testInput.field);
                     testInput.field.focus();
                 }
@@ -106,19 +100,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
         }
 
         add($btnInput, $expInput, expEditorInput) {
-            /*let btnText = $btnInput.val().replace(/[{}\s]/g, '');
-            let expText = $expInput.val().replace(/[{}\s]/g, '');*/
             if ($btnInput.val() === '' || $expInput.val() === '') {
                 return;
             }
-
-            console.log($btnInput.parent('.answer').children('div').html());
-            console.log($expInput.parent('.answer').children('div').children('.mq-root-block').html());
-
-            // let test = $btnInput.parent('.answer').children('div').remove();
-            // console.log(test.html());
-
-            console.log($btnInput.parent('.answer').children('div').children('.mq-root-block').html());
 
             let control;
             let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
@@ -128,104 +112,32 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
             let command = expEditorInput.field.latex();
             console.log('latex: '+command);
-            // command = command.trim().replace(/[{}]/g, '');
 
-            control = new EditorControl('', html, field => field.latex(command.trim()));
-            // control = new EditorControl('', html, field => field.cmd(command));
+            control = new EditorControl(html, field => field.latex(command.trim()));
+            // control = new VisualMath.Control('', html, field => field.latex(command.trim()));
             control.enable();
             this.$wrapper.append(control.$element);
 
             expEditorInput.field.latex('');
 
-            /*if (expText.replace(/[{}a-z0-9A-Z\s]/g, '') === '^') {
-                chars = btnText.split('^');
-                console.log(chars[0] + ' ' + chars[1]);
-                let caret = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
-                caret += '<span class="mq-root-block">';
-                caret += '<var>'+chars[0]+'</var>';
-                caret += '<span class="mq-supsub mq-non-leaf mq-sup-only">';
-                caret += '<span class="mq-sup">';
-                caret += '<var>'+chars[1]+'</var>';
-                caret += '</span></span></span></div>';
-                control = new EditorControl('caret', caret, field => field.cmd('^'));
-            } else if (expText.includes('lim_')) {
-                chars = expText.split('\\');
-                let lim = '<span class="mq-root-block">lim</span>';
-                console.log('lim');
-                console.log(chars);
-                control = new EditorControl('lim', lim, field => {
-                    field.cmd('\\lim').typedText('_').write(chars[1].split('_')[1])
-                        .cmd('\\to').write(expText.split('to')[1]).moveToRightEnd();
-                });
-            } else if (expText.includes('binom')) {
-                let nchoosek = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
-                nchoosek += '<span class="mq-root-block">';
-                nchoosek += '<span class="mq-non-leaf">';
-                nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);">(</span>';
-                nchoosek += '<span class="mq-non-leaf" style="margin-top:0;">';
-                nchoosek += '<span class="mq-array mq-non-leaf">';
-                nchoosek += '<span style="font-size: 14px;"><var>n</var></span>';
-                nchoosek += '<span style="font-size: 14px;"><var>k</var></span>';
-                nchoosek += '</span></span>';
-                nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);">)</span></span>';
-                nchoosek += '</span></div>';
-                control = new EditorControl('nchoosek', nchoosek, field => field.cmd('\\choose'));
-            } else if (expText.includes('sqrt')) {
-                let sqrt = '<span class="mq-root-block">&radic;</span>';
-                control = new EditorControl('sqrt', sqrt, field => field.cmd('\\sqrt'));
-            } else if (expText.includes('int')) {
-                let int = '<span class="mq-root-block">&int;</span>';
-                control = new EditorControl('int', int, field => field.cmd('\\int'));
-            } else if (expText.includes('sum')) {
-                let sum = '<span class="mq-root-block"><span class="mq-large-operator mq-non-leaf">&sum;</span></span>';
-                control = new EditorControl('sum', sum, field => field.cmd('\\sum'));
-            } else if (expText.includes('frac')) {
-                let divide = '<span class="mq-root-block">/</span>';
-                control = new EditorControl('divide', divide, field => field.cmd('\\frac'));
-            } else if (expText.includes('pm')) {
-                let plusminus = '<span class="mq-root-block">&plusmn;</span>';
-                control = new EditorControl('plusminus', plusminus, field => field.cmd('\\pm'));
-            } else if (expText.includes('theta')) {
-                let theta = '<span class="mq-root-block">&theta;</span>';
-                control = new EditorControl('theta', theta, field => field.cmd('\\theta'));
-            } else if (expText.includes('pi')) {
-                let pi = '<span class="mq-root-block">&pi;</span>';
-                control = new EditorControl('pi', pi, field => field.cmd('\\pi'));
-            } else if (expText.includes('infinity') || expText.includes('infty')) {
-                let infinity = '<span class="mq-root-block">&infin;</span>';
-                control = new EditorControl('infinity', infinity, field => field.cmd('\\infinity'));
-            }
-            control.enable();
-            this.$wrapper.append(control.$element);*/
         }
 
     }
 
     return {
-        initialize: function(inputName, readonly, btnName, expName) {
+        initialize: function(testInputName, btnInputName, expInputName) {
 
-            console.log("name:  "+inputName);
-            console.log("ro:  "+readonly);
-            var readOnly = readonly;
-            var $shortanswerInput = $('#' + $.escapeSelector(inputName));
+            console.log("name:  "+testInputName);
+            var $shortanswerInput = $('#' + $.escapeSelector(testInputName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $shortanswerInput.removeClass('d-inline');
-            var $parent = $('#' + $.escapeSelector(inputName)).parent('.answer');
+            var $parent = $('#' + $.escapeSelector(testInputName)).parent('.answer');
 
-            //var input = new VisualMath.Input($shortanswerInput, $parent);
+            // var input = new VisualMath.Input($shortanswerInput, $parent);
             var input = new EditorInput($shortanswerInput, $parent);
             console.log("test value:  "+input.value);
             input.$input.hide();
-
-            let editorInput = new EditorInput();
-            if (!readonly) {
-
-                editorInput.change();
-
-            } else {
-                readOnly = true;
-                input.disable();
-            }
+            input.change();
 
             if ($shortanswerInput.val()) {
                 input.field.write(
@@ -233,7 +145,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 );
             }
 
-            var controlsWrapper = $('#' + $.escapeSelector(inputName)).parents('.shortmath').find('.controls_wrapper');
+            var controlsWrapper = $('#' + $.escapeSelector(testInputName)).parents('.shortmath').find('.controls_wrapper');
 
             controlsWrapper.addClass('visual-math-input-wrapper');
             controlsWrapper.attr('id', 'target');
@@ -291,7 +203,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                $(empty).addClass('visual-math-input-control btn btn-primary');
                $(empty).attr('draggable', true);
                $(empty).attr('id', 'placeholder');
-               $(empty).css('border', '1px solid yellow');
+               $(empty).css('border', '2px solid red');
 
                console.log(draggedIndex + ' to ' + targetIndex);
                if (target.parentNode.contains(dragged)) {
@@ -316,20 +228,20 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                console.log('draggedIndex after: ' + draggedIndex);
            });
 
-            let $btnInput = $('#' + $.escapeSelector(btnName));
+            let $btnInput = $('#' + $.escapeSelector(btnInputName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $btnInput.removeClass('d-inline');
-            $parent = $('#' + $.escapeSelector(btnName)).parent('.answer');
+            $parent = $('#' + $.escapeSelector(btnInputName)).parent('.answer');
 
             input = new EditorInput($btnInput, $parent);
             console.log("test value:  "+input.value);
             input.$input.hide();
             input.change();
 
-            let $expInput = $('#' + $.escapeSelector(expName));
+            let $expInput = $('#' + $.escapeSelector(expInputName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $expInput.removeClass('d-inline');
-            $parent = $('#' + $.escapeSelector(expName)).parent('.answer');
+            $parent = $('#' + $.escapeSelector(expInputName)).parent('.answer');
 
             input = new EditorInput($expInput, $parent);
             console.log("test value:  "+input.value);
@@ -337,11 +249,13 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             input.change();
 
             let $saveButton = $('#' + $.escapeSelector('save'));
+            let controls = new EditorControlList(controlsWrapper);
             $saveButton.on('click', event => {
                 event.preventDefault();
                 console.log("save");
-                let controls = new EditorControlList(controlsWrapper);
                 controls.add($btnInput, $expInput, input);
+
+                //clear inputs
                 $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
                 $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
             });

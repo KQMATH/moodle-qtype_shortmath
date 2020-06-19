@@ -87,7 +87,7 @@ echo html_writer::tag('input', '', array('type' => 'button', 'name' => 'save',
 echo html_writer::end_tag('div');
 
 // Execute js script
-$params = ['test', false, 'btn', 'exp']; // JS params passed here...
+$params = ['test', 'btn', 'exp']; // JS params passed here...
 $PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params);
 
 echo $OUTPUT->footer();
