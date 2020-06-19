@@ -51,6 +51,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
         enable() {
             super.enable();
+
             this.$element.off('click');
             this.$element.on('click', event => {
                 event.preventDefault();
@@ -61,8 +62,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     testInput.field.focus();
                 }
             });
+
             this.$element.attr('id', new Date().getTime());
             this.$element.attr('draggable', true);
+
             this.$element.on('dragstart', event => {
                 console.log('dragstart from: '+event.target.id);
                 dragged = event.target;
@@ -73,6 +76,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 event.originalEvent.dataTransfer.dropEffect = "move";
                 event.target.style.opacity = 0.5;
             });
+
             this.$element.on('dragend', event => {
                 event.target.style.opacity = "";
                 console.log('end');
@@ -82,9 +86,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                     document.getElementById('placeholder').replaceWith(dragged);
                 }
             });
+
         }
 
     }
+
     let dragged;
     let target;
     let nodes;
