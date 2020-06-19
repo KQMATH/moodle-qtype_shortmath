@@ -119,8 +119,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             let command = expEditorInput.field.latex();
             console.log('latex: '+command);
 
-            control = new EditorControl(html, field => field.latex(command.trim()));
-            // control = new VisualMath.Control('', html, field => field.latex(command.trim()));
+            control = new EditorControl(html, field => field.write(command));
             control.enable();
             this.$wrapper.append(control.$element);
 
