@@ -107,6 +107,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
         add($btnInput, $expInput, expEditorInput) {
             if ($btnInput.val() === '' || $expInput.val() === '') {
+                console.log('Enter all values!');
                 return;
             }
 
@@ -122,8 +123,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             control = new EditorControl(html, field => field.write(command));
             control.enable();
             this.$wrapper.append(control.$element);
-
-            expEditorInput.field.latex('');
 
         }
 
@@ -238,31 +237,33 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
             $btnInput.removeClass('d-inline');
             $parent = $('#' + $.escapeSelector(btnInputName)).parent('.answer');
 
-            input = new EditorInput($btnInput, $parent);
-            console.log("test value:  "+input.value);
-            input.$input.hide();
-            input.change();
+            let buttonInput = new EditorInput($btnInput, $parent);
+            buttonInput.$input.hide();
+            buttonInput.change();
 
             let $expInput = $('#' + $.escapeSelector(expInputName));
             // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
             $expInput.removeClass('d-inline');
             $parent = $('#' + $.escapeSelector(expInputName)).parent('.answer');
 
-            input = new EditorInput($expInput, $parent);
-            console.log("test value:  "+input.value);
-            input.$input.hide();
-            input.change();
+            let expressionInput = new EditorInput($expInput, $parent);
+            expressionInput.$input.hide();
+            expressionInput.change();
 
             let $saveButton = $('#' + $.escapeSelector('save'));
             let controls = new EditorControlList(controlsWrapper);
             $saveButton.on('click', event => {
                 event.preventDefault();
                 console.log("save");
-                controls.add($btnInput, $expInput, input);
+                controls.add($btnInput, $expInput, expressionInput);
 
                 //clear inputs
                 $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
                 $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
+
+                buttonInput.field.latex('');
+                expressionInput.field.latex('');
+
             });
         }
     };
