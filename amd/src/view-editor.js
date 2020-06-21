@@ -65,6 +65,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
             this.$element.attr('id', new Date().getTime());
             this.$element.attr('draggable', true);
+            this.$element.css({ width: 'auto', height: 'auto'});
 
             this.$element.on('dragstart', event => {
                 console.log('dragstart from: '+event.target.id);
@@ -110,6 +111,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 console.log('Enter all values!');
                 return;
             }
+
+            console.log($btnInput.parent('.answer').children('div').children('.mq-root-block').find('.mq-empty').remove());
 
             let control;
             let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
