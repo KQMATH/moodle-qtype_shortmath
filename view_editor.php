@@ -101,7 +101,7 @@ $output .= $tr_start .$td_start .$div_start .$save_button .$div_end .$td_end .$t
 
 $output .= html_writer::end_tag('table') .$div_end;
 
-echo $output;
+//echo $output;
 
 // Execute js script
 $params = ['test', 'btn', 'exp']; // JS params passed here...

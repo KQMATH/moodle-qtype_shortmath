@@ -23,8 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
-
+define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], function($, VisualMath, Templates) {
     let testInput = null;
 
     class EditorInput extends VisualMath.Input {
@@ -107,6 +106,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
         }
 
         add($btnInput, $expInput, expEditorInput) {
+            $(':focus').blur();
             if ($btnInput.val() === '' || $expInput.val() === '') {
                 console.log('Enter all values!');
                 return;
@@ -133,6 +133,37 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
 
     return {
         initialize: function(testInputName, btnInputName, expInputName) {
+            /**
+             * Template test
+             */
+            const context = {
+                "shortMathClass" : "que shortmath",
+                "controlsWrapperClass" : "controls_wrapper",
+                "buttonInputId" : "btn",
+                "buttonInputLabel" : "Button:",
+                "inputDivClass" : "ablock form-inline",
+                "inputSpanClass" : "answer",
+                "buttonInputName" : "btn",
+                "buttonInputSize" : 30,
+                "expressionInputId" : "exp",
+                "expressionInputLabel" : "Expression:",
+                "expressionInputName" : "exp",
+                "expressionInputSize" : 30,
+                "saveButtonName" : "save",
+                "saveButtonId" : "save",
+                "saveButtonClass" : "btn btn-primary",
+                "saveButtonValue" : "Save"
+            };
+
+            Templates.render('qtype_shortmath/editor', context)
+
+            // It returns a promise that needs to be resoved.
+                .then(function(html, js) {
+                    // Here eventually I have my compiled template, and any javascript that it generated.
+                    // The templates object has append, prepend and replace functions.
+                    // Templates.appendNodeContents('.block_looneytunes .content', html, js);
+                    console.log(html);
+                    Templates.appendNodeContents('div[role=\'main\']', html, js);
 
             console.log("name:  "+testInputName);
             var $shortanswerInput = $('#' + $.escapeSelector(testInputName));
@@ -152,6 +183,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 );
             }
 
+                    testInputName = btnInputName;
             var controlsWrapper = $('#' + $.escapeSelector(testInputName)).parents('.shortmath').find('.controls_wrapper');
 
             controlsWrapper.addClass('visual-math-input-wrapper');
@@ -268,6 +300,13 @@ define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) 
                 expressionInput.field.latex('');
 
             });
+                }).fail(function(ex) {
+                // Deal with this exception (I recommend core/notify exception function for this).
+            });
+            /**
+             * test end
+             */
+
         }
     };
 });
