@@ -38,42 +38,67 @@
     }
 }}
 
-<div class="{{shortMathClass}}">
-    <div class="{{controlsWrapperClass}}"></div>
-    <table>
-        <tr>
-            <td>
-                <label for="{{buttonInputId}}">{{buttonInputLabel}}</label>
-            </td>
-            <td>
-                <div class="{{inputDivClass}}">
-                    <span class="{{inputSpanClass}}">
-                        <input type="text" name="{{buttonInputName}}" id="{{buttonInputId}}"
-                         size="{{buttonInputSize}}"/>
-                    </span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="{{expressionInputId}}">{{expressionInputLabel}}</label>
-            </td>
-            <td>
-                <div class="{{inputDivClass}}">
-                    <span class="{{inputSpanClass}}">
-                        <input type="text" name="{{expressionInputName}}" id="{{expressionInputId}}"
-                         size="{{expressionInputSize}}"/>
-                    </span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
-                    class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
-                </div>
-            </td>
-        </tr>
-    </table>
+<div class="{{shortMathClass}} container-1">
+    <div class="box-1">
+        <div class="{{controlsWrapperClass}}"></div>
+        <table>
+            <tr>
+                <td>
+                    <label for="{{testInputId}}">{{testInputLabel}}</label>
+                </td>
+                <td>
+                    <div class="{{inputDivClass}}">
+                        <span class="{{inputSpanClass}}">
+                            <input type="text" name="{{testInputName}}" id="{{testInputId}}"
+                                   size="{{testInputSize}}"/>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="box-2">
+        <table>
+            <tr>
+                <td>
+                    <label for="{{buttonInputId}}">{{buttonInputLabel}}</label>
+                </td>
+                <td>
+                    <div class="{{inputDivClass}}">
+                        <span class="{{inputSpanClass}}">
+                            <input type="text" name="{{buttonInputName}}" id="{{buttonInputId}}"
+                             size="{{buttonInputSize}}"/>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="{{expressionInputId}}">{{expressionInputLabel}}</label>
+                </td>
+                <td>
+                    <div class="{{inputDivClass}}">
+                        <span class="{{inputSpanClass}}">
+                            <input type="text" name="{{expressionInputName}}" id="{{expressionInputId}}"
+                             size="{{expressionInputSize}}"/>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="button">
+                        <div>
+                            <input type="button" name="{{addButtonName}}" id="{{addButtonId}}"
+                            class="{{addButtonClass}}" value="{{addButtonValue}}"/>
+                        </div>
+                        <div>
+                            <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
+                                   class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>

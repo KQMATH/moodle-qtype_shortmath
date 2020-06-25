@@ -139,6 +139,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             const context = {
                 "shortMathClass" : "que shortmath",
                 "controlsWrapperClass" : "controls_wrapper",
+                "testInputLabel" : "Test:",
+                "testInputId" : "test",
+                "testInputName" : "test",
+                "testInputSize" : 30,
                 "buttonInputId" : "btn",
                 "buttonInputLabel" : "Button:",
                 "inputDivClass" : "ablock form-inline",
@@ -149,6 +153,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 "expressionInputLabel" : "Expression:",
                 "expressionInputName" : "exp",
                 "expressionInputSize" : 30,
+                "addButtonName" : "add",
+                "addButtonId" : "add",
+                "addButtonClass" : "btn btn-primary",
+                "addButtonValue" : "Add",
                 "saveButtonName" : "save",
                 "saveButtonId" : "save",
                 "saveButtonClass" : "btn btn-primary",
@@ -286,11 +294,15 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             expressionInput.change();
 
             let $saveButton = $('#' + $.escapeSelector('save'));
+            $saveButton.hide();
+
+            let $addButton = $('#' + $.escapeSelector('add'));
             let controls = new EditorControlList(controlsWrapper);
-            $saveButton.on('click', event => {
+            $addButton.on('click', event => {
                 event.preventDefault();
-                console.log("save");
+                console.log("add");
                 controls.add($btnInput, $expInput, expressionInput);
+                $saveButton.show();
 
                 //clear inputs
                 $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
