@@ -81,7 +81,7 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
          $field = new xmldb_field('editorconfig', XMLDB_TYPE_TEXT, null, null, null, null, null);
          
 
-        // Conditionally launch drop index hash.
+        // Conditionally launch add field for qtype_shortmath_options.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
