@@ -9,10 +9,22 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key linking to the question table."/>
         <FIELD NAME="usecase" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether answers are matched case-sensitively."/>
+        <FIELD NAME="editorconfig" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The JSON encoded editor configuration."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="questionid" TYPE="foreign-unique" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="qtype_shortmath_templates" COMMENT="Template for shortmath questions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contextid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The contextid that the template was created with."/>
+        <FIELD NAME="template" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The JSON encoded editor configuration template."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contextid" TYPE="foreign-unique" FIELDS="contextid" REFTABLE="context" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>
