@@ -99,7 +99,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
     class EditorControlList {
 
         constructor(wrapper) {
-            // this.controls = [];
+            this.controls = [];
             this.$wrapper = $(wrapper);
             this.$wrapper.addClass('visual-math-input-wrapper');
             // this.defineDefault();
@@ -126,7 +126,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             control = new EditorControl(html, field => field.write(command));
             control.enable();
             this.$wrapper.append(control.$element);
-
+            this.controls.push({button: html, expression: command});
         }
 
     }
@@ -312,6 +312,20 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 expressionInput.field.latex('');
 
             });
+
+            $saveButton.on('click', event => {
+                $.ajax({
+                    type: 'post',
+                    url: 'editor_action.php',
+                    data: {'data': JSON.stringify(controls.controls)},
+                    success: (data, status, xhttp) =>{
+                        console.log(data);
+                        console.log(controls.controls);
+                    },
+                    error: 'onError'
+                });
+            });
+
                 }).fail(function(ex) {
                 // Deal with this exception (I recommend core/notify exception function for this).
             });
