@@ -7,8 +7,11 @@ $data = $_POST['data'];
 /*foreach ($data as $d) {
     echo($d['expression']);
 }*/
+global $DB;
 
 $record = new stdClass;
-$record->contextid = context_user::instance($USER->id);
+//$record->contextid = context_user::instance($USER->id)->id;
+$record->contextid = time();
 $record->template = $data;
-$DB->insert_record('qtype_shortmath_templates', $record);
+$insert = $DB->insert_record('qtype_shortmath_templates', $record);
+echo $insert;
