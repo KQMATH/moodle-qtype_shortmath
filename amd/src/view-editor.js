@@ -109,7 +109,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             $(':focus').blur();
             if ($btnInput.val() === '' || $expInput.val() === '') {
                 console.log('Enter all values!');
-                return;
+                return false;
             }
 
             console.log($btnInput.parent('.answer').children('div').children('.mq-root-block').find('.mq-empty').remove());
@@ -127,6 +127,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             control.enable();
             this.$wrapper.append(control.$element);
             this.controls.push({button: html, expression: command});
+            return true;
         }
 
     }
@@ -139,6 +140,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             const context = {
                 "shortMathClass" : "que shortmath",
                 "controlsWrapperClass" : "controls_wrapper",
+                "messageClass" : "message",
+                "messageValue" : "Configuration saved!",
                 "testInputLabel" : "Test:",
                 "testInputId" : "test",
                 "testInputName" : "test",
@@ -301,8 +304,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             $addButton.on('click', event => {
                 event.preventDefault();
                 console.log("add");
-                controls.add($btnInput, $expInput, expressionInput);
-                $saveButton.show();
+                let isSuccess = controls.add($btnInput, $expInput, expressionInput);
+                if(isSuccess) {
+                    $saveButton.show();
+                }
 
                 //clear inputs
                 $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
@@ -314,16 +319,28 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             });
 
             $saveButton.on('click', event => {
+                $(':focus').blur();
                 $.ajax({
-                    type: 'post',
+                    method: 'post',
                     url: 'editor_action.php',
-                    data: {'data': JSON.stringify(controls.controls)},
-                    success: (data, status, xhttp) =>{
-                        console.log(data);
+                    data: {'data': JSON.stringify(controls.controls)}
+                }).done( message  =>{
+                        console.log(message);
                         console.log(controls.controls);
-                    },
-                    error: 'onError'
-                });
+                        if(message > 0) {
+                            controlsWrapper.html('');
+                            controls = new EditorControlList(controlsWrapper);
+                            $saveButton.hide();
+                            let messageDiv = $('#' + $.escapeSelector(testInputName)).parents('.shortmath').find('.message');
+                            messageDiv.show();
+                            setTimeout(() => {
+                                messageDiv.hide();
+                            }, 5000);
+                        }
+                    }).fail((jqXHR, textStatus, errorThrown) => {
+                        console.log('error: '+errorThrown);
+                        alert(textStatus);
+                    });
             });
 
                 }).fail(function(ex) {
