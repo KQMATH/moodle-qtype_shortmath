@@ -19,32 +19,42 @@
 
     Example context (json):
     {
-        "shortMathClass" : "que shortmath",
-        "controlsWrapperClass" : "controls_wrapper",
-        "buttonInputId" : "btn",
-        "buttonInputLabel" : "Button:",
-        "inputDivClass" : "ablock form-inline",
-        "inputSpanClass" : "answer",
-        "buttonInputName" : "btn",
-        "buttonInputSize" : 30,
-        "expressionInputId" : "exp",
-        "expressionInputLabel" : "Expression:",
-        "expressionInputName" : "exp",
-        "expressionInputSize" : 30,
-        "saveButtonName" : "save",
-        "saveButtonId" : "save",
-        "saveButtonClass" : "btn btn-primary",
-        "saveButtonValue" : "Save"
+        "shortMathClass": "que shortmath",
+        "controlsWrapperClass": "controls_wrapper",
+        "messageClass": "message",
+        "messageValue": "Configuration saved!",
+        "testInputLabel": "Test:",
+        "testInputId": "test",
+        "testInputName": "test",
+        "testInputSize": 30,
+        "buttonInputId": "btn",
+        "buttonInputLabel": "Button:",
+        "inputDivClass": "ablock form-inline",
+        "inputSpanClass": "answer",
+        "buttonInputName": "btn",
+        "buttonInputSize": 30,
+        "expressionInputId": "exp",
+        "expressionInputLabel": "Expression:",
+        "expressionInputName": "exp",
+        "expressionInputSize": 30,
+        "addButtonName": "add",
+        "addButtonId": "add",
+        "addButtonClass": "btn btn-primary",
+        "addButtonValue": "Add",
+        "saveButtonName": "save",
+        "saveButtonId": "save",
+        "saveButtonClass": "btn btn-primary",
+        "saveButtonValue": "Save"
     }
 }}
 
 <div class="{{shortMathClass}} container-1">
     <div class="box-1">
-        <div class="{{controlsWrapperClass}}"></div>
-        <div class="{{messageClass}}" style="display: none;">
-            <b>{{messageValue}}</b>
-        </div>
         <table>
+            <div class="{{controlsWrapperClass}}"></div>
+            <div class="{{messageClass}}" style="display: none;">
+                <b>{{messageValue}}</b>
+            </div>
             <tr>
                 <td>
                     <label for="{{testInputId}}">{{testInputLabel}}</label>
@@ -55,6 +65,14 @@
                             <input type="text" name="{{testInputName}}" id="{{testInputId}}"
                                    size="{{testInputSize}}"/>
                         </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="button">
+                        <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
+                               class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
                     </div>
                 </td>
             </tr>
@@ -70,7 +88,7 @@
                     <div class="{{inputDivClass}}">
                         <span class="{{inputSpanClass}}">
                             <input type="text" name="{{buttonInputName}}" id="{{buttonInputId}}"
-                             size="{{buttonInputSize}}"/>
+                                   size="{{buttonInputSize}}"/>
                         </span>
                     </div>
                 </td>
@@ -83,7 +101,7 @@
                     <div class="{{inputDivClass}}">
                         <span class="{{inputSpanClass}}">
                             <input type="text" name="{{expressionInputName}}" id="{{expressionInputId}}"
-                             size="{{expressionInputSize}}"/>
+                                   size="{{expressionInputSize}}"/>
                         </span>
                     </div>
                 </td>
@@ -91,14 +109,8 @@
             <tr>
                 <td colspan="2">
                     <div class="button">
-                        <div>
-                            <input type="button" name="{{addButtonName}}" id="{{addButtonId}}"
-                            class="{{addButtonClass}}" value="{{addButtonValue}}"/>
-                        </div>
-                        <div>
-                            <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
-                                   class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
-                        </div>
+                        <input type="button" name="{{addButtonName}}" id="{{addButtonId}}"
+                               class="{{addButtonClass}}" value="{{addButtonValue}}"/>
                     </div>
                 </td>
             </tr>

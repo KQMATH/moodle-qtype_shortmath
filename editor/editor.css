@@ -1,22 +1,22 @@
 .container-1 {
-    display:flex;
-    flex-wrap:wrap;
+    display: flex;
+    flex-wrap: wrap;
     /*flex-direction:column;*/
 }
 
 .box-1 {
-    flex:1;
-    order:2;
+    flex: 1;
+    order: 2;
 }
 
 .box-2 {
-    flex:1;
-    order:1;
+    flex: 1;
+    order: 1;
 }
 
 .box-1, .box-2 {
-    border:1px #ccc solid;
-    padding:10px;
+    border: 1px #ccc solid;
+    padding: 10px;
 }
 
 .que.shortmath .visual-math-input-wrapper {
@@ -24,10 +24,10 @@
 }
 
 .button {
-    display:flex;
+    display: flex;
     justify-content: flex-end;
 }
 
 .button div {
-    padding:2px;
+    padding: 2px;
 }

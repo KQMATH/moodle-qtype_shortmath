@@ -23,7 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], function($, VisualMath, Templates) {
+define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], function ($, VisualMath, Templates) {
     let testInput = null;
 
     class EditorInput extends VisualMath.Input {
@@ -54,9 +54,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             this.$element.off('click');
             this.$element.on('click', event => {
                 event.preventDefault();
-                console.log($(':focus'));
                 if (testInput !== null) {
-                    console.log(testInput.field.latex())
                     this.onClick(testInput.field);
                     testInput.field.focus();
                 }
@@ -64,10 +62,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
 
             this.$element.attr('id', new Date().getTime());
             this.$element.attr('draggable', true);
-            this.$element.css({ width: 'auto', height: 'auto'});
+            this.$element.css({width: 'auto', height: 'auto'});
 
             this.$element.on('dragstart', event => {
-                console.log('dragstart from: '+event.target.id);
                 dragged = event.target;
                 nodes = Array.from(dragged.parentNode.children); //buttons on the control list
                 draggedIndex = nodes.indexOf(dragged);
@@ -79,10 +76,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
 
             this.$element.on('dragend', event => {
                 event.target.style.opacity = "";
-                console.log('end');
-                console.log($(':focus').blur());
-                console.log(document.getElementById('placeholder'));
-                if(document.getElementById('placeholder') !== null) {
+                $(':focus').blur();
+                if (document.getElementById('placeholder') !== null) {
                     document.getElementById('placeholder').replaceWith(dragged);
                 }
             });
@@ -112,7 +107,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 return false;
             }
 
-            console.log($btnInput.parent('.answer').children('div').children('.mq-root-block').find('.mq-empty').remove());
 
             let control;
             let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
@@ -121,7 +115,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             html += '</span></div>';
 
             let command = expEditorInput.field.latex();
-            console.log('latex: '+command);
 
             control = new EditorControl(html, field => field.write(command));
             control.enable();
@@ -133,223 +126,193 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
     }
 
     return {
-        initialize: function(testInputName, btnInputName, expInputName) {
-            /**
-             * Template test
-             */
+        initialize: function (testInputId, btnInputId, expInputId) {
+
             const context = {
-                "shortMathClass" : "que shortmath",
-                "controlsWrapperClass" : "controls_wrapper",
-                "messageClass" : "message",
-                "messageValue" : "Configuration saved!",
-                "testInputLabel" : "Test:",
-                "testInputId" : "test",
-                "testInputName" : "test",
-                "testInputSize" : 30,
-                "buttonInputId" : "btn",
-                "buttonInputLabel" : "Button:",
-                "inputDivClass" : "ablock form-inline",
-                "inputSpanClass" : "answer",
-                "buttonInputName" : "btn",
-                "buttonInputSize" : 30,
-                "expressionInputId" : "exp",
-                "expressionInputLabel" : "Expression:",
-                "expressionInputName" : "exp",
-                "expressionInputSize" : 30,
-                "addButtonName" : "add",
-                "addButtonId" : "add",
-                "addButtonClass" : "btn btn-primary",
-                "addButtonValue" : "Add",
-                "saveButtonName" : "save",
-                "saveButtonId" : "save",
-                "saveButtonClass" : "btn btn-primary",
-                "saveButtonValue" : "Save"
+                "shortMathClass": "que shortmath",
+                "controlsWrapperClass": "controls_wrapper",
+                "messageClass": "message",
+                "messageValue": "Configuration saved!",
+                "testInputLabel": "Test:",
+                "testInputId": "test",
+                "testInputName": "test",
+                "testInputSize": 30,
+                "buttonInputId": "btn",
+                "buttonInputLabel": "Button:",
+                "inputDivClass": "ablock form-inline",
+                "inputSpanClass": "answer",
+                "buttonInputName": "btn",
+                "buttonInputSize": 30,
+                "expressionInputId": "exp",
+                "expressionInputLabel": "Expression:",
+                "expressionInputName": "exp",
+                "expressionInputSize": 30,
+                "addButtonName": "add",
+                "addButtonId": "add",
+                "addButtonClass": "btn btn-primary",
+                "addButtonValue": "Add",
+                "saveButtonName": "save",
+                "saveButtonId": "save",
+                "saveButtonClass": "btn btn-primary",
+                "saveButtonValue": "Save"
             };
 
             Templates.render('qtype_shortmath/editor', context)
-
-            // It returns a promise that needs to be resoved.
-                .then(function(html, js) {
-                    // Here eventually I have my compiled template, and any javascript that it generated.
-                    // The templates object has append, prepend and replace functions.
-                    // Templates.appendNodeContents('.block_looneytunes .content', html, js);
-                    console.log(html);
+                .then(function (html, js) {
                     Templates.appendNodeContents('div[role=\'main\']', html, js);
 
-            console.log("name:  "+testInputName);
-            var $shortanswerInput = $('#' + $.escapeSelector(testInputName));
-            // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-            $shortanswerInput.removeClass('d-inline');
-            var $parent = $('#' + $.escapeSelector(testInputName)).parent('.answer');
+                    var $shortanswerInput = $('#' + $.escapeSelector(testInputId));
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $shortanswerInput.removeClass('d-inline');
+                    var $parent = $('#' + $.escapeSelector(testInputId)).parent('.answer');
 
-            // var input = new VisualMath.Input($shortanswerInput, $parent);
-            var input = new EditorInput($shortanswerInput, $parent);
-            console.log("test value:  "+input.value);
-            input.$input.hide();
-            input.change();
+                    var input = new EditorInput($shortanswerInput, $parent);
+                    input.$input.hide();
+                    input.change();
 
-            if ($shortanswerInput.val()) {
-                input.field.write(
-                    $shortanswerInput.val()
-                );
-            }
+                    if ($shortanswerInput.val()) {
+                        input.field.write(
+                            $shortanswerInput.val()
+                        );
+                    }
 
-                    testInputName = btnInputName;
-            var controlsWrapper = $('#' + $.escapeSelector(testInputName)).parents('.shortmath').find('.controls_wrapper');
+                    var controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
 
-            controlsWrapper.addClass('visual-math-input-wrapper');
-            controlsWrapper.attr('id', 'target');
+                    controlsWrapper.addClass('visual-math-input-wrapper');
+                    controlsWrapper.attr('id', 'target');
 
-            controlsWrapper.on('drop', event =>{
-                event.preventDefault();
+                    controlsWrapper.on('drop', event => {
+                        event.preventDefault();
 
-                console.log('dropping to: '+target.id);
-                if (target.id === dragged.id) {
-                    console.log('dont');
-                    event.originalEvent.dataTransfer.clearData();
-                    return;
-                }
-
-                console.log('dropped');
-                document.getElementById('placeholder').replaceWith(dragged);
-                event.originalEvent.dataTransfer.clearData();
-            });
-
-            controlsWrapper.on('dragover', event => {
-               event.preventDefault();
-               event.originalEvent.dataTransfer.dropEffect = "move";
-            });
-
-           controlsWrapper.on('dragenter', event => {
-               console.log('drop detected');
-               console.log(event.target);
-
-               let targetId;
-               if ($(event.target).hasClass('visual-math-input-wrapper')){
-                   targetId = event.target.lastChild.id;
-               }else if(event.target.nodeName !== 'BUTTON'){
-                   console.log($(event.target).parents('button'));
-                   targetId = $(event.target).parents('button').attr('id');
-               } else {
-                   targetId =  event.target.id;
-               }
-
-               console.log('targetId: ' + targetId);
-               if (targetId === 'placeholder') {
-                   console.log('done');
-                   return;
-               }
-
-               target = document.getElementById(targetId);
-               console.log('target: ' + target);
-
-               let targetIndex = nodes.indexOf(target);
-               if (draggedIndex === targetIndex) { //movement within button
-                   return;
-               }
-
-               let empty = document.createElement('button');
-               $(empty).html('');
-               $(empty).addClass('visual-math-input-control btn btn-primary');
-               $(empty).attr('draggable', true);
-               $(empty).attr('id', 'placeholder');
-               $(empty).css('border', '2px solid red');
-
-               console.log(draggedIndex + ' to ' + targetIndex);
-               if (target.parentNode.contains(dragged)) {
-                   target.parentNode.removeChild(dragged);
-               } else {
-                   target.parentNode.removeChild(document.getElementById('placeholder'));
-               }
-
-               if (draggedIndex < targetIndex) {
-                   console.log('last:' + target.parentNode.lastChild);
-                   if (target.parentNode.lastChild !== target) {
-                       target.parentNode.insertBefore(empty, target.nextSibling); //left to right
-                   } else {
-                       target.parentNode.appendChild(empty);
-                   }
-               } else {
-                   target.parentNode.insertBefore(empty, target); //right to left
-               }
-
-               nodes = Array.from(target.parentNode.children);
-               draggedIndex = nodes.indexOf(empty);
-               console.log('draggedIndex after: ' + draggedIndex);
-           });
-
-            let $btnInput = $('#' + $.escapeSelector(btnInputName));
-            // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-            $btnInput.removeClass('d-inline');
-            $parent = $('#' + $.escapeSelector(btnInputName)).parent('.answer');
-
-            let buttonInput = new EditorInput($btnInput, $parent);
-            buttonInput.$input.hide();
-            buttonInput.change();
-
-            let $expInput = $('#' + $.escapeSelector(expInputName));
-            // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-            $expInput.removeClass('d-inline');
-            $parent = $('#' + $.escapeSelector(expInputName)).parent('.answer');
-
-            let expressionInput = new EditorInput($expInput, $parent);
-            expressionInput.$input.hide();
-            expressionInput.change();
-
-            let $saveButton = $('#' + $.escapeSelector('save'));
-            $saveButton.hide();
-
-            let $addButton = $('#' + $.escapeSelector('add'));
-            let controls = new EditorControlList(controlsWrapper);
-            $addButton.on('click', event => {
-                event.preventDefault();
-                console.log("add");
-                let isSuccess = controls.add($btnInput, $expInput, expressionInput);
-                if(isSuccess) {
-                    $saveButton.show();
-                }
-
-                //clear inputs
-                $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
-                $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
-
-                buttonInput.field.latex('');
-                expressionInput.field.latex('');
-
-            });
-
-            $saveButton.on('click', event => {
-                $(':focus').blur();
-                $.ajax({
-                    method: 'post',
-                    url: 'editor_action.php',
-                    data: {'data': JSON.stringify(controls.controls)}
-                }).done( message  =>{
-                        console.log(message);
-                        console.log(controls.controls);
-                        if(message > 0) {
-                            controlsWrapper.html('');
-                            controls = new EditorControlList(controlsWrapper);
-                            $saveButton.hide();
-                            let messageDiv = $('#' + $.escapeSelector(testInputName)).parents('.shortmath').find('.message');
-                            messageDiv.show();
-                            setTimeout(() => {
-                                messageDiv.hide();
-                            }, 5000);
+                        if (target.id === dragged.id) {
+                            event.originalEvent.dataTransfer.clearData();
+                            return;
                         }
-                    }).fail((jqXHR, textStatus, errorThrown) => {
-                        console.log('error: '+errorThrown);
-                        alert(textStatus);
-                    });
-            });
 
-                }).fail(function(ex) {
+                        document.getElementById('placeholder').replaceWith(dragged);
+                        event.originalEvent.dataTransfer.clearData();
+                    });
+
+                    controlsWrapper.on('dragover', event => {
+                        event.preventDefault();
+                        event.originalEvent.dataTransfer.dropEffect = "move";
+                    });
+
+                    controlsWrapper.on('dragenter', event => {
+
+                        let targetId;
+                        if ($(event.target).hasClass('visual-math-input-wrapper')) {
+                            targetId = event.target.lastChild.id;
+                        } else if (event.target.nodeName !== 'BUTTON') {
+                            targetId = $(event.target).parents('button').attr('id');
+                        } else {
+                            targetId = event.target.id;
+                        }
+
+                        if (targetId === 'placeholder') {
+                            return;
+                        }
+
+                        target = document.getElementById(targetId);
+
+                        let targetIndex = nodes.indexOf(target);
+                        if (draggedIndex === targetIndex) { //movement within button
+                            return;
+                        }
+
+                        let empty = document.createElement('button');
+                        $(empty).html('');
+                        $(empty).addClass('visual-math-input-control btn btn-primary');
+                        $(empty).attr('draggable', true);
+                        $(empty).attr('id', 'placeholder');
+                        $(empty).css('border', '2px solid red');
+
+                        if (target.parentNode.contains(dragged)) {
+                            target.parentNode.removeChild(dragged);
+                        } else {
+                            target.parentNode.removeChild(document.getElementById('placeholder'));
+                        }
+
+                        if (draggedIndex < targetIndex) {
+                            if (target.parentNode.lastChild !== target) {
+                                target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                            } else {
+                                target.parentNode.appendChild(empty);
+                            }
+                        } else {
+                            target.parentNode.insertBefore(empty, target); //right to left
+                        }
+
+                        nodes = Array.from(target.parentNode.children);
+                        draggedIndex = nodes.indexOf(empty);
+                    });
+
+                    let $btnInput = $('#' + $.escapeSelector(btnInputId));
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $btnInput.removeClass('d-inline');
+                    $parent = $('#' + $.escapeSelector(btnInputId)).parent('.answer');
+
+                    let buttonInput = new EditorInput($btnInput, $parent);
+                    buttonInput.$input.hide();
+                    buttonInput.change();
+
+                    let $expInput = $('#' + $.escapeSelector(expInputId));
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $expInput.removeClass('d-inline');
+                    $parent = $('#' + $.escapeSelector(expInputId)).parent('.answer');
+
+                    let expressionInput = new EditorInput($expInput, $parent);
+                    expressionInput.$input.hide();
+                    expressionInput.change();
+
+                    let $saveButton = $('#' + $.escapeSelector('save'));
+                    $saveButton.hide();
+
+                    let $addButton = $('#' + $.escapeSelector('add'));
+                    let controls = new EditorControlList(controlsWrapper);
+                    $addButton.on('click', event => {
+                        event.preventDefault();
+
+                        let isSuccess = controls.add($btnInput, $expInput, expressionInput);
+                        if (isSuccess) {
+                            $saveButton.show();
+                        }
+
+                        //clear inputs
+                        $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
+                        $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
+
+                        buttonInput.field.latex('');
+                        expressionInput.field.latex('');
+
+                    });
+
+                    $saveButton.on('click', event => {
+                        $(':focus').blur();
+                        $.ajax({
+                            method: 'post',
+                            url: 'editor_action.php',
+                            data: {'data': JSON.stringify(controls.controls)}
+                        }).done(message => {
+                            if (message > 0) {
+                                controlsWrapper.html('');
+                                controls = new EditorControlList(controlsWrapper);
+                                $saveButton.hide();
+                                let messageDiv = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.message');
+                                messageDiv.show();
+                                setTimeout(() => {
+                                    messageDiv.hide();
+                                }, 5000);
+                            }
+                        }).fail((jqXHR, textStatus, errorThrown) => {
+                            console.log('error: ' + errorThrown);
+                            alert(textStatus);
+                        });
+                    });
+
+                }).fail(function (ex) {
                 // Deal with this exception (I recommend core/notify exception function for this).
             });
-            /**
-             * test end
-             */
-
         }
     };
 });
