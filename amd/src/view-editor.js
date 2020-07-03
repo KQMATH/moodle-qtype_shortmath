@@ -72,6 +72,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 event.originalEvent.dataTransfer.setData("text", event.target.id);
                 event.originalEvent.dataTransfer.dropEffect = "move";
                 event.target.style.opacity = 0.5;
+                $('.delete-icon').show();
             });
 
             this.$element.on('dragend', event => {
@@ -80,6 +81,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 if (document.getElementById('placeholder') !== null) {
                     document.getElementById('placeholder').replaceWith(dragged);
                 }
+                $('.delete-icon').hide();
             });
 
         }
@@ -106,7 +108,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 console.log('Enter all values!');
                 return false;
             }
-
 
             let control;
             let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
@@ -308,6 +309,30 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                             console.log('error: ' + errorThrown);
                             alert(textStatus);
                         });
+                    });
+
+                    let deleteIcon = $('.delete-icon');
+
+                    deleteIcon.on('dragover', event => {
+                        event.preventDefault();
+                        event.originalEvent.dataTransfer.dropEffect = "move";
+                    });
+
+                    deleteIcon.on('drop', event => {
+                        event.preventDefault();
+                        let parentNode = dragged.parentNode;
+                        if (parentNode !== null) {
+                            parentNode.removeChild(dragged);
+                            if (parentNode.firstElementChild === null) {
+                                $saveButton.hide();
+                            }
+                        } else {
+                            let placeholder = document.getElementById('placeholder');
+                            if (placeholder !== null) {
+                                placeholder.parentNode.removeChild(placeholder);
+                            }
+                        }
+                        event.originalEvent.dataTransfer.clearData();
                     });
 
                 }).fail(function (ex) {

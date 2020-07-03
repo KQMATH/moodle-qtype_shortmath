@@ -5,12 +5,12 @@
 }
 
 .box-1 {
-    flex: 1;
+    flex: 0 0 425px; /* set box size */
     order: 2;
 }
 
 .box-2 {
-    flex: 1;
+    flex: 0 0 425px; /* set box size */
     order: 1;
 }
 
@@ -23,11 +23,45 @@
     margin: 0;
 }
 
-.button {
+.delete-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.test-box {
+    display: flex;
+    align-items: center;
+}
+
+.editor, .test {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-box {
+    display: flex;
+    align-items: center;
+}
+
+.editor-box div:nth-child(1) {
+    min-width: 95px; /* set label size */
     display: flex;
     justify-content: flex-end;
 }
 
-.button div {
-    padding: 2px;
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.delete-icon {
+    padding: 0.3em 25px 0.3em 25px;
+    background-color: red;
+    margin-top: 0.6em;
+}
+
+.que .ablock {
+    margin: .3em 0 .3em 0;
 }
