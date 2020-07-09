@@ -5,16 +5,17 @@
 }
 
 .box-1 {
-    flex: 0 0 425px; /* set box size */
     order: 2;
 }
 
 .box-2 {
-    flex: 0 0 425px; /* set box size */
     order: 1;
 }
 
 .box-1, .box-2 {
+    /* set box size */
+    flex: 0 0 425px;
+    margin: 10px;
     border: 1px #ccc solid;
     padding: 10px;
 }
@@ -29,23 +30,26 @@
     justify-content: center;
 }
 
-.test-box {
+.test {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-.editor, .test {
+.editor {
     display: flex;
     flex-direction: column;
 }
 
-.editor-box {
+.input-box {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 }
 
-.editor-box div:nth-child(1) {
-    min-width: 95px; /* set label size */
+.input-box div:nth-child(1) {
+    /*!* set label size *!
+    min-width: 95px; */
     display: flex;
     justify-content: flex-end;
 }

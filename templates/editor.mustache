@@ -59,27 +59,25 @@
                 <i class="fa fa-trash fa-2x"></i>
             </div>
         </div>
-        <div class="test-editor">
-            <div class="editor-box">
-                <div>
-                    <label for="{{testInputId}}">{{testInputLabel}}</label>
-                </div>
-                <div class="{{inputDivClass}}">
+        <div class="test">
+            <div>
+                <label for="{{testInputId}}">{{testInputLabel}}</label>
+            </div>
+            <div class="{{inputDivClass}}">
                         <span class="{{inputSpanClass}}">
                             <input type="text" name="{{testInputName}}" id="{{testInputId}}"
                                    size="{{testInputSize}}"/>
                         </span>
-                </div>
             </div>
-            <div class="button">
-                <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
-                       class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
-            </div>
+        </div>
+        <div class="button">
+            <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
+                   class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
         </div>
     </div>
     <div class="box-2">
         <div class="editor">
-            <div class="editor-box">
+            <div class="input-box">
                 <div>
                     <label for="{{buttonInputId}}">{{buttonInputLabel}}</label>
                 </div>
@@ -90,7 +88,7 @@
                         </span>
                 </div>
             </div>
-            <div class="editor-box">
+            <div class="input-box">
                 <div>
                     <label for="{{expressionInputId}}">{{expressionInputLabel}}</label>
                 </div>
@@ -101,10 +99,10 @@
                         </span>
                 </div>
             </div>
-            <div class="button">
-                <input type="button" name="{{addButtonName}}" id="{{addButtonId}}"
-                       class="{{addButtonClass}}" value="{{addButtonValue}}"/>
-            </div>
+        </div>
+        <div class="button">
+            <input type="button" name="{{addButtonName}}" id="{{addButtonId}}"
+                   class="{{addButtonClass}}" value="{{addButtonValue}}"/>
         </div>
     </div>
 </div>
