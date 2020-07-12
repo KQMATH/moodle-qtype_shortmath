@@ -50,13 +50,19 @@
 
 <div class="{{shortMathClass}} container-1">
     <div class="box-1">
+        <div class="modeCheck">
+            <div>
+                <input type="checkbox" name="testMode" id="testMode" value="">
+                <label for="testMode">Test mode</label>
+            </div>
+        </div>
         <div class="{{controlsWrapperClass}}"></div>
         <div class="{{messageClass}}" style="display: none;">
             <b>{{messageValue}}</b>
         </div>
         <div class="delete-box">
             <div class="delete-icon" style="display: none;">
-                <i class="fa fa-trash fa-2x"></i>
+                <i class="{{deleteIconClass}}"></i>
             </div>
         </div>
         <div class="test">
@@ -70,9 +76,20 @@
                         </span>
             </div>
         </div>
-        <div class="button">
-            <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
-                   class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
+        <div id="saveMode">
+            <div class="templateName">
+                <div>
+                    <label for="{{nameInputId}}">{{nameInputLabel}}</label>
+                </div>
+                <div class="{{inputDivClass}}">
+                    <input type="text" class="{{nameInputClass}}" name="{{nameInputName}}"
+                           id="{{nameInputId}}">
+                </div>
+            </div>
+            <div class="button">
+                <input type="button" name="{{saveButtonName}}" id="{{saveButtonId}}"
+                       class="{{saveButtonClass}}" value="{{saveButtonValue}}"/>
+            </div>
         </div>
     </div>
     <div class="box-2">

@@ -24,13 +24,17 @@
  * @module qtype_shortmath/input
  */
 define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], function ($, VisualMath, Templates) {
-    let testInput = null;
+    let lastFocusedInput = null;
+    let dragged;
+    let target;
+    let nodes;
+    let draggedIndex;
 
     class EditorInput extends VisualMath.Input {
 
         constructor(input, parent) {
             super(input, parent);
-            this.$textarea.on('blur', () => testInput = this);
+            this.$textarea.on('blur', () => lastFocusedInput = this);
         }
 
         change() {
@@ -54,9 +58,15 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             this.$element.off('click');
             this.$element.on('click', event => {
                 event.preventDefault();
-                if (testInput !== null) {
-                    this.onClick(testInput.field);
-                    testInput.field.focus();
+                $(':focus').blur();
+                if (lastFocusedInput !== null) {
+                    if (lastFocusedInput.field === undefined) {
+                        console.log('Plain text field');
+                        lastFocusedInput.focus();
+                        return;
+                    }
+                    this.onClick(lastFocusedInput.field);
+                    lastFocusedInput.field.focus();
                 }
             });
 
@@ -87,11 +97,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
         }
 
     }
-
-    let dragged;
-    let target;
-    let nodes;
-    let draggedIndex;
 
     class EditorControlList {
 
@@ -152,6 +157,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 "addButtonId": "add",
                 "addButtonClass": "btn btn-primary",
                 "addButtonValue": "Add",
+                "deleteIconClass": "fa fa-trash fa-2x",
+                "nameInputLabel": "Name:",
+                "nameInputClass": "form-control",
+                "nameInputName": "name",
+                "nameInputId": "name",
                 "saveButtonName": "save",
                 "saveButtonId": "save",
                 "saveButtonClass": "btn btn-primary",
@@ -167,12 +177,12 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                     $shortanswerInput.removeClass('d-inline');
                     var $parent = $('#' + $.escapeSelector(testInputId)).parent('.answer');
 
-                    var input = new EditorInput($shortanswerInput, $parent);
-                    input.$input.hide();
-                    input.change();
+                    var testInput = new EditorInput($shortanswerInput, $parent);
+                    testInput.$input.hide();
+                    testInput.change();
 
                     if ($shortanswerInput.val()) {
-                        input.field.write(
+                        testInput.field.write(
                             $shortanswerInput.val()
                         );
                     }
@@ -267,7 +277,28 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                     expressionInput.change();
 
                     let $saveButton = $('#' + $.escapeSelector('save'));
-                    $saveButton.hide();
+
+                    let $saveModeDiv = $('#' + $.escapeSelector('saveMode'));
+
+                    let $testModeDiv = $('.test');
+
+                    let $testMode = $('#' + $.escapeSelector('testMode'));
+                    $testMode.change(() => {
+                        if ($testMode.prop('checked')) {
+                            $saveModeDiv.hide();
+                            $testModeDiv.show();
+                        } else {
+                            $saveModeDiv.show();
+                            $testModeDiv.hide();
+                        }
+                    });
+
+                    let $modeCheckDiv = $('.modeCheck');
+
+                    let $testBox = $('.box-1');
+                    $testBox.hide();
+
+                    let isDataVisible = false;
 
                     let $addButton = $('#' + $.escapeSelector('add'));
                     let controls = new EditorControlList(controlsWrapper);
@@ -275,8 +306,17 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                         event.preventDefault();
 
                         let isSuccess = controls.add($btnInput, $expInput, expressionInput);
-                        if (isSuccess) {
-                            $saveButton.show();
+                        if (isSuccess && !isDataVisible) {
+                            $modeCheckDiv.show();
+                            $testBox.show();
+                            if ($testMode.prop('checked')) {
+                                $saveModeDiv.hide();
+                                $testModeDiv.show();
+                            } else {
+                                $saveModeDiv.show();
+                                $testModeDiv.hide();
+                            }
+                            isDataVisible = true;
                         }
 
                         //clear inputs
@@ -288,21 +328,35 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
 
                     });
 
+                    let $templateNameInput = $('#' + $.escapeSelector('name'));
+                    $templateNameInput.on('blur', () => {
+                        lastFocusedInput = $templateNameInput;
+                    });
+
                     $saveButton.on('click', event => {
                         $(':focus').blur();
                         $.ajax({
                             method: 'post',
                             url: 'editor_action.php',
-                            data: {'data': JSON.stringify(controls.controls)}
+                            data: {
+                                'data': JSON.stringify(controls.controls),
+                                'name': $templateNameInput.val()
+                            }
                         }).done(message => {
                             if (message > 0) {
                                 controlsWrapper.html('');
                                 controls = new EditorControlList(controlsWrapper);
-                                $saveButton.hide();
+                                $templateNameInput.val('');
+                                testInput.field.latex('');
+                                $testMode.prop('checked', false);
+                                $saveModeDiv.hide();
+                                $modeCheckDiv.hide();
                                 let messageDiv = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.message');
                                 messageDiv.show();
                                 setTimeout(() => {
                                     messageDiv.hide();
+                                    $testBox.hide();
+                                    isDataVisible = false;
                                 }, 5000);
                             }
                         }).fail((jqXHR, textStatus, errorThrown) => {
@@ -324,7 +378,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                         if (parentNode !== null) {
                             parentNode.removeChild(dragged);
                             if (parentNode.firstElementChild === null) {
-                                $saveButton.hide();
+                                $templateNameInput.val('');
+                                testInput.field.latex('');
+                                $testMode.prop('checked', false);
+                                $testBox.hide();
+                                isDataVisible = false;
                             }
                         } else {
                             let placeholder = document.getElementById('placeholder');
