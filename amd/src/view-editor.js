@@ -165,7 +165,11 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                 "saveButtonName": "save",
                 "saveButtonId": "save",
                 "saveButtonClass": "btn btn-primary",
-                "saveButtonValue": "Save"
+                "saveButtonValue": "Save",
+                "backButtonName": "back",
+                "backButtonId": "back",
+                "backButtonClass": "btn btn-primary",
+                "backButtonValue": "Go Back"
             };
 
             Templates.render('qtype_shortmath/editor', context)
@@ -391,6 +395,12 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                             }
                         }
                         event.originalEvent.dataTransfer.clearData();
+                    });
+
+                    let $backButton = $('#' + $.escapeSelector('back'));
+                    $backButton.on('click', event => {
+                        event.preventDefault();
+                        window.history.back();
                     });
 
                 }).fail(function (ex) {

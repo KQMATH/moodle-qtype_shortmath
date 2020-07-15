@@ -1,22 +1,27 @@
 <?php
 
+use qtype_shortmath\output\manager_page;
+
 require_once(__DIR__ . '/../../../config.php');
 
-/*//$title = get_string('pluginname', 'tool_demo');
-$title = 'test';
-$pagetitle = $title;
-$url = new moodle_url("question/type/shortmath/editor_manager.php");
-$PAGE->set_url($url);
+$context = context_system::instance();
+$PAGE->set_context($context);
+
+$title = get_string('editor_manager', 'qtype_shortmath');
+$PAGE->set_url("/question/type/shortmath/editor_manager.php");
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
-$output = $PAGE->get_renderer('qtype_shortmath');
+$settingsnode = $PAGE->settingsnav->add(get_string('editor_manager', 'qtype_shortmath'),
+    null, navigation_node::TYPE_SETTING);
+$editurl = new moodle_url('/question/type/shortmath/editor_manager.php');
+$editnode = $settingsnode->add(get_string('resetpage', 'my'), $editurl);
+$editnode->make_active();
 
-echo $output->header();
-echo $output->heading($pagetitle);*/
-$manager = new \qtype_shortmath\output\manager_page();
-//$manager = new \qtype_shortmath\privacy\provider();
-//$renderer = $PAGE->get_renderer('qtype_shortmath');
-//echo $renderer->render($manager);
+echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('manage_templates', 'qtype_shortmath'));
 
-/*echo $output->footer();*/
+$manager = new manager_page();
+echo $OUTPUT->render($manager);
+
+echo $OUTPUT->footer();

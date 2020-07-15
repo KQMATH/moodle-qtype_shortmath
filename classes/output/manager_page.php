@@ -12,13 +12,6 @@ use templatable;
 class manager_page implements renderable, templatable
 {
     /**
-     * manager_page constructor.
-     */
-    /*public function __construct()
-    {
-    }*/
-
-    /**
      * Function to export the renderer data in a format that is suitable for a
      * mustache template. This means:
      * 1. No complex types - only stdClass, array, int, string, float, bool
@@ -30,6 +23,10 @@ class manager_page implements renderable, templatable
     public function export_for_template(renderer_base $output)
     {
         // TODO: Implement export_for_template() method.
-        return new stdClass();
+
+        return ["backButtonName" => "back",
+            "backButtonId" => "back",
+            "backButtonClass" => "btn btn-primary",
+            "backButtonValue" => "Go Back"];
     }
 }
