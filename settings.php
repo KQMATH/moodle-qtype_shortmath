@@ -1,4 +1,11 @@
 <?php
+/**
+ * *
+ *  * @package    qtype_shortmath
+ *  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ *  * @copyright  2020 NTNU
+ *
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -22,4 +29,4 @@ $settings->add(new admin_setting_configselect('qtype_shortmath/defaultconfigurat
 
 $settings->add(new admin_setting_description('manager',
     get_string('manage_templates_link_desc', 'qtype_shortmath'),
-    implode("\n* ", $links)));
+    implode("\n* ", $links))); // TODO: check this

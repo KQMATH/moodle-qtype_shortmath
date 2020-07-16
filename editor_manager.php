@@ -12,6 +12,8 @@ $PAGE->set_url("/question/type/shortmath/editor_manager.php");
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
+$PAGE->requires->css('/question/type/shortmath/editor/editor_manager.css');
+
 $settingsnode = $PAGE->settingsnav->add(get_string('editor_manager', 'qtype_shortmath'),
     null, navigation_node::TYPE_SETTING);
 $editurl = new moodle_url('/question/type/shortmath/editor_manager.php');
@@ -21,7 +23,10 @@ $editnode->make_active();
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manage_templates', 'qtype_shortmath'));
 
-$manager = new manager_page();
+// Get all templates from database
+$templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
+
+$manager = new manager_page($templates);
 echo $OUTPUT->render($manager);
 
 echo $OUTPUT->footer();

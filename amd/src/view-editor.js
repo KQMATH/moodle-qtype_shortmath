@@ -129,10 +129,19 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             return true;
         }
 
+        addAll(value) {
+            let html = value['button'];
+            let command = value['expression'];
+            let control = new EditorControl(html, field => field.write(command));
+            control.enable();
+            this.$wrapper.append(control.$element);
+            this.controls.push({button: html, expression: command});
+        }
+
     }
 
     return {
-        initialize: function (testInputId, btnInputId, expInputId) {
+        initialize: function (testInputId, btnInputId, expInputId, data) {
 
             const context = {
                 "shortMathClass": "que shortmath",
@@ -300,12 +309,13 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                     let $modeCheckDiv = $('.modeCheck');
 
                     let $testBox = $('.box-1');
-                    $testBox.hide();
 
+                    // To prevent calls to show test box repeatedly
                     let isDataVisible = false;
 
                     let $addButton = $('#' + $.escapeSelector('add'));
                     let controls = new EditorControlList(controlsWrapper);
+
                     $addButton.on('click', event => {
                         event.preventDefault();
 
@@ -332,7 +342,24 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
 
                     });
 
+                    let name = '';
+                    if (data === null) {
+                        $testBox.hide();
+                    } else {
+                        name = data['name'];
+                        if ($testMode.prop('checked')) {
+                            $saveModeDiv.hide();
+                            $testModeDiv.show();
+                        } else {
+                            $saveModeDiv.show();
+                            $testModeDiv.hide();
+                        }
+                        isDataVisible = true;
+                        JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+                    }
+
                     let $templateNameInput = $('#' + $.escapeSelector('name'));
+                    $templateNameInput.val(name);
                     $templateNameInput.on('blur', () => {
                         lastFocusedInput = $templateNameInput;
                     });
@@ -344,7 +371,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                             url: 'editor_action.php',
                             data: {
                                 'data': JSON.stringify(controls.controls),
-                                'name': $templateNameInput.val()
+                                'name': $templateNameInput.val(),
+                                'id': data === null ? 0 : data['id']
                             }
                         }).done(message => {
                             if (message > 0) {
@@ -361,6 +389,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                                     messageDiv.hide();
                                     $testBox.hide();
                                     isDataVisible = false;
+                                    if (data !== null) {
+                                        window.location.replace('/question/type/shortmath/editor_manager.php');
+                                    }
                                 }, 5000);
                             }
                         }).fail((jqXHR, textStatus, errorThrown) => {
@@ -400,7 +431,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                     let $backButton = $('#' + $.escapeSelector('back'));
                     $backButton.on('click', event => {
                         event.preventDefault();
-                        window.history.back();
+                        window.location.replace('/question/type/shortmath/editor_manager.php');
                     });
 
                 }).fail(function (ex) {

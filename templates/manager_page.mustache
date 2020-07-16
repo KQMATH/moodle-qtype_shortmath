@@ -24,7 +24,24 @@
     }
 }}
 
-<a href="/question/type/shortmath/view_editor.php">Add Templates</a><br/>
+<a href="/question/type/shortmath/view_editor.php">
+    {{# str}} add_templates, qtype_shortmath {{/ str}}
+</a><br/>
+<div class="container-1">
+    {{#templates}}
+        <div class="box-1">
+            {{name}}
+            <a href="#" title="Edit Template" id="edit-template-{{id}}" class="edit-template">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </a>
+            <form>
+                <input type="hidden" name="templateId" value="{{id}}"/>
+                <input type="hidden" name="templateName" value="{{name}}"/>
+                <input type="hidden" name="templateData" value="{{template}}"/>
+            </form>
+        </div>
+    {{/templates}}
+</div>
 <input type="button" name="{{backButtonName}}" id="{{backButtonId}}"
        class="{{backButtonClass}}" value="{{backButtonValue}}"/>
 {{#js}}

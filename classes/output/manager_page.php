@@ -11,6 +11,17 @@ use templatable;
 
 class manager_page implements renderable, templatable
 {
+    protected $templates = array();
+
+    /**
+     * manager_page constructor.
+     * @param array $templates
+     */
+    public function __construct(array $templates)
+    {
+        $this->templates = $templates;
+    }
+
     /**
      * Function to export the renderer data in a format that is suitable for a
      * mustache template. This means:
@@ -27,6 +38,7 @@ class manager_page implements renderable, templatable
         return ["backButtonName" => "back",
             "backButtonId" => "back",
             "backButtonClass" => "btn btn-primary",
-            "backButtonValue" => "Go Back"];
+            "backButtonValue" => "Go Back",
+            "templates" => new \ArrayIterator($this->templates)];
     }
 }

@@ -26,6 +26,14 @@
 define(['jquery'], function ($) {
     return {
         initialize: function () {
+            $('.edit-template').on('click', event => {
+                event.preventDefault();
+                let $form = $(event.target).closest('div').find('form');
+                $form.attr('action', '/question/type/shortmath/view_editor.php');
+                $form.attr('method', 'post');
+                $form.submit();
+            });
+
             $('#' + $.escapeSelector('back')).on('click', event => {
                 event.preventDefault();
                 window.history.back();

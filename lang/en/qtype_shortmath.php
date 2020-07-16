@@ -36,7 +36,8 @@ $string['privacy:metadata'] = 'The ShortMath question type plugin does not store
 
 $string['filloutoneanswer'] = 'You must provide at least one possible answer, written in a valid latex math format. Answers left blank will not be used. \'*\' can be used as a wildcard to match any characters. The first matching answer will be used to determine the score and feedback.';
 $string['template_manager_path'] = '<a href="{$a->link}">Manage templates</a>';
-$string['editor_path'] = '<a href="{$a->link}">Add template</a>';
+$string['editor_path'] = '<a href="{$a->link}">Add templates</a>';
+$string['add_templates'] = 'Add templates';
 $string['default_config'] = 'Default configuration';
 $string['default_config_desc'] = 'The default editor configuration.';
 $string['editor_manager'] = 'Editor Manager';
