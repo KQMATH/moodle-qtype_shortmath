@@ -383,12 +383,18 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                                 $testMode.prop('checked', false);
                                 $saveModeDiv.hide();
                                 $modeCheckDiv.hide();
+                                let border = $testBox.css('border');
+                                $testBox.css('border', 0);
                                 let messageDiv = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.message');
                                 messageDiv.show();
+                                let overlay = $('#' + $.escapeSelector('overlay-div'));
+                                overlay.show();
                                 setTimeout(() => {
                                     messageDiv.hide();
+                                    $testBox.css('border', border);
                                     $testBox.hide();
                                     isDataVisible = false;
+                                    overlay.hide();
                                     if (data !== null) {
                                         window.location.replace('/question/type/shortmath/editor_manager.php');
                                     }

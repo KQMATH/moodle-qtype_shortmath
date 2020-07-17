@@ -53,7 +53,7 @@
 }
 
 .overlay {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0);
     z-index: 999;
     position: absolute;
     left: 0;

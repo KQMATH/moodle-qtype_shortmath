@@ -37,7 +37,16 @@ define(['jquery'], function ($) {
             $('.delete-template').on('click', event => {
                 event.preventDefault();
                 let $templateBox = $(event.target).closest('.box-1');
-                let id = $templateBox.find('form').find('input[name="templateId"]').val();
+                let $form = $templateBox.find('form');
+
+                let isDelete = confirm('Remove template: '
+                    + $form.find('input[name="templateName"]').val() + ' ?');
+                if (!isDelete) {
+                    return;
+                }
+
+                let id = $form.find('input[name="templateId"]').val();
+
                 $.post('editor_action.php', {'id': id, 'type': 'delete'}
                 ).done(message => {
                     if (message > 0) {

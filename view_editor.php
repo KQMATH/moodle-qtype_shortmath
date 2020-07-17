@@ -50,7 +50,7 @@ $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
 $PAGE->requires->css('/question/type/shortmath/editor/editor.css');
 
-$settingsnode = $PAGE->settingsnav->add($title, null, navigation_node::TYPE_SETTING);
+$settingsnode = $PAGE->settingsnav->add($pagetitle, null, navigation_node::TYPE_SETTING);
 $editnode = $settingsnode->add(get_string('resetpage', 'my'), $pageurl);
 $editnode->make_active();
 
