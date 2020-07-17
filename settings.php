@@ -13,7 +13,7 @@ $context = context_system::instance();
 $PAGE->set_context($context);
 
 $links = array(
-    get_string('template_manager_path', 'qtype_shortmath',
+    get_string('template_manager_link', 'qtype_shortmath',
         array('link' => (string)new moodle_url('/question/type/shortmath/editor_manager.php'))));
 
 // Get all templates from database

@@ -6,24 +6,61 @@
  *
  */
 
+.add-templates-div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
 .container-1 {
     display: flex;
     flex-wrap: wrap;
     /*flex-direction:column;*/
 }
 
-.container-2 {
+.box-1 {
     display: flex;
-    flex-wrap: wrap;
-    /*flex-direction:column;*/
-}
-
-.box-1, .box-2 {
     /* set box size */
-    flex: 0 0 425px;
+    flex: 0 0 175px;
     margin: 10px;
     border: 1px #ccc solid;
     padding: 10px;
+    align-items: center;
+}
+
+.template-name-div {
+    margin-right: auto;
+    width: 100px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+}
+
+.icon-divs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.icon-divs > div {
+    margin: 0 5px;
+}
+
+.message {
+    color: red;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
 }
 
 .que.shortmath .visual-math-input-wrapper {

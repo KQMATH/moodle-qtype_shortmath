@@ -39,6 +39,8 @@ class manager_page implements renderable, templatable
             "backButtonId" => "back",
             "backButtonClass" => "btn btn-primary",
             "backButtonValue" => "Go Back",
-            "templates" => new \ArrayIterator($this->templates)];
+            "templates" => new \ArrayIterator($this->templates),
+            "messageClass" => "message",
+            "messageValue" => "Template removed!"];
     }
 }

@@ -13,6 +13,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 $PAGE->requires->css('/question/type/shortmath/editor/editor_manager.css');
+$PAGE->requires->string_for_js('editor_path', 'qtype_shortmath');
 
 $settingsnode = $PAGE->settingsnav->add(get_string('editor_manager', 'qtype_shortmath'),
     null, navigation_node::TYPE_SETTING);

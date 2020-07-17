@@ -24,16 +24,33 @@
     }
 }}
 
-<a href="/question/type/shortmath/view_editor.php">
-    {{# str}} add_templates, qtype_shortmath {{/ str}}
-</a><br/>
+<div class="overlay" id="overlay-div"></div>
+<div class="add-templates-div">
+    <a href="{{# str}} editor_path, qtype_shortmath {{/ str}}">
+        {{# str}} add_templates, qtype_shortmath {{/ str}}
+    </a>
+</div>
 <div class="container-1">
     {{#templates}}
         <div class="box-1">
-            {{name}}
-            <a href="#" title="Edit Template" id="edit-template-{{id}}" class="edit-template">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </a>
+            <div class="{{messageClass}}" style="display: none;">
+                <b>{{messageValue}}</b>
+            </div>
+            <div class="template-name-div" title="{{name}}">
+                {{name}}
+            </div>
+            <div class="icon-divs">
+                <div>
+                    <a href="#" title="Edit Template" id="edit-template-{{id}}" class="edit-template">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="#" title="Delete Template" id="delete-template-{{id}}" class="delete-template">
+                        <i class="fa fa-remove"></i>
+                    </a>
+                </div>
+            </div>
             <form>
                 <input type="hidden" name="templateId" value="{{id}}"/>
                 <input type="hidden" name="templateName" value="{{name}}"/>

@@ -28,10 +28,34 @@ define(['jquery'], function ($) {
         initialize: function () {
             $('.edit-template').on('click', event => {
                 event.preventDefault();
-                let $form = $(event.target).closest('div').find('form');
-                $form.attr('action', '/question/type/shortmath/view_editor.php');
+                let $form = $(event.target).closest('.box-1').find('form');
+                $form.attr('action', M.str.qtype_shortmath.editor_path);
                 $form.attr('method', 'post');
                 $form.submit();
+            });
+
+            $('.delete-template').on('click', event => {
+                event.preventDefault();
+                let $templateBox = $(event.target).closest('.box-1');
+                let id = $templateBox.find('form').find('input[name="templateId"]').val();
+                $.post('editor_action.php', {'id': id, 'type': 'delete'}
+                ).done(message => {
+                    if (message > 0) {
+                        $templateBox.children().hide();
+                        let messageDiv = $templateBox.find('.message');
+                        let overlay = $('#' + $.escapeSelector('overlay-div'));
+                        messageDiv.show();
+                        overlay.show();
+                        setTimeout(() => {
+                            messageDiv.hide();
+                            $templateBox.hide();
+                            overlay.hide();
+                        }, 5000);
+                    }
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    console.log('error: ' + errorThrown);
+                    alert(textStatus);
+                });
             });
 
             $('#' + $.escapeSelector('back')).on('click', event => {
