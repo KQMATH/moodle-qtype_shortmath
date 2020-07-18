@@ -141,7 +141,16 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
     }
 
     return {
-        initialize: function (testInputId, btnInputId, expInputId, data) {
+        /**
+         *
+         * @param testInputId
+         * @param btnInputId
+         * @param expInputId
+         * @param templateId
+         * @param templateName
+         * @param testInputId
+         */
+        initialize: function (testInputId, btnInputId, expInputId, templateId, templateName) {
 
             const context = {
                 "shortMathClass": "que shortmath",
@@ -342,39 +351,46 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
 
                     });
 
-                    let name = '';
-                    if (data === null) {
+                    if (templateId === 0) {
                         $testBox.hide();
                     } else {
-                        name = data['name'];
-                        if ($testMode.prop('checked')) {
-                            $saveModeDiv.hide();
-                            $testModeDiv.show();
-                        } else {
-                            $saveModeDiv.show();
-                            $testModeDiv.hide();
-                        }
-                        isDataVisible = true;
-                        JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+                        $.post(M.str.qtype_shortmath.editor_action_path,
+                            {
+                                'id': templateId,
+                                'type': 'get'
+                            }
+                        ).done(message => {
+                            let data = JSON.parse(message);
+                            if ($testMode.prop('checked')) {
+                                $saveModeDiv.hide();
+                                $testModeDiv.show();
+                            } else {
+                                $saveModeDiv.show();
+                                $testModeDiv.hide();
+                            }
+                            isDataVisible = true;
+                            JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+                        }).fail((jqXHR, textStatus, errorThrown) => {
+                            console.log('error: ' + errorThrown);
+                            alert(textStatus);
+                        });
                     }
 
                     let $templateNameInput = $('#' + $.escapeSelector('name'));
-                    $templateNameInput.val(name);
+                    $templateNameInput.val(templateName);
                     $templateNameInput.on('blur', () => {
                         lastFocusedInput = $templateNameInput;
                     });
 
                     $saveButton.on('click', event => {
                         $(':focus').blur();
-                        $.ajax({
-                            method: 'post',
-                            url: 'editor_action.php',
-                            data: {
+                        $.post(M.str.qtype_shortmath.editor_action_path,
+                            {
                                 'data': JSON.stringify(controls.controls),
                                 'name': $templateNameInput.val(),
-                                'id': data === null ? 0 : data['id']
+                                'id': templateId
                             }
-                        }).done(message => {
+                        ).done(message => {
                             if (message > 0) {
                                 controlsWrapper.html('');
                                 controls = new EditorControlList(controlsWrapper);
@@ -395,8 +411,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                                     $testBox.hide();
                                     isDataVisible = false;
                                     overlay.hide();
-                                    if (data !== null) {
-                                        window.location.replace('/question/type/shortmath/editor_manager.php');
+                                    if (templateId > 0) {
+                                        window.location.replace(M.str.qtype_shortmath.editor_manager_path);
                                     }
                                 }, 5000);
                             }
@@ -437,7 +453,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
                     let $backButton = $('#' + $.escapeSelector('back'));
                     $backButton.on('click', event => {
                         event.preventDefault();
-                        window.location.replace('/question/type/shortmath/editor_manager.php');
+                        window.location.replace(M.str.qtype_shortmath.editor_manager_path);
                     });
 
                 }).fail(function (ex) {

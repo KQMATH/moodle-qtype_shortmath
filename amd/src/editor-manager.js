@@ -47,7 +47,11 @@ define(['jquery'], function ($) {
 
                 let id = $form.find('input[name="templateId"]').val();
 
-                $.post('editor_action.php', {'id': id, 'type': 'delete'}
+                $.post(M.str.qtype_shortmath.editor_action_path,
+                    {
+                        'id': id,
+                        'type': 'delete'
+                    }
                 ).done(message => {
                     if (message > 0) {
                         $templateBox.children().hide();
@@ -69,7 +73,7 @@ define(['jquery'], function ($) {
 
             $('#' + $.escapeSelector('back')).on('click', event => {
                 event.preventDefault();
-                window.history.back();
+                window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
             });
         }
     };

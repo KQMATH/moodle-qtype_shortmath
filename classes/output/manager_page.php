@@ -33,12 +33,10 @@ class manager_page implements renderable, templatable
      */
     public function export_for_template(renderer_base $output)
     {
-        // TODO: Implement export_for_template() method.
-
         return ["backButtonName" => "back",
             "backButtonId" => "back",
             "backButtonClass" => "btn btn-primary",
-            "backButtonValue" => "Go Back",
+            "backButtonValue" => "Go to " . get_string('pluginname', 'qtype_shortmath') . " settings",
             "templates" => new \ArrayIterator($this->templates),
             "messageClass" => "message",
             "messageValue" => "Template removed!"];

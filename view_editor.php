@@ -25,21 +25,19 @@
 // File: /mod/mymodulename/view.php
 require_once(__DIR__ . '/../../../config.php');
 
+require_login();
+
 $title = get_string('add_templates', 'qtype_shortmath');
+
 $id = optional_param('templateId', 0, PARAM_INT);
-$data = NULL;
-if($id > 0) {
-    $name = optional_param('templateName', '', PARAM_TEXT);
-    $data = (object) array( 'id' => $id,
-        'name' => optional_param('templateName', '', PARAM_TEXT),
-        'template' => optional_param('templateData', '', PARAM_RAW)
-    );
+$name = optional_param('templateName', '', PARAM_TEXT);
+if ($id > 0) {
     $title = get_string('edit_template', 'qtype_shortmath', $name);
 }
 
 $context = context_system::instance();
 $PAGE->set_context($context);
-$pageurl = new moodle_url('/question/type/shortmath/view_editor.php');
+$pageurl = new moodle_url(get_string('editor_path', 'qtype_shortmath'));
 $PAGE->set_url($pageurl);
 $pagetitle = "Editor configuration";
 $PAGE->set_title($pagetitle);
@@ -49,6 +47,8 @@ $PAGE->set_pagelayout('standard');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
 $PAGE->requires->css('/question/type/shortmath/editor/editor.css');
+$PAGE->requires->string_for_js('editor_action_path', 'qtype_shortmath');
+$PAGE->requires->string_for_js('editor_manager_path', 'qtype_shortmath');
 
 $settingsnode = $PAGE->settingsnav->add($pagetitle, null, navigation_node::TYPE_SETTING);
 $editnode = $settingsnode->add(get_string('resetpage', 'my'), $pageurl);
@@ -58,7 +58,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 
 // Execute js script
-$params = ['test', 'btn', 'exp', $data]; // JS params passed here...
-$PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params); // TODO: data size too large
+$params = ['test', 'btn', 'exp', $id, $name]; // JS params passed here...
+$PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params);
 
 echo $OUTPUT->footer();

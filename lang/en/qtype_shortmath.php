@@ -44,3 +44,6 @@ $string['manage_templates'] = 'Manage Templates';
 $string['manage_templates_link_desc']= 'Template Manager';
 $string['edit_template'] = 'Edit template: {$a}';
 $string['editor_path'] = '/question/type/shortmath/view_editor.php';
+$string['editor_action_path'] = '/question/type/shortmath/editor_action.php';
+$string['editor_manager_path'] = '/question/type/shortmath/editor_manager.php';
+$string['plugin_settings_path'] = '/admin/settings.php?section=qtypesettingshortmath';
