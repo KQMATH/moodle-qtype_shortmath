@@ -26,9 +26,8 @@
 
 <div class="overlay" id="overlay-div"></div>
 <div class="add-templates-div">
-    <a href="{{# str}} editor_path, qtype_shortmath {{/ str}}">
-        {{# str}} add_templates, qtype_shortmath {{/ str}}
-    </a>
+    <input type="button" name="{{addTemplatesButtonName}}" id="{{addTemplatesButtonId}}"
+           class="{{addTemplatesButtonClass}}" value="{{# str}} add_templates, qtype_shortmath {{/ str}}">
 </div>
 <div class="container-1">
     {{#templates}}
@@ -60,7 +59,7 @@
     {{/templates}}
 </div>
 <input type="button" name="{{backButtonName}}" id="{{backButtonId}}"
-       class="{{backButtonClass}}" value="{{backButtonValue}}"/>
+       class="{{backButtonClass}}" value="{{backButtonValue}}">
 {{#js}}
     require(['jquery', 'qtype_shortmath/editor-manager'], function($, EditorManager) {
         EditorManager.initialize();

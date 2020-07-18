@@ -75,6 +75,11 @@ define(['jquery'], function ($) {
                 event.preventDefault();
                 window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
             });
+
+            $('#' + $.escapeSelector('addTemplates')).on('click', event => {
+                event.preventDefault();
+                window.location.replace(M.str.qtype_shortmath.editor_path);
+            });
         }
     };
 });

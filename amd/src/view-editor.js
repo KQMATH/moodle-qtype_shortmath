@@ -119,6 +119,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates'], functi
             html += '<span class="mq-root-block">';
             html += $btnInput.parent('.answer').children('div').children('.mq-root-block').html();
             html += '</span></div>';
+            html = $(html);
+            html.find('.mq-empty').remove(); // Removes white space from buttons
+            html = html.html();
 
             let command = expEditorInput.field.latex();
 

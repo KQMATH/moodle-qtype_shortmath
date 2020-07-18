@@ -39,6 +39,9 @@ class manager_page implements renderable, templatable
             "backButtonValue" => "Go to " . get_string('pluginname', 'qtype_shortmath') . " settings",
             "templates" => new \ArrayIterator($this->templates),
             "messageClass" => "message",
-            "messageValue" => "Template removed!"];
+            "messageValue" => "Template removed!",
+            "addTemplatesButtonName" => "addTemplates",
+            "addTemplatesButtonId" => "addTemplates",
+            "addTemplatesButtonClass" => "btn btn-primary",];
     }
 }
