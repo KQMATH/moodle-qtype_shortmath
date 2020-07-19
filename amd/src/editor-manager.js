@@ -55,13 +55,13 @@ define(['jquery'], function ($) {
                 ).done(message => {
                     if (message > 0) {
                         $templateBox.children().hide();
+                        $templateBox.find('.d-flex').children().hide();
                         let messageDiv = $templateBox.find('.message');
                         let overlay = $('#' + $.escapeSelector('overlay-div'));
                         messageDiv.show();
                         overlay.show();
                         setTimeout(() => {
-                            messageDiv.hide();
-                            $templateBox.hide();
+                            $templateBox.remove();
                             overlay.hide();
                         }, 5000);
                     }

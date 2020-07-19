@@ -6,46 +6,15 @@
  *
  */
 
-.add-templates-div {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-}
-
-.container-1 {
-    display: flex;
-    flex-wrap: wrap;
-    /*flex-direction:column;*/
-}
-
-.box-1 {
-    display: flex;
+.template-box {
     /* set box size */
     flex: 0 0 175px;
-    margin: 10px;
     border: 1px #ccc solid;
-    padding: 10px;
-    align-items: center;
 }
 
 .template-name-div {
-    margin-right: auto;
-    width: 100px;
-    overflow:hidden;
     white-space:nowrap;
     text-overflow: ellipsis;
-}
-
-.icon-divs {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-}
-
-.icon-divs > div {
-    margin: 0 5px;
 }
 
 .message {
@@ -61,58 +30,4 @@
     width: 100%;
     height: 100%;
     display: none;
-}
-
-.que.shortmath .visual-math-input-wrapper {
-    margin: 0;
-}
-
-.delete-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.test, .templateName {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.editor {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-box {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.input-box div:nth-child(1) {
-    /*!* set label size *!
-    min-width: 95px; */
-    display: flex;
-    justify-content: flex-end;
-}
-
-.button, .modeCheck {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.delete-icon {
-    padding: 0.3em 25px 0.3em 25px;
-    background-color: red;
-    margin-top: 0.6em;
-}
-
-.que .ablock {
-    margin: .3em 0 .3em 0;
-}
-
-.form-control {
-    border: 1px solid #bbb;
 }
