@@ -28,7 +28,7 @@ define(['jquery'], function ($) {
         initialize: function () {
             $('.edit-template').on('click', event => {
                 event.preventDefault();
-                let $form = $(event.target).closest('.box-1').find('form');
+                let $form = $(event.target).closest('.template-box').find('form');
                 $form.attr('action', M.str.qtype_shortmath.editor_path);
                 $form.attr('method', 'post');
                 $form.submit();
@@ -36,7 +36,7 @@ define(['jquery'], function ($) {
 
             $('.delete-template').on('click', event => {
                 event.preventDefault();
-                let $templateBox = $(event.target).closest('.box-1');
+                let $templateBox = $(event.target).closest('.template-box');
                 let $form = $templateBox.find('form');
 
                 let isDelete = confirm('Remove template: '
