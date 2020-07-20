@@ -13,6 +13,7 @@
 }
 
 .template-name-div {
+    width: 120px;
     white-space:nowrap;
     text-overflow: ellipsis;
 }

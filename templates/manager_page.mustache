@@ -25,16 +25,16 @@
 }}
 
 <div class="overlay" id="overlay-div"></div>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col d-flex align-items-center justify-content-start p-0 mx-1">
+        <div class="col d-flex align-items-center justify-content-start p-0 mb-2">
             <input type="button" name="{{addTemplatesButtonName}}" id="{{addTemplatesButtonId}}"
                    class="{{addTemplatesButtonClass}}" value="{{# str}} add_templates, qtype_shortmath {{/ str}}">
         </div>
     </div>
     <div class="row">
         {{#templates}}
-            <div class="col template-box d-flex align-items-center m-1 p-1">
+            <div class="col template-box d-flex align-items-center p-1 mr-2 mb-2">
                 <div class="{{messageClass}}" style="display: none;">
                     <b>{{messageValue}}</b>
                 </div>
@@ -62,7 +62,7 @@
         {{/templates}}
     </div>
     <div class="row">
-        <div class="col d-flex align-items-center justify-content-start p-0 mx-1">
+        <div class="col d-flex align-items-center justify-content-start p-0">
             <input type="button" name="{{backButtonName}}" id="{{backButtonId}}"
                    class="{{backButtonClass}}" value="{{backButtonValue}}">
         </div>
