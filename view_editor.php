@@ -27,12 +27,12 @@ require_once(__DIR__ . '/../../../config.php');
 
 require_login();
 
-$title = get_string('add_templates', 'qtype_shortmath');
+$title = get_string('create_templates', 'qtype_shortmath');
 
 $id = optional_param('templateId', 0, PARAM_INT);
 $name = optional_param('templateName', '', PARAM_TEXT);
 if ($id > 0) {
-    $title = get_string('edit_template', 'qtype_shortmath', $name);
+    $title = get_string('edit_template', 'qtype_shortmath');
 }
 
 $context = context_system::instance();
