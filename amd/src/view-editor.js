@@ -73,7 +73,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 this.$element.attr('id', new Date().getTime());
                 this.$element.attr('draggable', true);
-                this.$element.css({width: 'auto', height: 'auto'});
+                this.$element.addClass('p-0'); //for uniform look of the toolbar buttons
 
                 this.$element.on('dragstart', event => {
                     dragged = event.target;
