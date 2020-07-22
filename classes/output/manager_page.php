@@ -33,15 +33,9 @@ class manager_page implements renderable, templatable
      */
     public function export_for_template(renderer_base $output)
     {
-        return ["backButtonName" => "back",
-            "backButtonId" => "back",
-            "backButtonClass" => "btn btn-primary",
-            "backButtonValue" => "Go to " . get_string('pluginname', 'qtype_shortmath') . " settings",
-            "templates" => new \ArrayIterator($this->templates),
-            "messageClass" => "message",
-            "messageValue" => "Template removed!",
-            "addTemplatesButtonName" => "addTemplates",
-            "addTemplatesButtonId" => "addTemplates",
-            "addTemplatesButtonClass" => "btn btn-primary",];
+        return [
+            "buttonClass" => "btn btn-primary",
+            "templates" => new \ArrayIterator($this->templates)
+        ];
     }
 }

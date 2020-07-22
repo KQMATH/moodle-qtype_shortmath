@@ -8,27 +8,6 @@
 
 .template-box {
     /* set box size */
-    flex: 0 0 175px;
+    max-width: 180px;
     border: 1px #ccc solid;
-}
-
-.template-name-div {
-    width: 120px;
-    white-space:nowrap;
-    text-overflow: ellipsis;
-}
-
-.message {
-    color: red;
-}
-
-.overlay {
-    background-color: rgba(0, 0, 0, 0);
-    z-index: 999;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
 }

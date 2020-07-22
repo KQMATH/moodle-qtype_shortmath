@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
@@ -23,63 +22,70 @@
 /**
  * @module qtype_shortmath/editor-manager
  */
-define(['jquery'], function ($) {
-    return {
-        initialize: function () {
-            $('.edit-template').on('click', event => {
-                event.preventDefault();
-                let $form = $(event.target).closest('.template-box').find('form');
-                $form.attr('action', M.str.qtype_shortmath.editor_path);
-                $form.attr('method', 'post');
-                $form.submit();
-            });
-
-            $('.delete-template').on('click', event => {
-                event.preventDefault();
-                let $templateBox = $(event.target).closest('.template-box');
-                let $form = $templateBox.find('form');
-
-                let isDelete = confirm('Remove template: '
-                    + $form.find('input[name="templateName"]').val() + ' ?');
-                if (!isDelete) {
-                    return;
-                }
-
-                let id = $form.find('input[name="templateId"]').val();
-
-                $.post(M.str.qtype_shortmath.editor_action_path,
-                    {
-                        'id': id,
-                        'type': 'delete'
-                    }
-                ).done(message => {
-                    if (message > 0) {
-                        $templateBox.children().hide();
-                        $templateBox.find('.d-flex').children().hide();
-                        let messageDiv = $templateBox.find('.message');
-                        let overlay = $('#' + $.escapeSelector('overlay-div'));
-                        messageDiv.show();
-                        overlay.show();
-                        setTimeout(() => {
-                            $templateBox.remove();
-                            overlay.hide();
-                        }, 5000);
-                    }
-                }).fail((jqXHR, textStatus, errorThrown) => {
-                    console.log('error: ' + errorThrown);
-                    alert(textStatus);
+define(['jquery', 'core/notification', 'theme_boost/tooltip'],
+    function ($, notification) {
+        return {
+            initialize: function () {
+                $('[data-toggle="tooltip"]').tooltip({
+                    container: 'body'
                 });
-            });
+                $('.edit-template').on('click', event => {
+                    event.preventDefault();
+                    let $form = $(event.target).closest('.template-box').find('form');
+                    $form.attr('action', M.str.qtype_shortmath.editor_path);
+                    $form.attr('method', 'post');
+                    $form.submit();
+                });
 
-            $('#' + $.escapeSelector('back')).on('click', event => {
-                event.preventDefault();
-                window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
-            });
+                $('.delete-template').on('click', event => {
+                    event.preventDefault();
 
-            $('#' + $.escapeSelector('addTemplates')).on('click', event => {
-                event.preventDefault();
-                window.location.replace(M.str.qtype_shortmath.editor_path);
-            });
-        }
-    };
-});
+                    // Clear notifications
+                    $('#' + $.escapeSelector('user-notifications')).children().remove();
+
+                    let $templateBox = $(event.target).closest('.template-box');
+                    let $form = $templateBox.find('form');
+                    let id = $form.find('input[name="templateId"]').val();
+
+                    notification.confirm('Delete Template',
+                        `Delete<b>&nbsp;${$form.find('input[name="templateName"]').val()}&nbsp;</b>from database?`,
+                        'OK', 'Cancel', () => {
+                            $.post(M.str.qtype_shortmath.editor_action_path,
+                                {
+                                    'id': id,
+                                    'type': 'delete'
+                                }
+                            ).done(message => {
+                                if (message > 0) {
+                                    notification.addNotification({
+                                        message: "Template deleted!",
+                                        type: "success"
+                                    });
+                                    $templateBox.remove();
+                                } else {
+                                    notification.addNotification({
+                                        message: "Something went wrong!",
+                                        type: "error"
+                                    });
+                                }
+                            }).fail((jqXHR, textStatus, errorThrown) => {
+                                notification.addNotification({
+                                    message: textStatus + ': ' + errorThrown,
+                                    type: "error"
+                                });
+                            });
+                        });
+                });
+
+                $('#' + $.escapeSelector('back')).on('click', event => {
+                    event.preventDefault();
+                    window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
+                });
+
+                $('#' + $.escapeSelector('createTemplates')).on('click', event => {
+                    event.preventDefault();
+                    window.location.replace(M.str.qtype_shortmath.editor_path);
+                });
+            }
+        };
+    });

@@ -19,52 +19,54 @@
 
     Example context (json):
     {
-            "messageClass" : "message",
-            "messageValue" : "Template removed!"
+            "buttonClass" : "btn btn-primary",
+            "templates" : new \ArrayIterator($this->templates)
     }
 }}
 
-<div class="overlay" id="overlay-div"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col d-flex align-items-center justify-content-start p-0 mb-2">
-            <input type="button" name="{{addTemplatesButtonName}}" id="{{addTemplatesButtonId}}"
-                   class="{{addTemplatesButtonClass}}" value="{{# str}} add_templates, qtype_shortmath {{/ str}}">
+            <input type="button" name="createTemplates" id="createTemplates"
+                   class="{{buttonClass}}" value="{{# str}} create_templates, qtype_shortmath {{/ str}}">
         </div>
     </div>
     <div class="row">
-        {{#templates}}
-            <div class="col template-box d-flex align-items-center p-1 mr-2 mb-2">
-                <div class="{{messageClass}}" style="display: none;">
-                    <b>{{messageValue}}</b>
-                </div>
-                <div class="template-name-div mr-auto overflow-hidden" title="{{name}}">
-                    {{name}}
-                </div>
-                <div class="d-flex align-items-center ml-auto">
-                    <div class="px-1">
-                        <a href="#" title="Edit Template" id="edit-template-{{id}}" class="edit-template">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
+        <div class="col p-0 d-flex flex-row flex-wrap">
+            {{#templates}}
+                <div class="container-fluid template-box mr-2 ml-0 mb-2 mt-0 p-1">
+                    <div class="row">
+                        <div class="col-8">
+                    <span title="{{name}}" class="d-inline-block text-truncate" style="max-width: 120px;">
+                        {{name}}
+                    </span>
+                        </div>
+                        <div class="col p-0">
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="Edit Template"
+                               id="edit-template-{{id}}" class="edit-template">
+                                <i class="fa fa-pencil-square-o m-1" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="col p-0">
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="Delete Template"
+                               id="delete-template-{{id}}" class="delete-template">
+                                <i class="fa fa-remove m-1"></i>
+                            </a>
+                        </div>
+                        <form>
+                            <input type="hidden" name="templateId" value="{{id}}"/>
+                            <input type="hidden" name="templateName" value="{{name}}"/>
+                            <input type="hidden" name="templateData" value="{{template}}"/>
+                        </form>
                     </div>
-                    <div class="px-1">
-                        <a href="#" title="Delete Template" id="delete-template-{{id}}" class="delete-template">
-                            <i class="fa fa-remove"></i>
-                        </a>
-                    </div>
                 </div>
-                <form>
-                    <input type="hidden" name="templateId" value="{{id}}"/>
-                    <input type="hidden" name="templateName" value="{{name}}"/>
-                    <input type="hidden" name="templateData" value="{{template}}"/>
-                </form>
-            </div>
-        {{/templates}}
+            {{/templates}}
+        </div>
     </div>
     <div class="row">
         <div class="col d-flex align-items-center justify-content-start p-0">
-            <input type="button" name="{{backButtonName}}" id="{{backButtonId}}"
-                   class="{{backButtonClass}}" value="{{backButtonValue}}">
+            <input type="button" name="back" id="back" class="{{buttonClass}}"
+                   value="Go to {{# str}} pluginname, qtype_shortmath {{/ str}} settings">
         </div>
     </div>
 </div>
