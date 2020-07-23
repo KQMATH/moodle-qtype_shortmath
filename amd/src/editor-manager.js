@@ -25,10 +25,28 @@
 define(['jquery', 'core/notification', 'theme_boost/tooltip'],
     function ($, notification) {
         return {
-            initialize: function () {
-                $('[data-toggle="tooltip"]').tooltip({
-                    container: 'body'
+            initialize: () => {
+                $('.edit-template, .delete-template').each((index, element) => {
+                    $(element).tooltip({
+                        container: element
+                    });
                 });
+
+                $('.text-truncate').each((index, element) => {
+                    let $ele = $(element);
+                    if (element.offsetWidth < element.scrollWidth) {
+                        $ele.tooltip({
+                            container: element,
+                            delay: {
+                                show: 0,
+                                delay: 300
+                            }
+                        });
+                    } else {
+                        $ele.attr('title', '');
+                    }
+                });
+
                 $('.edit-template').on('click', event => {
                     event.preventDefault();
                     let $form = $(event.target).closest('.template-box').find('form');
