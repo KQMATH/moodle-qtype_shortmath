@@ -108,9 +108,15 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
             }
 
             add($btnInput, $expInput, expEditorInput) {
+                //TODO: show validation messages
                 $(':focus').blur();
-                if ($btnInput.val() === '' || $expInput.val() === '') {
+                if ($btnInput.val() === '') {
                     console.log('Enter all values!');
+                    $btnInput.parent('.answer').find('.mq-root-block').mousedown().mouseup();
+                    return false;
+                } else if ($expInput.val() === '') {
+                    console.log('Enter all values!');
+                    $expInput.parent('.answer').find('.mq-root-block').mousedown().mouseup();
                     return false;
                 }
 
@@ -131,19 +137,16 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     $frac.remove();
                 }
 
-                let $bin = $html.find('.mq-paren.mq-scaled');
-                if ($bin.length > 0) {
-                    $bin.css('transform', 'scale(0.8, 1.5)'); //resize binomial
-                    $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
-                    $html.find('var').parent().css('font-size', '14px');
-                    html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${new Date().getTime()}">`;
-                    html += $html.prop('outerHTML');
-                    html += '</div>';
-                    $html = $(html);
-                }
-
+                let $binom = $html.find('.mq-paren.mq-scaled'); //nCr
                 let $supsub = $html.find('.mq-supsub'); //power
-                if ($supsub.length > 0) {
+                let $vars = $html.find('var');
+
+                if ($binom.length > 0 || $supsub.length > 0 || $vars.length > 0) {
+                    if ($binom.length > 0) {
+                        $binom.css('transform', 'scale(0.8, 1.5)'); //resize binomial
+                        $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
+                        $html.find('var').parent().css('font-size', '14px');
+                    }
                     html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${new Date().getTime()}">`;
                     html += $html.prop('outerHTML');
                     html += '</div>';
@@ -329,9 +332,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 }
 
                                 //clear inputs
-                                $btnInput.parent('.answer').find('.mq-root-block').html('');
-                                $expInput.parent('.answer').find('.mq-root-block').html('');
-
                                 buttonInput.field.latex('');
                                 expressionInput.field.latex('');
                             }
