@@ -73,7 +73,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 this.$element.attr('id', new Date().getTime());
                 this.$element.attr('draggable', true);
-                this.$element.addClass('p-0'); //for uniform look of the toolbar buttons
 
                 this.$element.on('dragstart', event => {
                     dragged = event.target;
@@ -115,13 +114,43 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     return false;
                 }
 
-                let html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%; id=${new Date().getTime()}">`;
-                html += '<span class="mq-root-block">';
-                html += $btnInput.parent('.answer').children('div').children('.mq-root-block').html();
-                html += '</span></div>';
-                html = $(html);
-                html.find('.mq-empty').remove(); // Removes white space from buttons
-                html = html.html();
+                let html = $btnInput.parent('.answer').find('.mq-root-block').prop('outerHTML');
+
+                let $html = $(html);
+
+                $html.find('.mq-empty').remove(); // Removes white space from buttons
+
+                $html.find('big').replaceWith((i, element) => {
+                    return '<span>' + element + '</span>';
+                });
+
+                let $frac = $html.find('.mq-fraction'); //division
+                if ($frac.length > 0) {
+                    $html.append('<var>' + $html.find('.mq-numerator').text()
+                        + '/' + $html.find('.mq-denominator').text() + '</var>');
+                    $frac.remove();
+                }
+
+                let $bin = $html.find('.mq-paren.mq-scaled');
+                if ($bin.length > 0) {
+                    $bin.css('transform', 'scale(0.8, 1.5)'); //resize binomial
+                    $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
+                    $html.find('var').parent().css('font-size', '14px');
+                    html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${new Date().getTime()}">`;
+                    html += $html.prop('outerHTML');
+                    html += '</div>';
+                    $html = $(html);
+                }
+
+                let $supsub = $html.find('.mq-supsub'); //power
+                if ($supsub.length > 0) {
+                    html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${new Date().getTime()}">`;
+                    html += $html.prop('outerHTML');
+                    html += '</div>';
+                    $html = $(html);
+                }
+
+                html = $html.prop('outerHTML');
 
                 let command = expEditorInput.field.latex();
                 this.addControl(html, command);
@@ -293,17 +322,19 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                             event.preventDefault();
 
                             let isSuccess = controls.add($btnInput, $expInput, expressionInput);
-                            if (isSuccess && !isDataVisible) {
-                                $testBox.show();
-                                isDataVisible = true;
+                            if (isSuccess) {
+                                if (!isDataVisible) {
+                                    $testBox.show();
+                                    isDataVisible = true;
+                                }
+
+                                //clear inputs
+                                $btnInput.parent('.answer').find('.mq-root-block').html('');
+                                $expInput.parent('.answer').find('.mq-root-block').html('');
+
+                                buttonInput.field.latex('');
+                                expressionInput.field.latex('');
                             }
-
-                            //clear inputs
-                            $btnInput.parent('.answer').children('div').children('.mq-root-block').html('');
-                            $expInput.parent('.answer').children('div').children('.mq-root-block').html('');
-
-                            buttonInput.field.latex('');
-                            expressionInput.field.latex('');
 
                         });
 
