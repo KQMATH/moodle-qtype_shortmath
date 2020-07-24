@@ -15,17 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main interface to Question Tracker
+ * Editor template creation page.
  *
- * @package     local_questiontracker
+ * @package     qtype_shortmath
  * @author      André Storhaug <andr3.storhaug@gmail.com>
  * @copyright   2020 NTNU
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// File: /mod/mymodulename/view.php
 require_once(__DIR__ . '/../../../config.php');
 
 require_login();
+$context = context_system::instance();
+require_capability('moodle/site:config', $context);
 
 $title = get_string('create_templates', 'qtype_shortmath');
 
@@ -35,24 +36,19 @@ if ($id > 0) {
     $title = get_string('edit_template', 'qtype_shortmath');
 }
 
-$context = context_system::instance();
 $PAGE->set_context($context);
 $pageurl = new moodle_url(get_string('editor_path', 'qtype_shortmath'));
 $PAGE->set_url($pageurl);
 $pagetitle = "Editor configuration";
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
-$PAGE->set_pagelayout('standard');
+$PAGE->set_pagelayout('admin');
 
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
 $PAGE->requires->css('/question/type/shortmath/editor/editor.css');
 $PAGE->requires->string_for_js('editor_action_path', 'qtype_shortmath');
 $PAGE->requires->string_for_js('editor_manager_path', 'qtype_shortmath');
-
-$settingsnode = $PAGE->settingsnav->add($pagetitle, null, navigation_node::TYPE_SETTING);
-$editnode = $settingsnode->add(get_string('resetpage', 'my'), $pageurl);
-$editnode->make_active();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
