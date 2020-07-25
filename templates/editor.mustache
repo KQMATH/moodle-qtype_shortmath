@@ -38,10 +38,10 @@
 <div class="overlay" id="overlay-div"></div>
 <div class="que shortmath container-fluid">
     <div class="row">
-        <div class="templateName saveMode col p-0 d-flex align-items-center mb-3">
+        <div class="templateName col p-0 d-flex align-items-center mb-3">
             <label for="name">{{nameInputLabel}}</label>
             <input type="text" class="form-control text-ltr ml-1 w-auto" name="name"
-                   id="name">
+                   id="name" data-toggle="popover">
         </div>
     </div>
     <div class="row">
@@ -81,7 +81,7 @@
                 <div class="row">
                     <div class="col p-0 d-flex align-items-center mb-2">
                         <label for="btn" class="mr-auto">{{buttonInputLabel}}</label>
-                        <span class="{{inputSpanClass}}">
+                        <span class="{{inputSpanClass}}" data-toggle="popover">
                             <input type="text" name="btn" id="btn"
                                    size="{{inputSize}}"/>
                         </span>
@@ -90,7 +90,7 @@
                 <div class="row">
                     <div class="col p-0 d-flex align-items-center mb-2">
                         <label for="exp" class="mr-auto">{{expressionInputLabel}}</label>
-                        <span class="{{inputSpanClass}} ml-1">
+                        <span class="{{inputSpanClass}}" data-toggle="popover">
                             <input type="text" name="exp" id="exp"
                                    size="{{inputSize}}"/>
                         </span>

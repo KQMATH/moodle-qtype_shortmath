@@ -23,7 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/notification'],
+define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/notification', 'theme_boost/popover'],
     function ($, VisualMath, Templates, notification) {
         let lastFocusedInput = null;
         let dragged;
@@ -107,20 +107,43 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 // this.defineDefault();
             }
 
-            add($btnInput, $expInput, expEditorInput) {
-                //TODO: show validation messages
+            /**
+             *
+             * @param buttonField
+             * @param expressionField
+             * @param $inputFields
+             * @returns {boolean}
+             */
+            add(buttonField, expressionField, $inputFields) {
+                let $buttonFieldRoot = $(buttonField.el());
+                let $expressionFieldRoot = $(expressionField.el());
+                let expressionValue = expressionField.latex();
+                let showMessage = false;
+
                 $(':focus').blur();
-                if ($btnInput.val() === '') {
-                    console.log('Enter all values!');
-                    $btnInput.parent('.answer').find('.mq-root-block').mousedown().mouseup();
-                    return false;
-                } else if ($expInput.val() === '') {
-                    console.log('Enter all values!');
-                    $expInput.parent('.answer').find('.mq-root-block').mousedown().mouseup();
-                    return false;
+
+                if (buttonField.latex() === '') {
+                    $expressionFieldRoot.parent().attr('data-content', '');
+                    showMessage = true;
+                    buttonField.focus();
+                    $buttonFieldRoot.parent().attr('data-content', 'Button cannot be blank!');
+                } else if (expressionValue === '') {
+                    $buttonFieldRoot.parent().attr('data-content', '');
+                    showMessage = true;
+                    expressionField.focus();
+                    $expressionFieldRoot.parent().attr('data-content', 'Expression cannot be blank!');
                 }
 
-                let html = $btnInput.parent('.answer').find('.mq-root-block').prop('outerHTML');
+                if (showMessage) {
+                    console.log('Enter all values!');
+                    $inputFields.popover('enable');
+                    $inputFields.popover('show');
+                    return false;
+                } else {
+                    $inputFields.popover('disable');
+                }
+
+                let html = $buttonFieldRoot.find('.mq-root-block').prop('outerHTML');
 
                 let $html = $(html);
 
@@ -155,8 +178,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 html = $html.prop('outerHTML');
 
-                let command = expEditorInput.field.latex();
-                this.addControl(html, command);
+                this.addControl(html, expressionValue);
                 return true;
             }
 
@@ -321,10 +343,14 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         let $addButton = $('#' + $.escapeSelector('add'));
                         let controls = new EditorControlList(controlsWrapper);
 
+                        let buttonField = buttonInput.field;
+                        let expressionField = expressionInput.field;
+                        let $inputFields = $('.answer[data-toggle="popover"]');
+
                         $addButton.on('click', event => {
                             event.preventDefault();
 
-                            let isSuccess = controls.add($btnInput, $expInput, expressionInput);
+                            let isSuccess = controls.add(buttonField, expressionField, $inputFields);
                             if (isSuccess) {
                                 if (!isDataVisible) {
                                     $testBox.show();
@@ -332,8 +358,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 }
 
                                 //clear inputs
-                                buttonInput.field.latex('');
-                                expressionInput.field.latex('');
+                                buttonField.latex('');
+                                expressionField.latex('');
                             }
 
                         });
@@ -359,25 +385,27 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         }
 
                         let $templateNameInput = $('#' + $.escapeSelector('name'));
-                        $templateNameInput.val(templateName);
-                        $templateNameInput.on('blur', () => {
-                            lastFocusedInput = $templateNameInput;
-                        });
+                        $templateNameInput.val(templateName)
+                            .on('blur', () => {
+                                lastFocusedInput = $templateNameInput;
+                            });
 
                         $saveButton.on('click', event => {
                             event.preventDefault();
 
                             // Clear notifications
-                            $('#' + $.escapeSelector('user-notifications')).children().remove();
+                            $('.alert').alert('close');
+
                             let name = $templateNameInput.val().trim();
                             if (name === '') {
-                                notification.addNotification({
-                                    message: "Name cannot be blank!",
-                                    type: "error"
-                                });
-                                $templateNameInput.focus();
+                                $templateNameInput.focus()
+                                    .popover('enable')
+                                    .popover('show');
                                 return;
+                            } else {
+                                $templateNameInput.popover('disable');
                             }
+
                             $.post(M.str.qtype_shortmath.editor_action_path,
                                 {
                                     'data': JSON.stringify(controls.controls),
@@ -449,6 +477,21 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         $backButton.on('click', event => {
                             event.preventDefault();
                             window.location.replace(M.str.qtype_shortmath.editor_manager_path);
+                        });
+
+                        //field validation messages
+                        $inputFields.each((index, element) => {
+                            $(element).popover({
+                                container: element,
+                                placement: 'top',
+                                trigger: 'manual'
+                            });
+                        });
+
+                        $templateNameInput.popover({
+                            placement: 'top',
+                            trigger: 'manual',
+                            content: 'Name cannot be empty!'
                         });
 
                     }).fail(function (ex) {

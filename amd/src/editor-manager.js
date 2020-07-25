@@ -58,9 +58,6 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip'],
                 $('.delete-template').on('click', event => {
                     event.preventDefault();
 
-                    // Clear notifications
-                    $('#' + $.escapeSelector('user-notifications')).children().remove();
-
                     let $templateBox = $(event.target).closest('.template-box');
                     let $form = $templateBox.find('form');
                     let id = $form.find('input[name="templateId"]').val();
@@ -68,6 +65,9 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip'],
                     notification.confirm('Delete Template',
                         `Delete<b>&nbsp;${$form.find('input[name="templateName"]').val()}&nbsp;</b>from database?`,
                         'OK', 'Cancel', () => {
+                            // Clear notifications
+                            $('.alert').alert('close');
+
                             $.post(M.str.qtype_shortmath.editor_action_path,
                                 {
                                     'id': id,
