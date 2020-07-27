@@ -11,3 +11,21 @@
     max-width: 180px;
     border: 1px #ccc solid;
 }
+
+.tooltip-inner {
+    white-space: nowrap;
+}
+
+.popover {
+    border-radius: 0.25rem;
+    border-color: #5bc0de;
+}
+
+.popover-body {
+    background-color: #5bc0de;
+    color: #fff;
+}
+
+.bs-popover-top > .arrow::after, .bs-popover-top > .arrow::before {
+    border-top-color: #5bc0de;
+}

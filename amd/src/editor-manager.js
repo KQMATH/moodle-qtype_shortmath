@@ -22,32 +22,34 @@
 /**
  * @module qtype_shortmath/editor-manager
  */
-define(['jquery', 'core/notification', 'theme_boost/tooltip'],
+define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popover'],
     function ($, notification) {
         return {
             initialize: () => {
                 $('.edit-template, .delete-template').each((index, element) => {
                     $(element).tooltip({
-                        container: element
+                        container: element.parentElement
                     });
                 });
 
                 $('.text-truncate').each((index, element) => {
                     let $ele = $(element);
                     if (element.offsetWidth < element.scrollWidth) {
-                        $ele.tooltip({
+                        $ele.popover({
                             container: element,
                             delay: {
                                 show: 0,
                                 delay: 300
-                            }
+                            },
+                            placement: 'top',
+                            trigger: 'hover'
                         });
                     } else {
                         $ele.attr('title', '');
                     }
                 });
 
-                $('.edit-template').on('click', event => {
+                $('.edit-template').click(event => {
                     event.preventDefault();
                     let $form = $(event.target).closest('.template-box').find('form');
                     $form.attr('action', M.str.qtype_shortmath.editor_path);
@@ -55,7 +57,7 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip'],
                     $form.submit();
                 });
 
-                $('.delete-template').on('click', event => {
+                $('.delete-template').click(event => {
                     event.preventDefault();
 
                     let $templateBox = $(event.target).closest('.template-box');
@@ -95,12 +97,12 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip'],
                         });
                 });
 
-                $('#' + $.escapeSelector('back')).on('click', event => {
+                $('#' + $.escapeSelector('back')).click(event => {
                     event.preventDefault();
                     window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
                 });
 
-                $('#' + $.escapeSelector('createTemplates')).on('click', event => {
+                $('#' + $.escapeSelector('createTemplates')).click(event => {
                     event.preventDefault();
                     window.location.replace(M.str.qtype_shortmath.editor_path);
                 });
