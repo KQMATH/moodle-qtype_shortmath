@@ -1,10 +1,6 @@
-.test-box, .input-box, .templateName {
+.test-box, .input-box {
     /* set box size */
     flex: 0 0 425px;
-}
-
-.test-box, .input-box {
-    border: 1px #ccc solid;
 }
 
 .delete-icon {

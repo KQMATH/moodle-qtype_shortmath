@@ -19,96 +19,103 @@
 
     Example context (json):
     {
-        "testInputLabel": "Test:",
+        "testInputLabel": "Test",
         "inputSize": 30,
         "inputBoxTitle": "Add Buttons",
         "testBoxTitle": "Test Buttons/Save Template",
-        "buttonInputLabel": "Button:",
+        "buttonInputLabel": "Button",
         "inputSpanClass": "answer",
-        "expressionInputLabel": "Expression:",
+        "expressionInputLabel": "Expression",
         "buttonClass": "btn btn-primary",
         "addButtonValue": "Add",
         "deleteIconClass": "fa fa-trash fa-2x",
-        "nameInputLabel": "Name:",
+        "nameInputLabel": "Name",
         "saveButtonValue": "Save",
-        "backButtonValue": "Go Back"
+        "backButtonValue": "Go Back",
+        "toolbarTitle": "Toolbar",
+        "nameErrorMessage": "Name cannot be empty!"
     }
 }}
 
 <div class="overlay" id="overlay-div"></div>
 <div class="que shortmath container-fluid">
-    <div class="row">
-        <div class="templateName col p-0 d-flex align-items-center mb-3">
-            <label for="name">{{nameInputLabel}}</label>
-            <input type="text" class="form-control text-ltr ml-1 w-auto" name="name"
-                   id="name" data-toggle="popover">
+    <form class="needs-validation" novalidate id="saveForm">
+        <div class="row">
+            <div class="col-md-4 mb-3 p-0">
+                <label for="name">{{nameInputLabel}}</label>
+                <input type="text" class="form-control text-ltr w-auto" name="name"
+                       id="name" required>
+                <div class="invalid-feedback text-nowrap">{{nameErrorMessage}}</div>
+            </div>
         </div>
-    </div>
+    </form>
     <div class="row">
-        <div class="test-box order-2 col mb-2 mr-2 p-2">
+        <div class="col-md-4 mb-3 p-0">
+            <h3>{{inputBoxTitle}}</h3>
+            <div class="container-fluid">
+                <form id="addForm" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-4 mb-3 p-0">
+                            <label for="btn" class="mr-auto">{{buttonInputLabel}}</label>
+                            <span class="{{inputSpanClass}}">
+                                <input type="text" name="btn" id="btn" size="{{inputSize}}">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3 p-0">
+                            <label for="exp" class="mr-auto">{{expressionInputLabel}}</label>
+                            <span class="{{inputSpanClass}}">
+                                <input type="text" name="exp" id="exp" size="{{inputSize}}">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3 p-0">
+                            <input type="button" name="add" id="add"
+                                   class="{{buttonClass}}" value="{{addButtonValue}}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="test-box col-md-4 mb-3 p-0">
             <h3>{{testBoxTitle}}</h3>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col p-0 mb-2">
+                    <div class="col mb-3 p-0">
+                        <div>{{toolbarTitle}}</div>
                         <div class="controls_wrapper m-0"></div>
-                        <div class="delete-box d-flex align-items-center justify-content-center">
-                            <div class="delete-icon d-none rounded-circle bg-danger text-center mt-2">
-                                <i class="{{deleteIconClass}} m-2"></i>
-                            </div>
+                    </div>
+                </div>
+                <div class="row delete-box d-none">
+                    <div class="col mb-3 p-0 d-flex align-items-center justify-content-center">
+                        <div class="delete-icon rounded-circle bg-danger text-center">
+                            <i class="{{deleteIconClass}} m-2"></i>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col p-0 d-flex align-items-center justify-content-center mb-2">
+                    <div class="col-md-4 mb-3 p-0">
                         <label for="test">{{testInputLabel}}</label>
-                        <span class="{{inputSpanClass}} ml-1">
-                            <input type="text" name="test" id="test"
-                                   size="{{inputSize}}"/>
+                        <span class="{{inputSpanClass}}">
+                            <input type="text" name="test" id="test" size="{{inputSize}}">
                         </span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col d-flex align-items-center justify-content-end p-0">
+                    <div class="col d-flex align-items-center p-0">
                         <input type="button" name="save" id="save"
-                               class="{{buttonClass}}" value="{{saveButtonValue}}"/>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="input-box order-1 col mb-2 mr-2 p-2">
-            <h3>{{inputBoxTitle}}</h3>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col p-0 d-flex align-items-center mb-2">
-                        <label for="btn" class="mr-auto">{{buttonInputLabel}}</label>
-                        <span class="{{inputSpanClass}}" data-toggle="popover">
-                            <input type="text" name="btn" id="btn"
-                                   size="{{inputSize}}"/>
-                        </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col p-0 d-flex align-items-center mb-2">
-                        <label for="exp" class="mr-auto">{{expressionInputLabel}}</label>
-                        <span class="{{inputSpanClass}}" data-toggle="popover">
-                            <input type="text" name="exp" id="exp"
-                                   size="{{inputSize}}"/>
-                        </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col d-flex align-items-center justify-content-end p-0">
-                        <input type="button" name="add" id="add"
-                               class="{{buttonClass}}" value="{{addButtonValue}}"/>
+                               class="{{buttonClass}}" value="{{saveButtonValue}}">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col p-0">
+        <div class="col-md-4 mb-3 p-0">
             <input type="button" name="back" id="back"
-                   class="{{buttonClass}}" value="{{backButtonValue}}"/>
+                   class="{{buttonClass}}" value="{{backButtonValue}}">
         </div>
     </div>
 </div>

@@ -30,17 +30,34 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
         let target;
         let nodes;
         let draggedIndex;
+        let isSuccess = true;
 
         class EditorInput extends VisualMath.Input {
 
             constructor(input, parent) {
                 super(input, parent);
                 this.$textarea.on('blur', () => lastFocusedInput = this);
+                this.$input.prop('required', true);
+                this.$input.addClass('form-control');
+                let errorDiv = document.createElement('div');
+                $(errorDiv).addClass('invalid-feedback text-nowrap');
+                this.$parent.append(errorDiv);
             }
 
             change() {
                 super.onEdit = ($input, field) => {
                     $input.val(field.latex());
+                    if (!isSuccess && !$input.parents('.test-box').length) {
+                        if ($input.val() === '') {
+                            $input.siblings('.visual-math-input-field')
+                                .removeClass('form-control is-valid')
+                                .addClass('form-control is-invalid');
+                        } else {
+                            $input.siblings('.visual-math-input-field')
+                                .removeClass('form-control is-invalid')
+                                .addClass('form-control is-valid');
+                        }
+                    }
                     $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
                 };
             }
@@ -49,8 +66,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
         class EditorControl extends VisualMath.Control {
 
-            constructor(text, onClick) {
-                super('', text, onClick);
+            constructor(name, text, onClick) {
+                super(name, text, onClick);
             }
 
             enable() {
@@ -59,7 +76,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 this.$element.off('click');
                 this.$element.on('click', event => {
                     event.preventDefault();
+
                     $(':focus').blur();
+
                     if (lastFocusedInput !== null) {
                         if (lastFocusedInput.field === undefined) {
                             console.log('Plain text field');
@@ -71,7 +90,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     }
                 });
 
-                this.$element.attr('id', new Date().getTime());
+                this.$element.attr('id', 'btn_' + this.name);
                 this.$element.attr('draggable', true);
 
                 this.$element.on('dragstart', event => {
@@ -82,7 +101,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     event.originalEvent.dataTransfer.setData("text", event.target.id);
                     event.originalEvent.dataTransfer.dropEffect = "move";
                     event.target.style.opacity = 0.5;
-                    $('.delete-icon').removeClass('d-none');
+                    $('.delete-box').removeClass('d-none');
                 });
 
                 this.$element.on('dragend', event => {
@@ -91,7 +110,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     if (document.getElementById('placeholder') !== null) {
                         document.getElementById('placeholder').replaceWith(dragged);
                     }
-                    $('.delete-icon').addClass('d-none');
+                    $('.delete-box').addClass('d-none');
                 });
 
             }
@@ -111,37 +130,12 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
              *
              * @param buttonField
              * @param expressionField
-             * @param $inputFields
              * @returns {boolean}
              */
-            add(buttonField, expressionField, $inputFields) {
+            add(buttonField, expressionField) {
                 let $buttonFieldRoot = $(buttonField.el());
-                let $expressionFieldRoot = $(expressionField.el());
-                let expressionValue = expressionField.latex();
-                let showMessage = false;
 
                 $(':focus').blur();
-
-                if (buttonField.latex() === '') {
-                    $expressionFieldRoot.parent().attr('data-content', '');
-                    showMessage = true;
-                    buttonField.focus();
-                    $buttonFieldRoot.parent().attr('data-content', 'Button cannot be blank!');
-                } else if (expressionValue === '') {
-                    $buttonFieldRoot.parent().attr('data-content', '');
-                    showMessage = true;
-                    expressionField.focus();
-                    $expressionFieldRoot.parent().attr('data-content', 'Expression cannot be blank!');
-                }
-
-                if (showMessage) {
-                    console.log('Enter all values!');
-                    $inputFields.popover('enable');
-                    $inputFields.popover('show');
-                    return false;
-                } else {
-                    $inputFields.popover('disable');
-                }
 
                 let html = $buttonFieldRoot.find('.mq-root-block').prop('outerHTML');
 
@@ -170,7 +164,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
                         $html.find('var').parent().css('font-size', '14px');
                     }
-                    html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${new Date().getTime()}">`;
+                    html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${Date.now()}">`;
                     html += $html.prop('outerHTML');
                     html += '</div>';
                     $html = $(html);
@@ -178,7 +172,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 html = $html.prop('outerHTML');
 
-                this.addControl(html, expressionValue);
+                this.addControl(html, expressionField.latex());
                 return true;
             }
 
@@ -189,7 +183,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
             }
 
             addControl(html, command) {
-                let control = new EditorControl(html, field => field.write(command));
+                let control = new EditorControl(Date.now(), html, field => field.write(command));
                 control.enable();
                 this.$wrapper.append(control.$element);
                 this.controls.push({button: html, expression: command});
@@ -210,19 +204,21 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
             initialize: function (testInputId, btnInputId, expInputId, templateId, templateName) {
 
                 const context = {
-                    "testInputLabel": "Test:",
+                    "testInputLabel": "Test",
                     "inputSize": 30,
                     "inputBoxTitle": "Add Buttons",
                     "testBoxTitle": "Test Buttons/Save Template",
-                    "buttonInputLabel": "Button:",
+                    "buttonInputLabel": "Button",
                     "inputSpanClass": "answer",
-                    "expressionInputLabel": "Expression:",
+                    "expressionInputLabel": "Expression",
                     "buttonClass": "btn btn-primary",
                     "addButtonValue": "Add",
                     "deleteIconClass": "fa fa-trash fa-2x",
-                    "nameInputLabel": "Name:",
+                    "nameInputLabel": "Name",
                     "saveButtonValue": "Save",
-                    "backButtonValue": "Go Back"
+                    "backButtonValue": "Go Back",
+                    "toolbarTitle": "Toolbar",
+                    "nameErrorMessage": "Name cannot be empty!"
                 };
 
                 Templates.render('qtype_shortmath/editor', context)
@@ -345,23 +341,47 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                         let buttonField = buttonInput.field;
                         let expressionField = expressionInput.field;
-                        let $inputFields = $('.answer[data-toggle="popover"]');
 
-                        $addButton.on('click', event => {
+                        let $addForm = $('#' + $.escapeSelector('addForm'));
+                        buttonInput.$parent.find('.invalid-feedback').text('Button is empty or invalid!');
+                        expressionInput.$parent.find('.invalid-feedback').text('Expression is empty or invalid!');
+
+                        $addButton.click(event => {
                             event.preventDefault();
 
-                            let isSuccess = controls.add(buttonField, expressionField, $inputFields);
-                            if (isSuccess) {
-                                if (!isDataVisible) {
-                                    $testBox.show();
-                                    isDataVisible = true;
+                            $addForm.submit();
+                        });
+
+                        $addForm.submit(event => {
+                            if ($addForm[0].checkValidity() === false) {
+                                isSuccess = false;
+
+                                $(':focus').blur();
+
+                                $addForm.find('input:text.form-control').each((index, element) => {
+                                    let $element = $(element);
+                                    if ($element.val() === '') {
+                                        $element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
+                                    }
+                                });
+                                event.preventDefault();
+                                event.stopPropagation();
+                            } else {
+                                isSuccess = controls.add(buttonField, expressionField);
+                                if (isSuccess) {
+                                    if (!isDataVisible) {
+                                        $testBox.show();
+                                        isDataVisible = true;
+                                    }
+
+                                    $addForm.find('.visual-math-input-field').removeClass('form-control is-valid');
+
+                                    //clear inputs
+                                    buttonField.latex('');
+                                    expressionField.latex('');
                                 }
-
-                                //clear inputs
-                                buttonField.latex('');
-                                expressionField.latex('');
+                                event.preventDefault();
                             }
-
                         });
 
                         if (templateId === 0) {
@@ -390,61 +410,72 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 lastFocusedInput = $templateNameInput;
                             });
 
+                        let $saveForm = $('#' + $.escapeSelector('saveForm'));
+
+                        $saveForm.submit(event => {
+                            if ($saveForm[0].checkValidity() === false) {
+                                $(':focus').blur();
+                                $saveForm.addClass('was-validated');
+                                event.preventDefault();
+                                event.stopPropagation();
+                            } else {
+                                $.post(M.str.qtype_shortmath.editor_action_path,
+                                    {
+                                        'data': JSON.stringify(controls.controls),
+                                        'name': $templateNameInput.val().trim(),
+                                        'id': templateId
+                                    }
+                                ).done(message => {
+                                    if (message > 0) {
+                                        if (templateId > 0) {
+                                            notification.addNotification({
+                                                message: "Configuration saved! Please wait...",
+                                                type: "success"
+                                            });
+
+                                            $('#' + $.escapeSelector('overlay-div')).show();
+
+                                            setTimeout(() => {
+                                                window.location.replace(M.str.qtype_shortmath.editor_manager_path);
+                                            }, 5000);
+                                        } else {
+                                            notification.addNotification({
+                                                message: "Configuration saved!",
+                                                type: "success"
+                                            });
+
+                                            controlsWrapper.html('');
+                                            controls = new EditorControlList(controlsWrapper);
+                                            $templateNameInput.val('');
+                                            testInput.field.latex('');
+                                            $testBox.hide();
+                                            isDataVisible = false;
+                                        }
+                                    } else {
+                                        notification.addNotification({
+                                            message: "Something went wrong!",
+                                            type: "error"
+                                        });
+                                    }
+                                    $saveButton.blur();
+                                }).fail((jqXHR, textStatus, errorThrown) => {
+                                    notification.addNotification({
+                                        message: textStatus + ': ' + errorThrown,
+                                        type: "error"
+                                    });
+                                    $saveButton.blur();
+                                });
+                                $saveForm.removeClass('was-validated');
+                                event.preventDefault();
+                            }
+                        });
+
                         $saveButton.on('click', event => {
                             event.preventDefault();
 
                             // Clear notifications
                             $('.alert').alert('close');
-
-                            let name = $templateNameInput.val().trim();
-                            if (name === '') {
-                                $templateNameInput.focus()
-                                    .popover('enable')
-                                    .popover('show');
-                                return;
-                            } else {
-                                $templateNameInput.popover('disable');
-                            }
-
-                            $.post(M.str.qtype_shortmath.editor_action_path,
-                                {
-                                    'data': JSON.stringify(controls.controls),
-                                    'name': name,
-                                    'id': templateId
-                                }
-                            ).done(message => {
-                                if (message > 0) {
-                                    notification.addNotification({
-                                        message: "Configuration saved!",
-                                        type: "success"
-                                    });
-                                    if (templateId > 0) {
-                                        $('#' + $.escapeSelector('overlay-div')).show();
-                                        setTimeout(() => {
-                                            window.location.replace(M.str.qtype_shortmath.editor_manager_path);
-                                        }, 5000);
-                                    } else {
-                                        controlsWrapper.html('');
-                                        controls = new EditorControlList(controlsWrapper);
-                                        $templateNameInput.val('');
-                                        testInput.field.latex('');
-                                        $testBox.hide();
-                                        isDataVisible = false;
-                                    }
-                                } else {
-                                    notification.addNotification({
-                                        message: "Something went wrong!",
-                                        type: "error"
-                                    });
-                                }
-                                $saveButton.blur();
-                            }).fail((jqXHR, textStatus, errorThrown) => {
-                                notification.addNotification({
-                                    message: textStatus + ': ' + errorThrown,
-                                    type: "error"
-                                });
-                                $saveButton.blur();
-                            });
+                            $saveForm.submit();
                         });
 
                         let deleteIcon = $('.delete-icon');
@@ -478,22 +509,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                             event.preventDefault();
                             window.location.replace(M.str.qtype_shortmath.editor_manager_path);
                         });
-
-                        //field validation messages
-                        $inputFields.each((index, element) => {
-                            $(element).popover({
-                                container: element,
-                                placement: 'top',
-                                trigger: 'manual'
-                            });
-                        });
-
-                        $templateNameInput.popover({
-                            placement: 'top',
-                            trigger: 'manual',
-                            content: 'Name cannot be empty!'
-                        });
-
                     }).fail(function (ex) {
                     // Deal with this exception (I recommend core/notify exception function for this).
                 });
