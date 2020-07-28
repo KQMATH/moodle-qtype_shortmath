@@ -22,9 +22,7 @@ $PAGE->requires->string_for_js('plugin_settings_path', 'qtype_shortmath');
 
 $settingsnode = $PAGE->settingsnav->add(get_string('editor_manager', 'qtype_shortmath'),
     null, navigation_node::TYPE_SETTING);
-$editurl = new moodle_url('/question/type/shortmath/editor_manager.php');
-$editnode = $settingsnode->add(get_string('resetpage', 'my'), $editurl);
-$editnode->make_active();
+$settingsnode->make_active();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manage_templates', 'qtype_shortmath'));
