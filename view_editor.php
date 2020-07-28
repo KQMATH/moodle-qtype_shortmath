@@ -22,6 +22,9 @@
  * @copyright   2020 NTNU
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use qtype_shortmath\shortmath_urls;
+
 require_once(__DIR__ . '/../../../config.php');
 
 require_login();
@@ -37,7 +40,7 @@ if ($id > 0) {
 }
 
 $PAGE->set_context($context);
-$pageurl = new moodle_url(get_string('editor_path', 'qtype_shortmath'));
+$pageurl = new moodle_url(shortmath_urls::$editor_path);
 $PAGE->set_url($pageurl);
 $pagetitle = "Editor configuration";
 $PAGE->set_title($pagetitle);
@@ -47,14 +50,13 @@ $PAGE->set_pagelayout('admin');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
 $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
 $PAGE->requires->css('/question/type/shortmath/editor/editor.css');
-$PAGE->requires->string_for_js('editor_action_path', 'qtype_shortmath');
-$PAGE->requires->string_for_js('editor_manager_path', 'qtype_shortmath');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 
 // Execute js script
-$params = ['test', 'btn', 'exp', $id, $name]; // JS params passed here...
+$params = ['test', 'btn', 'exp', $id, $name,
+    shortmath_urls::$editor_action_path, shortmath_urls::$editor_manager_path]; // JS params passed here...
 $PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params);
 
 echo $OUTPUT->footer();

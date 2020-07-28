@@ -4,6 +4,7 @@ namespace qtype_shortmath\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use qtype_shortmath\shortmath_urls;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -35,7 +36,10 @@ class manager_page implements renderable, templatable
     {
         return [
             "buttonClass" => "btn btn-primary",
-            "templates" => new \ArrayIterator($this->templates)
+            "templates" => new \ArrayIterator($this->templates),
+            "editor_path" => shortmath_urls::$editor_path,
+            "editor_action_path" => shortmath_urls::$editor_action_path,
+            "plugin_settings_path" => shortmath_urls::$plugin_settings_path
         ];
     }
 }

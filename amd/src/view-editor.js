@@ -201,7 +201,8 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
              * @param templateName
              * @param testInputId
              */
-            initialize: function (testInputId, btnInputId, expInputId, templateId, templateName) {
+            initialize: function (testInputId, btnInputId, expInputId, templateId, templateName,
+                                  actionPath, managerPath) {
 
                 const context = {
                     "testInputLabel": "Test",
@@ -387,7 +388,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         if (templateId === 0) {
                             $testBox.hide();
                         } else {
-                            $.post(M.str.qtype_shortmath.editor_action_path,
+                            $.post(actionPath,
                                 {
                                     'id': templateId,
                                     'type': 'get'
@@ -419,7 +420,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 event.preventDefault();
                                 event.stopPropagation();
                             } else {
-                                $.post(M.str.qtype_shortmath.editor_action_path,
+                                $.post(actionPath,
                                     {
                                         'data': JSON.stringify(controls.controls),
                                         'name': $templateNameInput.val().trim(),
@@ -436,7 +437,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                             $('#' + $.escapeSelector('overlay-div')).show();
 
                                             setTimeout(() => {
-                                                window.location.replace(M.str.qtype_shortmath.editor_manager_path);
+                                                window.location.replace(managerPath);
                                             }, 5000);
                                         } else {
                                             notification.addNotification({
@@ -507,7 +508,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         let $backButton = $('#' + $.escapeSelector('back'));
                         $backButton.on('click', event => {
                             event.preventDefault();
-                            window.location.replace(M.str.qtype_shortmath.editor_manager_path);
+                            window.location.replace(managerPath);
                         });
                     }).fail(function (ex) {
                     // Deal with this exception (I recommend core/notify exception function for this).

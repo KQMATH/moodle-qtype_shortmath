@@ -25,7 +25,7 @@
 define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popover'],
     function ($, notification) {
         return {
-            initialize: () => {
+            initialize: (editorPath, actionPath, pluginSettingsPath) => {
                 $('.edit-template, .delete-template').each((index, element) => {
                     $(element).tooltip({
                         container: element.parentElement
@@ -52,7 +52,7 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popov
                 $('.edit-template').click(event => {
                     event.preventDefault();
                     let $form = $(event.target).closest('.template-box').find('form');
-                    $form.attr('action', M.str.qtype_shortmath.editor_path);
+                    $form.attr('action', editorPath);
                     $form.attr('method', 'post');
                     $form.submit();
                 });
@@ -70,7 +70,7 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popov
                             // Clear notifications
                             $('.alert').alert('close');
 
-                            $.post(M.str.qtype_shortmath.editor_action_path,
+                            $.post(actionPath,
                                 {
                                     'id': id,
                                     'type': 'delete'
@@ -99,12 +99,12 @@ define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popov
 
                 $('#' + $.escapeSelector('back')).click(event => {
                     event.preventDefault();
-                    window.location.replace(M.str.qtype_shortmath.plugin_settings_path);
+                    window.location.replace(pluginSettingsPath);
                 });
 
                 $('#' + $.escapeSelector('createTemplates')).click(event => {
                     event.preventDefault();
-                    window.location.replace(M.str.qtype_shortmath.editor_path);
+                    window.location.replace(editorPath);
                 });
             }
         };

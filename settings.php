@@ -7,6 +7,8 @@
  *
  */
 
+use qtype_shortmath\shortmath_urls;
+
 defined('MOODLE_INTERNAL') || die();
 
 $context = context_system::instance();
@@ -35,4 +37,4 @@ $settings->add(new admin_setting_configselect('qtype_shortmath/defaultconfigurat
 $settings->add(new admin_setting_description('qtype_shortmath/templatemanager',
     get_string('manage_templates_link_desc', 'qtype_shortmath'),
     get_string('template_manager_link', 'qtype_shortmath',
-        array('link' => (string)new moodle_url(get_string('editor_manager_path', 'qtype_shortmath'))))));
+        array('link' => (string)new moodle_url(shortmath_urls::$editor_manager_path)))));

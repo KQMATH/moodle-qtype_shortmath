@@ -20,7 +20,10 @@
     Example context (json):
     {
             "buttonClass" : "btn btn-primary",
-            "templates" : new \ArrayIterator($this->templates)
+            "templates" : new \ArrayIterator($this->templates),
+            "editor_path" : shortmath_urls::$editor_path,
+            "editor_action_path" : shortmath_urls::$editor_action_path,
+            "plugin_settings_path" : shortmath_urls::$plugin_settings_path
     }
 }}
 
@@ -38,9 +41,8 @@
                     <div class="row">
                         <div class="col-8">
                             <h6 class="m-0">
-                                <span data-content="{{name}}" class="d-inline-block text-truncate" style="max-width: 120px;">
-                                    {{name}}
-                                </span>
+                                <span data-content="{{name}}" class="d-inline-block text-truncate"
+                                      style="max-width: 120px;">{{name}}</span>
                             </h6>
                         </div>
                         <div class="col p-0">
@@ -79,6 +81,6 @@
 {{#js}}
     require(['jquery', 'qtype_shortmath/editor-manager'],
         function($, EditorManager) {
-            EditorManager.initialize();
+            EditorManager.initialize('{{editor_path}}', '{{editor_action_path}}', '{{plugin_settings_path}}');
         });
 {{/js}}
