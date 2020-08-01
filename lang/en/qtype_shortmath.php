@@ -43,3 +43,5 @@ $string['editor_manager'] = 'Editor Manager';
 $string['manage_templates'] = 'Manage Templates';
 $string['manage_templates_link_desc'] = 'Template Manager';
 $string['edit_template'] = 'Edit template';
+$string['toolbar_template'] = 'Toolbar template';
+$string['cannotgetshortmathoptions'] = 'Cannot get ShortMath options for question ID {$a}.';

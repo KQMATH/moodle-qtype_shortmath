@@ -39,6 +39,6 @@ require_once($CFG->dirroot . '/question/type/shortanswer/questiontype.php');
  */
 class qtype_shortmath extends qtype_shortanswer {
     public function extra_question_fields() {
-        return ['qtype_shortmath_options', 'usecase'];
+        return ['qtype_shortmath_options', 'usecase', 'editorconfig'];
     }
 }

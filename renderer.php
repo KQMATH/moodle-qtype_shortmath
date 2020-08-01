@@ -43,6 +43,7 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
         global $PAGE;
         $result = '';
         $inputname = $qa->get_qt_field_name('answer');
+        $questionid = $qa->get_question()->id;
 
         $result .= html_writer::div('', '', ['class' => 'controls_wrapper']);
         $result .= parent::formulation_and_controls($qa, $options);
@@ -50,6 +51,7 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
         $params = array(
             'inputname' => $inputname,
             'readonly' => false,
+            'questionid' => $questionid
         );
 
         if ($options->readonly) {
