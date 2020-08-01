@@ -73,7 +73,6 @@ define(['jquery', './mathquill'], function ($, MathQuill) {
             this.controls = [];
             this.$wrapper = $(wrapper);
             this.$wrapper.addClass('visual-math-input-wrapper');
-            this.defineDefault();
         }
 
         define(name, text, onClick) {

@@ -44,12 +44,21 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
     }
 
     protected function definition_inner($mform) {
+        global $DB;
+
         $menu = array(
             get_string('caseno', 'qtype_shortanswer'),
             get_string('caseyes', 'qtype_shortanswer')
         );
         $mform->addElement('select', 'usecase',
             get_string('casesensitive', 'qtype_shortanswer'), $menu);
+
+        $templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
+        foreach ($templates as $template) {
+            $options[$template->template] = $template->name; // TODO: template value as key is ambiguous
+        }
+        $mform->addElement('select', 'editorconfig',
+            get_string('toolbar_template', 'qtype_shortmath'), $options);
 
         $mform->addElement('static', 'answersinstruct',
             get_string('correctanswers', 'qtype_shortanswer'),
