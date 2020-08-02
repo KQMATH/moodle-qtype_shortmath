@@ -66,8 +66,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
         class EditorControl extends VisualMath.Control {
 
-            constructor(name, text, onClick) {
+            constructor(name, text, onClick, command) {
                 super(name, text, onClick);
+                this.command = command;
             }
 
             enable() {
@@ -90,7 +91,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     }
                 });
 
-                this.$element.attr('id', 'btn_' + this.name);
+                this.$element.attr('id', this.name);
                 this.$element.attr('draggable', true);
 
                 this.$element.on('dragstart', event => {
@@ -117,13 +118,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
         }
 
-        class EditorControlList {
+        class EditorControlList extends VisualMath.ControlList {
 
             constructor(wrapper) {
-                this.controls = [];
-                this.$wrapper = $(wrapper);
-                this.$wrapper.addClass('visual-math-input-wrapper');
-                // this.defineDefault();
+                super(wrapper);
             }
 
             /**
@@ -172,21 +170,22 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 html = $html.prop('outerHTML');
 
-                this.addControl(html, expressionField.latex());
+                this.addControl('btn_' + Date.now(), html, expressionField.latex());
                 return true;
             }
 
             addAll(value) {
+                let name = value['name'];
                 let html = value['button'];
                 let command = value['expression'];
-                this.addControl(html, command)
+                this.addControl(name, html, command);
             }
 
-            addControl(html, command) {
-                let control = new EditorControl(Date.now(), html, field => field.write(command));
+            addControl(name, html, command) {
+                let control = new EditorControl(name, html, field => field.write(command), command);
+                this.controls[name] = control;
                 control.enable();
                 this.$wrapper.append(control.$element);
-                this.controls.push({button: html, expression: command});
             }
 
         }
@@ -420,9 +419,21 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 event.preventDefault();
                                 event.stopPropagation();
                             } else {
+                                let data = [];
+                                let items = controls.controls;
+
+                                controlsWrapper.children('button').each((index, element) => {
+                                    let control = items[element.id];
+                                    data.push({
+                                        name: control['name'],
+                                        button: control['text'],
+                                        expression: control['command']
+                                    });
+                                });
+
                                 $.post(actionPath,
                                     {
-                                        'data': JSON.stringify(controls.controls),
+                                        'data': JSON.stringify(data),
                                         'name': $templateNameInput.val().trim(),
                                         'id': templateId
                                     }
