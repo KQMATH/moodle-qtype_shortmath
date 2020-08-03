@@ -203,6 +203,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
             initialize: function (testInputId, btnInputId, expInputId, templateId, templateName,
                                   actionPath, managerPath) {
 
+                // Mustache template context for editor page
                 const context = {
                     "testInputLabel": "Test",
                     "inputSize": 30,
@@ -221,16 +222,36 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     "nameErrorMessage": "Name cannot be empty!"
                 };
 
-                Templates.render('qtype_shortmath/editor', context)
-                    .then(function (html, js) {
-                        Templates.appendNodeContents('div[role=\'main\']', html, js);
+                let $btnInput;
+                let $expInput;
+                let $shortanswerInput; // Test input
+                let $parent;
+                let $testBox;
+                let controlsWrapper;
 
-                        var $shortanswerInput = $('#' + $.escapeSelector(testInputId));
+                let buttonInput;
+                let expressionInput;
+                let testInput;
+                let controls;
+
+                // To prevent calls to show test box repeatedly
+                let isDataVisible = false;
+
+                Templates.render('qtype_shortmath/editor', context).then(
+                    (html, js) => {
+                        Templates.appendNodeContents('div[role=\'main\']', html, js);
+                    }).then(
+                    () => {
+                        // Shortmath input fields
+                        $shortanswerInput = $('#' + $.escapeSelector(testInputId));
+                        $btnInput = $('#' + $.escapeSelector(btnInputId));
+                        $expInput = $('#' + $.escapeSelector(expInputId));
+
                         // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
                         $shortanswerInput.removeClass('d-inline');
-                        var $parent = $('#' + $.escapeSelector(testInputId)).parent('.answer');
+                        $parent = $shortanswerInput.parent('.answer');
 
-                        var testInput = new EditorInput($shortanswerInput, $parent);
+                        testInput = new EditorInput($shortanswerInput, $parent);
                         testInput.$input.hide();
                         testInput.change();
 
@@ -240,7 +261,26 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                             );
                         }
 
-                        var controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
+                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                        $btnInput.removeClass('d-inline');
+                        $parent = $btnInput.parent('.answer');
+
+                        buttonInput = new EditorInput($btnInput, $parent);
+                        buttonInput.$input.hide();
+                        buttonInput.change();
+
+                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                        $expInput.removeClass('d-inline');
+                        $parent = $expInput.parent('.answer');
+
+                        expressionInput = new EditorInput($expInput, $parent);
+                        expressionInput.$input.hide();
+                        expressionInput.change();
+
+                    }).then(
+                    () => {
+                        // Wrapper for toolbar and drag and drop functionality for buttons
+                        controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
 
                         controlsWrapper.addClass('visual-math-input-wrapper');
                         controlsWrapper.attr('id', 'target');
@@ -310,39 +350,17 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                             nodes = Array.from(target.parentNode.children);
                             draggedIndex = nodes.indexOf(empty);
                         });
-
-                        let $btnInput = $('#' + $.escapeSelector(btnInputId));
-                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                        $btnInput.removeClass('d-inline');
-                        $parent = $('#' + $.escapeSelector(btnInputId)).parent('.answer');
-
-                        let buttonInput = new EditorInput($btnInput, $parent);
-                        buttonInput.$input.hide();
-                        buttonInput.change();
-
-                        let $expInput = $('#' + $.escapeSelector(expInputId));
-                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                        $expInput.removeClass('d-inline');
-                        $parent = $('#' + $.escapeSelector(expInputId)).parent('.answer');
-
-                        let expressionInput = new EditorInput($expInput, $parent);
-                        expressionInput.$input.hide();
-                        expressionInput.change();
-
-                        let $saveButton = $('#' + $.escapeSelector('save'));
-
-                        let $testBox = $('.test-box');
-
-                        // To prevent calls to show test box repeatedly
-                        let isDataVisible = false;
-
+                    }).then(
+                    () => {
+                        // Add buttons to toolbar on create mode/load buttons in edit mode
                         let $addButton = $('#' + $.escapeSelector('add'));
-                        let controls = new EditorControlList(controlsWrapper);
-
+                        let $addForm = $('#' + $.escapeSelector('addForm'));
                         let buttonField = buttonInput.field;
                         let expressionField = expressionInput.field;
 
-                        let $addForm = $('#' + $.escapeSelector('addForm'));
+                        $testBox = $('.test-box');
+                        controls = new EditorControlList(controlsWrapper);
+
                         buttonInput.$parent.find('.invalid-feedback').text('Button is empty or invalid!');
                         expressionInput.$parent.find('.invalid-feedback').text('Expression is empty or invalid!');
 
@@ -403,14 +421,45 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                 });
                             });
                         }
+                    }).then(
+                    () => {
+                        // Delete buttons from toolbar
+                        let deleteIcon = $('.delete-icon');
 
+                        deleteIcon.on('dragover', event => {
+                            event.preventDefault();
+                            event.originalEvent.dataTransfer.dropEffect = "move";
+                        });
+
+                        deleteIcon.on('drop', event => {
+                            event.preventDefault();
+                            let parentNode = dragged.parentNode;
+                            if (parentNode !== null) {
+                                parentNode.removeChild(dragged);
+                                if (parentNode.firstElementChild === null) {
+                                    testInput.field.latex('');
+                                    $testBox.hide();
+                                    isDataVisible = false;
+                                }
+                            } else {
+                                let placeholder = document.getElementById('placeholder');
+                                if (placeholder !== null) {
+                                    placeholder.parentNode.removeChild(placeholder);
+                                }
+                            }
+                            event.originalEvent.dataTransfer.clearData();
+                        });
+                    }).then(
+                    () => {
+                        // Save toolbar template in database
+                        let $saveButton = $('#' + $.escapeSelector('save'));
                         let $templateNameInput = $('#' + $.escapeSelector('name'));
+                        let $saveForm = $('#' + $.escapeSelector('saveForm'));
+
                         $templateNameInput.val(templateName)
                             .on('blur', () => {
                                 lastFocusedInput = $templateNameInput;
                             });
-
-                        let $saveForm = $('#' + $.escapeSelector('saveForm'));
 
                         $saveForm.submit(event => {
                             if ($saveForm[0].checkValidity() === false) {
@@ -489,33 +538,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                             $('.alert').alert('close');
                             $saveForm.submit();
                         });
-
-                        let deleteIcon = $('.delete-icon');
-
-                        deleteIcon.on('dragover', event => {
-                            event.preventDefault();
-                            event.originalEvent.dataTransfer.dropEffect = "move";
-                        });
-
-                        deleteIcon.on('drop', event => {
-                            event.preventDefault();
-                            let parentNode = dragged.parentNode;
-                            if (parentNode !== null) {
-                                parentNode.removeChild(dragged);
-                                if (parentNode.firstElementChild === null) {
-                                    testInput.field.latex('');
-                                    $testBox.hide();
-                                    isDataVisible = false;
-                                }
-                            } else {
-                                let placeholder = document.getElementById('placeholder');
-                                if (placeholder !== null) {
-                                    placeholder.parentNode.removeChild(placeholder);
-                                }
-                            }
-                            event.originalEvent.dataTransfer.clearData();
-                        });
-
+                    }).then(
+                    () => {
+                        // Add back button to editor page
                         let $backButton = $('#' + $.escapeSelector('back'));
                         $backButton.on('click', event => {
                             event.preventDefault();
