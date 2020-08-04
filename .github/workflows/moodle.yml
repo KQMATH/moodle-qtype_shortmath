@@ -7,13 +7,12 @@ on:
     branches: [ develop ]
       
 jobs:
-  env:
-    DB: mysqli
-    MOODLE_BRANCH: MOODLE_39_STABLE
- 
   moodle-tests:
-
     runs-on: ubuntu-latest
+
+    env:
+        DB: mysqli
+        MOODLE_BRANCH: MOODLE_39_STABLE
 
     steps:
     - uses: actions/checkout@v2
@@ -25,7 +24,6 @@ jobs:
         cd ../..
         composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
         export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-
 
     - name: Install dependencies
       run: moodle-plugin-ci install
