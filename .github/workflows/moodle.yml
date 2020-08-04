@@ -1,0 +1,34 @@
+name: Moodle
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+      
+jobs:
+  env:
+    DB: mysqli
+    MOODLE_BRANCH: MOODLE_39_STABLE
+ 
+  moodle-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Before install
+      run: |
+        phpenv config-rm xdebug.ini
+        nvm install 8.9
+        cd ../..
+        composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
+        export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+
+
+    - name: Install dependencies
+      run: moodle-plugin-ci install
+
+    - name: Run test suite
+      run: moodle-plugin-ci phplint
