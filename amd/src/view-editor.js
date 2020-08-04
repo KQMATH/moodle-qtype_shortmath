@@ -237,315 +237,339 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 // To prevent calls to show test box repeatedly
                 let isDataVisible = false;
 
-                Templates.render('qtype_shortmath/editor', context).then(
-                    (html, js) => {
-                        Templates.appendNodeContents('div[role=\'main\']', html, js);
-                    }).then(
-                    () => {
-                        // Shortmath input fields
-                        $shortanswerInput = $('#' + $.escapeSelector(testInputId));
-                        $btnInput = $('#' + $.escapeSelector(btnInputId));
-                        $expInput = $('#' + $.escapeSelector(expInputId));
+                /**
+                 * Shortmath input fields
+                 */
+                const initInputFields = () => {
+                    $shortanswerInput = $('#' + $.escapeSelector(testInputId));
+                    $btnInput = $('#' + $.escapeSelector(btnInputId));
+                    $expInput = $('#' + $.escapeSelector(expInputId));
 
-                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                        $shortanswerInput.removeClass('d-inline');
-                        $parent = $shortanswerInput.parent('.answer');
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $shortanswerInput.removeClass('d-inline');
+                    $parent = $shortanswerInput.parent('.answer');
 
-                        testInput = new EditorInput($shortanswerInput, $parent);
-                        testInput.$input.hide();
-                        testInput.change();
+                    testInput = new EditorInput($shortanswerInput, $parent);
+                    testInput.$input.hide();
+                    testInput.change();
 
-                        if ($shortanswerInput.val()) {
-                            testInput.field.write(
-                                $shortanswerInput.val()
-                            );
+                    if ($shortanswerInput.val()) {
+                        testInput.field.write(
+                            $shortanswerInput.val()
+                        );
+                    }
+
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $btnInput.removeClass('d-inline');
+                    $parent = $btnInput.parent('.answer');
+
+                    buttonInput = new EditorInput($btnInput, $parent);
+                    buttonInput.$input.hide();
+                    buttonInput.change();
+
+                    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+                    $expInput.removeClass('d-inline');
+                    $parent = $expInput.parent('.answer');
+
+                    expressionInput = new EditorInput($expInput, $parent);
+                    expressionInput.$input.hide();
+                    expressionInput.change();
+
+                };
+
+                /**
+                 * Wrapper for toolbar and drag and drop functionality for buttons
+                 */
+                const initControlsWrapper = () => {
+                    controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
+
+                    controlsWrapper.addClass('visual-math-input-wrapper');
+                    controlsWrapper.attr('id', 'target');
+
+                    controlsWrapper.on('drop', event => {
+                        event.preventDefault();
+
+                        if (target.id === dragged.id) {
+                            event.originalEvent.dataTransfer.clearData();
+                            return;
                         }
 
-                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                        $btnInput.removeClass('d-inline');
-                        $parent = $btnInput.parent('.answer');
+                        document.getElementById('placeholder').replaceWith(dragged);
+                        event.originalEvent.dataTransfer.clearData();
+                    });
 
-                        buttonInput = new EditorInput($btnInput, $parent);
-                        buttonInput.$input.hide();
-                        buttonInput.change();
+                    controlsWrapper.on('dragover', event => {
+                        event.preventDefault();
+                        event.originalEvent.dataTransfer.dropEffect = "move";
+                    });
 
-                        // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                        $expInput.removeClass('d-inline');
-                        $parent = $expInput.parent('.answer');
+                    controlsWrapper.on('dragenter', event => {
 
-                        expressionInput = new EditorInput($expInput, $parent);
-                        expressionInput.$input.hide();
-                        expressionInput.change();
-
-                    }).then(
-                    () => {
-                        // Wrapper for toolbar and drag and drop functionality for buttons
-                        controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
-
-                        controlsWrapper.addClass('visual-math-input-wrapper');
-                        controlsWrapper.attr('id', 'target');
-
-                        controlsWrapper.on('drop', event => {
-                            event.preventDefault();
-
-                            if (target.id === dragged.id) {
-                                event.originalEvent.dataTransfer.clearData();
-                                return;
-                            }
-
-                            document.getElementById('placeholder').replaceWith(dragged);
-                            event.originalEvent.dataTransfer.clearData();
-                        });
-
-                        controlsWrapper.on('dragover', event => {
-                            event.preventDefault();
-                            event.originalEvent.dataTransfer.dropEffect = "move";
-                        });
-
-                        controlsWrapper.on('dragenter', event => {
-
-                            let targetId;
-                            if ($(event.target).hasClass('visual-math-input-wrapper')) {
-                                targetId = event.target.lastChild.id;
-                            } else if (event.target.nodeName !== 'BUTTON') {
-                                targetId = $(event.target).parents('button').attr('id');
-                            } else {
-                                targetId = event.target.id;
-                            }
-
-                            if (targetId === 'placeholder') {
-                                return;
-                            }
-
-                            target = document.getElementById(targetId);
-
-                            let targetIndex = nodes.indexOf(target);
-                            if (draggedIndex === targetIndex) { //movement within button
-                                return;
-                            }
-
-                            let empty = document.createElement('button');
-                            $(empty).html('');
-                            $(empty).addClass('visual-math-input-control btn btn-primary');
-                            $(empty).attr('draggable', true);
-                            $(empty).attr('id', 'placeholder');
-                            $(empty).css('border', '2px solid red');
-
-                            if (target.parentNode.contains(dragged)) {
-                                target.parentNode.removeChild(dragged);
-                            } else {
-                                target.parentNode.removeChild(document.getElementById('placeholder'));
-                            }
-
-                            if (draggedIndex < targetIndex) {
-                                if (target.parentNode.lastChild !== target) {
-                                    target.parentNode.insertBefore(empty, target.nextSibling); //left to right
-                                } else {
-                                    target.parentNode.appendChild(empty);
-                                }
-                            } else {
-                                target.parentNode.insertBefore(empty, target); //right to left
-                            }
-
-                            nodes = Array.from(target.parentNode.children);
-                            draggedIndex = nodes.indexOf(empty);
-                        });
-                    }).then(
-                    () => {
-                        // Add buttons to toolbar on create mode/load buttons in edit mode
-                        let $addButton = $('#' + $.escapeSelector('add'));
-                        let $addForm = $('#' + $.escapeSelector('addForm'));
-                        let buttonField = buttonInput.field;
-                        let expressionField = expressionInput.field;
-
-                        $testBox = $('.test-box');
-                        controls = new EditorControlList(controlsWrapper);
-
-                        buttonInput.$parent.find('.invalid-feedback').text('Button is empty or invalid!');
-                        expressionInput.$parent.find('.invalid-feedback').text('Expression is empty or invalid!');
-
-                        $addButton.click(event => {
-                            event.preventDefault();
-
-                            $addForm.submit();
-                        });
-
-                        $addForm.submit(event => {
-                            if ($addForm[0].checkValidity() === false) {
-                                isSuccess = false;
-
-                                $(':focus').blur();
-
-                                $addForm.find('input:text.form-control').each((index, element) => {
-                                    let $element = $(element);
-                                    if ($element.val() === '') {
-                                        $element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
-                                    }
-                                });
-                                event.preventDefault();
-                                event.stopPropagation();
-                            } else {
-                                isSuccess = controls.add(buttonField, expressionField);
-                                if (isSuccess) {
-                                    if (!isDataVisible) {
-                                        $testBox.show();
-                                        isDataVisible = true;
-                                    }
-
-                                    $addForm.find('.visual-math-input-field').removeClass('form-control is-valid');
-
-                                    //clear inputs
-                                    buttonField.latex('');
-                                    expressionField.latex('');
-                                }
-                                event.preventDefault();
-                            }
-                        });
-
-                        if (templateId === 0) {
-                            $testBox.hide();
+                        let targetId;
+                        if ($(event.target).hasClass('visual-math-input-wrapper')) {
+                            targetId = event.target.lastChild.id;
+                        } else if (event.target.nodeName !== 'BUTTON') {
+                            targetId = $(event.target).parents('button').attr('id');
                         } else {
+                            targetId = event.target.id;
+                        }
+
+                        if (targetId === 'placeholder') {
+                            return;
+                        }
+
+                        target = document.getElementById(targetId);
+
+                        let targetIndex = nodes.indexOf(target);
+                        if (draggedIndex === targetIndex) { //movement within button
+                            return;
+                        }
+
+                        let empty = document.createElement('button');
+                        $(empty).html('');
+                        $(empty).addClass('visual-math-input-control btn btn-primary');
+                        $(empty).attr('draggable', true);
+                        $(empty).attr('id', 'placeholder');
+                        $(empty).css('border', '2px solid red');
+
+                        if (target.parentNode.contains(dragged)) {
+                            target.parentNode.removeChild(dragged);
+                        } else {
+                            target.parentNode.removeChild(document.getElementById('placeholder'));
+                        }
+
+                        if (draggedIndex < targetIndex) {
+                            if (target.parentNode.lastChild !== target) {
+                                target.parentNode.insertBefore(empty, target.nextSibling); //left to right
+                            } else {
+                                target.parentNode.appendChild(empty);
+                            }
+                        } else {
+                            target.parentNode.insertBefore(empty, target); //right to left
+                        }
+
+                        nodes = Array.from(target.parentNode.children);
+                        draggedIndex = nodes.indexOf(empty);
+                    });
+                };
+
+                /**
+                 * To add buttons to toolbar in create mode/load buttons in edit mode
+                 */
+                const initAddForm = () => {
+                    let $addButton = $('#' + $.escapeSelector('add'));
+                    let $addForm = $('#' + $.escapeSelector('addForm'));
+                    let buttonField = buttonInput.field;
+                    let expressionField = expressionInput.field;
+
+                    $testBox = $('.test-box');
+                    controls = new EditorControlList(controlsWrapper);
+
+                    buttonInput.$parent.find('.invalid-feedback').text('Button is empty or invalid!');
+                    expressionInput.$parent.find('.invalid-feedback').text('Expression is empty or invalid!');
+
+                    $addButton.click(event => {
+                        event.preventDefault();
+
+                        $addForm.submit();
+                    });
+
+                    $addForm.submit(event => {
+                        if ($addForm[0].checkValidity() === false) {
+                            isSuccess = false;
+
+                            $(':focus').blur();
+
+                            $addForm.find('input:text.form-control').each((index, element) => {
+                                let $element = $(element);
+                                if ($element.val() === '') {
+                                    $element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
+                                }
+                            });
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            isSuccess = controls.add(buttonField, expressionField);
+                            if (isSuccess) {
+                                if (!isDataVisible) {
+                                    $testBox.show();
+                                    isDataVisible = true;
+                                }
+
+                                $addForm.find('.visual-math-input-field').removeClass('form-control is-valid');
+
+                                //clear inputs
+                                buttonField.latex('');
+                                expressionField.latex('');
+                            }
+                            event.preventDefault();
+                        }
+                    });
+
+                    if (templateId === 0) {
+                        $testBox.hide();
+                    } else {
+                        $.post(actionPath,
+                            {
+                                'id': templateId,
+                                'type': 'get'
+                            }
+                        ).done(message => {
+                            let data = JSON.parse(message);
+                            isDataVisible = true;
+                            JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+                        }).fail((jqXHR, textStatus, errorThrown) => {
+                            notification.addNotification({
+                                message: textStatus + ': ' + errorThrown,
+                                type: "error"
+                            });
+                        });
+                    }
+                };
+
+                /**
+                 * To delete buttons from toolbar
+                 */
+                const initDeleteButton = () => {
+                    let deleteIcon = $('.delete-icon');
+
+                    deleteIcon.on('dragover', event => {
+                        event.preventDefault();
+                        event.originalEvent.dataTransfer.dropEffect = "move";
+                    });
+
+                    deleteIcon.on('drop', event => {
+                        event.preventDefault();
+                        let parentNode = dragged.parentNode;
+                        if (parentNode !== null) {
+                            parentNode.removeChild(dragged);
+                            if (parentNode.firstElementChild === null) {
+                                testInput.field.latex('');
+                                $testBox.hide();
+                                isDataVisible = false;
+                            }
+                        } else {
+                            let placeholder = document.getElementById('placeholder');
+                            if (placeholder !== null) {
+                                placeholder.parentNode.removeChild(placeholder);
+                            }
+                        }
+                        event.originalEvent.dataTransfer.clearData();
+                    });
+                };
+
+                /**
+                 * To save toolbar template in database
+                 */
+                const initSaveForm = () => {
+                    let $saveButton = $('#' + $.escapeSelector('save'));
+                    let $templateNameInput = $('#' + $.escapeSelector('name'));
+                    let $saveForm = $('#' + $.escapeSelector('saveForm'));
+
+                    $templateNameInput.val(templateName)
+                        .on('blur', () => {
+                            lastFocusedInput = $templateNameInput;
+                        });
+
+                    $saveForm.submit(event => {
+                        if ($saveForm[0].checkValidity() === false) {
+                            $(':focus').blur();
+                            $saveForm.addClass('was-validated');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            let data = [];
+                            let items = controls.controls;
+
+                            controlsWrapper.children('button').each((index, element) => {
+                                let control = items[element.id];
+                                data.push({
+                                    name: control['name'],
+                                    button: control['text'],
+                                    expression: control['command']
+                                });
+                            });
+
                             $.post(actionPath,
                                 {
-                                    'id': templateId,
-                                    'type': 'get'
+                                    'data': JSON.stringify(data),
+                                    'name': $templateNameInput.val().trim(),
+                                    'id': templateId
                                 }
                             ).done(message => {
-                                let data = JSON.parse(message);
-                                isDataVisible = true;
-                                JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+                                if (message > 0) {
+                                    if (templateId > 0) {
+                                        notification.addNotification({
+                                            message: "Configuration saved! Please wait...",
+                                            type: "success"
+                                        });
+
+                                        $('#' + $.escapeSelector('overlay-div')).show();
+
+                                        setTimeout(() => {
+                                            window.location.replace(managerPath);
+                                        }, 5000);
+                                    } else {
+                                        notification.addNotification({
+                                            message: "Configuration saved!",
+                                            type: "success"
+                                        });
+
+                                        controlsWrapper.html('');
+                                        controls = new EditorControlList(controlsWrapper);
+                                        $templateNameInput.val('');
+                                        testInput.field.latex('');
+                                        $testBox.hide();
+                                        isDataVisible = false;
+                                    }
+                                } else {
+                                    notification.addNotification({
+                                        message: "Something went wrong!",
+                                        type: "error"
+                                    });
+                                }
+                                $saveButton.blur();
                             }).fail((jqXHR, textStatus, errorThrown) => {
                                 notification.addNotification({
                                     message: textStatus + ': ' + errorThrown,
                                     type: "error"
                                 });
+                                $saveButton.blur();
                             });
+                            $saveForm.removeClass('was-validated');
+                            event.preventDefault();
                         }
-                    }).then(
-                    () => {
-                        // Delete buttons from toolbar
-                        let deleteIcon = $('.delete-icon');
+                    });
 
-                        deleteIcon.on('dragover', event => {
-                            event.preventDefault();
-                            event.originalEvent.dataTransfer.dropEffect = "move";
-                        });
+                    $saveButton.on('click', event => {
+                        event.preventDefault();
 
-                        deleteIcon.on('drop', event => {
-                            event.preventDefault();
-                            let parentNode = dragged.parentNode;
-                            if (parentNode !== null) {
-                                parentNode.removeChild(dragged);
-                                if (parentNode.firstElementChild === null) {
-                                    testInput.field.latex('');
-                                    $testBox.hide();
-                                    isDataVisible = false;
-                                }
-                            } else {
-                                let placeholder = document.getElementById('placeholder');
-                                if (placeholder !== null) {
-                                    placeholder.parentNode.removeChild(placeholder);
-                                }
-                            }
-                            event.originalEvent.dataTransfer.clearData();
-                        });
-                    }).then(
-                    () => {
-                        // Save toolbar template in database
-                        let $saveButton = $('#' + $.escapeSelector('save'));
-                        let $templateNameInput = $('#' + $.escapeSelector('name'));
-                        let $saveForm = $('#' + $.escapeSelector('saveForm'));
+                        // Clear notifications
+                        $('.alert').alert('close');
+                        $saveForm.submit();
+                    });
+                };
 
-                        $templateNameInput.val(templateName)
-                            .on('blur', () => {
-                                lastFocusedInput = $templateNameInput;
-                            });
+                /**
+                 * To add back button to editor page
+                 */
+                const initBackButton = () => {
+                    let $backButton = $('#' + $.escapeSelector('back'));
+                    $backButton.on('click', event => {
+                        event.preventDefault();
+                        window.location.replace(managerPath);
+                    });
+                };
 
-                        $saveForm.submit(event => {
-                            if ($saveForm[0].checkValidity() === false) {
-                                $(':focus').blur();
-                                $saveForm.addClass('was-validated');
-                                event.preventDefault();
-                                event.stopPropagation();
-                            } else {
-                                let data = [];
-                                let items = controls.controls;
-
-                                controlsWrapper.children('button').each((index, element) => {
-                                    let control = items[element.id];
-                                    data.push({
-                                        name: control['name'],
-                                        button: control['text'],
-                                        expression: control['command']
-                                    });
-                                });
-
-                                $.post(actionPath,
-                                    {
-                                        'data': JSON.stringify(data),
-                                        'name': $templateNameInput.val().trim(),
-                                        'id': templateId
-                                    }
-                                ).done(message => {
-                                    if (message > 0) {
-                                        if (templateId > 0) {
-                                            notification.addNotification({
-                                                message: "Configuration saved! Please wait...",
-                                                type: "success"
-                                            });
-
-                                            $('#' + $.escapeSelector('overlay-div')).show();
-
-                                            setTimeout(() => {
-                                                window.location.replace(managerPath);
-                                            }, 5000);
-                                        } else {
-                                            notification.addNotification({
-                                                message: "Configuration saved!",
-                                                type: "success"
-                                            });
-
-                                            controlsWrapper.html('');
-                                            controls = new EditorControlList(controlsWrapper);
-                                            $templateNameInput.val('');
-                                            testInput.field.latex('');
-                                            $testBox.hide();
-                                            isDataVisible = false;
-                                        }
-                                    } else {
-                                        notification.addNotification({
-                                            message: "Something went wrong!",
-                                            type: "error"
-                                        });
-                                    }
-                                    $saveButton.blur();
-                                }).fail((jqXHR, textStatus, errorThrown) => {
-                                    notification.addNotification({
-                                        message: textStatus + ': ' + errorThrown,
-                                        type: "error"
-                                    });
-                                    $saveButton.blur();
-                                });
-                                $saveForm.removeClass('was-validated');
-                                event.preventDefault();
-                            }
-                        });
-
-                        $saveButton.on('click', event => {
-                            event.preventDefault();
-
-                            // Clear notifications
-                            $('.alert').alert('close');
-                            $saveForm.submit();
-                        });
-                    }).then(
-                    () => {
-                        // Add back button to editor page
-                        let $backButton = $('#' + $.escapeSelector('back'));
-                        $backButton.on('click', event => {
-                            event.preventDefault();
-                            window.location.replace(managerPath);
-                        });
+                Templates.render('qtype_shortmath/editor', context).then(
+                    (html, js) => {
+                        Templates.appendNodeContents('div[role=\'main\']', html, js);
+                        initInputFields();
+                        initControlsWrapper();
+                        initAddForm();
+                        initDeleteButton();
+                        initSaveForm();
+                        initBackButton();
                     }).fail(function (ex) {
                     // Deal with this exception (I recommend core/notify exception function for this).
                 });
