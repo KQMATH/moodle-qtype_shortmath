@@ -50,13 +50,13 @@
         </div>
     </form>
     <div class="row">
-        <div class="col-md-4 mb-3 p-0">
+        <div class="col-sm-auto mb-3 p-0">
             <h3>{{inputBoxTitle}}</h3>
             <div class="container-fluid">
                 <form id="addForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-4 mb-3 p-0">
-                            <label for="btn" class="mr-auto">{{buttonInputLabel}}</label>
+                            <label for="btn">{{buttonInputLabel}}</label>
                             <span class="{{inputSpanClass}}">
                                 <input type="text" name="btn" id="btn" size="{{inputSize}}">
                             </span>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3 p-0">
-                            <label for="exp" class="mr-auto">{{expressionInputLabel}}</label>
+                            <label for="exp">{{expressionInputLabel}}</label>
                             <span class="{{inputSpanClass}}">
                                 <input type="text" name="exp" id="exp" size="{{inputSize}}">
                             </span>
@@ -79,7 +79,7 @@
                 </form>
             </div>
         </div>
-        <div class="test-box col-md-4 mb-3 p-0">
+        <div class="test-box col-md-6 mb-3 p-0">
             <h3>{{testBoxTitle}}</h3>
             <div class="container-fluid">
                 <div class="row">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col d-flex align-items-center p-0">
+                    <div class="col-md-4 mb-3 p-0">
                         <input type="button" name="save" id="save"
                                class="{{buttonClass}}" value="{{saveButtonValue}}">
                     </div>
