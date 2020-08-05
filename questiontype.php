@@ -38,6 +38,11 @@ require_once($CFG->dirroot . '/question/type/shortanswer/questiontype.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath extends qtype_shortanswer {
+
+    /**
+     * extra_question_fields function
+     * @return array
+     */
     public function extra_question_fields() {
         return ['qtype_shortmath_options', 'usecase', 'editorconfig'];
     }
