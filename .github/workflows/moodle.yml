@@ -19,7 +19,6 @@ jobs:
 
     - name: Before install
       run: |
-        phpenv config-rm xdebug.ini
         nvm install 8.9
         cd ../..
         composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
