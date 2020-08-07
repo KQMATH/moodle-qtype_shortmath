@@ -24,8 +24,9 @@ $settingsnode->make_active();
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manage_templates', 'qtype_shortmath'));
 
-// Get all templates from database
-$templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
+// Get all templates except default and empty from database
+$templates = $DB->get_records_select('qtype_shortmath_templates',
+    'name != \'Default\' AND name != \'None\'', null, 'id');
 
 $manager = new manager_page($templates);
 echo $OUTPUT->render($manager);

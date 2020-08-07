@@ -57,8 +57,14 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
         foreach ($templates as $template) {
             $options[$template->template] = $template->name; // TODO: template value as key is ambiguous
         }
-        $mform->addElement('select', 'editorconfig',
+
+        $selecttemplate = $mform->addElement('select', 'editorconfig',
             get_string('toolbar_template', 'qtype_shortmath'), $options);
+
+        $defaultid = get_config('qtype_shortmath', 'defaultconfiguration');
+        $default = $DB->get_field('qtype_shortmath_templates', 'template', array('id' => $defaultid));
+
+        $selecttemplate->setSelected($default);
 
         $mform->addElement('static', 'answersinstruct',
             get_string('correctanswers', 'qtype_shortanswer'),

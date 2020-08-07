@@ -21,7 +21,7 @@ $menu = [];
  */
 $templates = $DB->get_records('qtype_shortmath_templates', null, 'id', 'id, name');
 foreach ($templates as $template) {
-    array_push($menu, $template->name);
+    $menu[$template->id] = $template->name;
 }
 
 /**
