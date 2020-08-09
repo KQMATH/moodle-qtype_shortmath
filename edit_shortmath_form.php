@@ -39,10 +39,18 @@ require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.p
  */
 class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
+    /**
+     * Function qtype_shortmath_edit_form::qtype
+     * @return string
+     */
     public function qtype() {
         return 'shortmath';
     }
 
+    /**
+     * Function qtype_shortmath_edit_form::definition_inner
+     * @param $mform
+     */
     protected function definition_inner($mform) {
         global $DB;
 

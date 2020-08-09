@@ -63,7 +63,7 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
     }
 
     if ($oldversion < 2020062500) {
-        /// Define tables user to be created
+        // Define tables user to be created
         $table = new xmldb_table('qtype_shortmath_templates');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('contextid', XMLDB_TYPE_INTEGER, 10, null, XMLDB_NOTNULL, null, '0');
