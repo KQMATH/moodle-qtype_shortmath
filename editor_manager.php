@@ -1,6 +1,6 @@
 <?php
-
 use qtype_shortmath\output\manager_page;
+use qtype_shortmath\shortmath_urls;
 
 require_once(__DIR__ . '/../../../config.php');
 
@@ -10,7 +10,7 @@ require_capability('moodle/site:config', $context);
 
 
 $PAGE->set_context($context);
-$PAGE->set_url("/question/type/shortmath/editor_manager.php");
+$PAGE->set_url(new moodle_url(shortmath_urls::$editormanagerpath));
 $title = get_string('editor_manager', 'qtype_shortmath');
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
@@ -24,7 +24,7 @@ $settingsnode->make_active();
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manage_templates', 'qtype_shortmath'));
 
-// Get all templates except default and empty from database
+// Get all templates except default and empty from database.
 $templates = $DB->get_records_select('qtype_shortmath_templates',
     'name != \'Default\' AND name != \'None\'', null, 'id');
 

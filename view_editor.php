@@ -40,7 +40,7 @@ if ($id > 0) {
 }
 
 $PAGE->set_context($context);
-$pageurl = new moodle_url(shortmath_urls::$editor_path);
+$pageurl = new moodle_url(shortmath_urls::$editorpath);
 $PAGE->set_url($pageurl);
 $pagetitle = "Editor configuration";
 $PAGE->set_title($pagetitle);
@@ -54,9 +54,9 @@ $PAGE->requires->css('/question/type/shortmath/editor/editor.css');
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 
-// Execute js script
+// Execute js script.
 $params = ['test', 'btn', 'exp', $id, $name,
-    shortmath_urls::$editor_action_path, shortmath_urls::$editor_manager_path]; // JS params passed here...
+    shortmath_urls::$editoractionpath, shortmath_urls::$editormanagerpath]; // JS params passed here...
 $PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params);
 
 echo $OUTPUT->footer();

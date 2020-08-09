@@ -68,7 +68,7 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
         $templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
         foreach ($templates as $template) {
-            $options[$template->template] = $template->name; // TODO: template value as key is ambiguous
+            $options[$template->template] = $template->name; // TODO: template value as key is ambiguous.
         }
 
         $selecttemplate = $mform->addElement('select', 'editorconfig',
@@ -93,13 +93,12 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
         $this->add_interactive_settings();
     }
 
-    public function validation($data, $files)
-    {
+    public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
-        $originalConfigValue = $data['originalconfig'];
+        $originalconfigvalue = $data['originalconfig'];
 
-        if ($originalConfigValue !== $data['editorconfig'] && $originalConfigValue !== 'none'
+        if ($originalconfigvalue !== $data['editorconfig'] && $originalconfigvalue !== 'none'
             && !$data['configchangeconfirm']) {
             $errors['configchangeconfirm'] = get_string('youmustconfirm', 'qtype_shortmath');
         }

@@ -1,5 +1,4 @@
 <?php
-
 namespace qtype_shortmath\output;
 
 defined('MOODLE_INTERNAL') || die();
@@ -18,8 +17,7 @@ class manager_page implements renderable, templatable
      * manager_page constructor.
      * @param array $templates
      */
-    public function __construct(array $templates)
-    {
+    public function __construct(array $templates) {
         $this->templates = $templates;
     }
 
@@ -32,14 +30,13 @@ class manager_page implements renderable, templatable
      * @param renderer_base $output Used to do a final render of any components that need to be rendered for export.
      * @return stdClass|array
      */
-    public function export_for_template(renderer_base $output)
-    {
+    public function export_for_template(renderer_base $output) {
         return [
             "buttonClass" => "btn btn-primary",
             "templates" => new \ArrayIterator($this->templates),
-            "editor_path" => shortmath_urls::$editor_path,
-            "editor_action_path" => shortmath_urls::$editor_action_path,
-            "plugin_settings_path" => shortmath_urls::$plugin_settings_path
+            "editor_path" => shortmath_urls::$editorpath,
+            "editor_action_path" => shortmath_urls::$editoractionpath,
+            "plugin_settings_path" => shortmath_urls::$pluginsettingspath
         ];
     }
 }

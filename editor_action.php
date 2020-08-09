@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__ . '/../../../config.php');
 
 require_login();
@@ -10,14 +9,14 @@ $name = optional_param('name', '', PARAM_TEXT);
 $type = optional_param('type', '', PARAM_TEXT);
 
 $record = new stdClass;
-//$record->contextid = context_user::instance($USER->id)->id;
+// $record->contextid = context_user::instance($USER->id)->id;
 $record->id = $id;
 $record->template = $data;
 $record->name = $name;
 if ($id > 0) {
     if ($type == 'delete') {
         $return = $DB->delete_records('qtype_shortmath_templates', array_filter((array)$record));
-    } elseif ($type == 'get') {
+    } else if ($type == 'get') {
         $return = json_encode($DB->get_record('qtype_shortmath_templates', array_filter((array)$record)));
     } else {
         $return = $DB->update_record('qtype_shortmath_templates', $record);
