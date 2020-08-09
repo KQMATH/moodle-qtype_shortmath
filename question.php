@@ -37,11 +37,12 @@ require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
  */
 class qtype_shortmath_question extends qtype_shortanswer_question {
 
+    /**
+     * Function of summarise_response
+     * @param array $response
+     * @return string|null
+     */
     public function summarise_response(array $response) {
-        if (isset($response['answer'])) {
-            return '\\[' . $response['answer'] . '\\]';
-        } else {
-            return null;
-        }
+        return isset($response['answer']) ? '\\[' . $response['answer'] . '\\]' : null;
     }
 }
