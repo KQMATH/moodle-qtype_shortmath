@@ -53,6 +53,11 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
         $mform->addElement('select', 'usecase',
             get_string('casesensitive', 'qtype_shortanswer'), $menu);
 
+        $editorconfig = isset($this->question->options->editorconfig) ?
+            $this->question->options->editorconfig : 'none';
+        $mform->addElement('hidden', 'originalconfig', $editorconfig);
+        $mform->setType('originalconfig', PARAM_RAW);
+
         $templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
         foreach ($templates as $template) {
             $options[$template->template] = $template->name; // TODO: template value as key is ambiguous
@@ -66,6 +71,9 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
         $selecttemplate->setSelected($default);
 
+        $mform->addElement('advcheckbox', 'configchangeconfirm', '',
+            get_string('configchangeconfirm', 'qtype_shortmath'));
+
         $mform->addElement('static', 'answersinstruct',
             get_string('correctanswers', 'qtype_shortanswer'),
             get_string('filloutoneanswer', 'qtype_shortmath'));
@@ -75,5 +83,19 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
             question_bank::fraction_options());
 
         $this->add_interactive_settings();
+    }
+
+    public function validation($data, $files)
+    {
+        $errors = parent::validation($data, $files);
+
+        $originalConfigValue = $data['originalconfig'];
+
+        if ($originalConfigValue !== $data['editorconfig'] && $originalConfigValue !== 'none'
+            && !$data['configchangeconfirm']) {
+            $errors['configchangeconfirm'] = get_string('youmustconfirm', 'qtype_shortmath');
+        }
+
+        return $errors;
     }
 }

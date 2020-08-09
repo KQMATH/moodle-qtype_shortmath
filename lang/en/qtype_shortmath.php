@@ -45,3 +45,5 @@ $string['manage_templates_link_desc'] = 'Template Manager';
 $string['edit_template'] = 'Edit template';
 $string['toolbar_template'] = 'Toolbar template';
 $string['cannotgetshortmathoptions'] = 'Cannot get ShortMath options for question ID {$a}.';
+$string['youmustconfirm'] = 'You must confirm here.';
+$string['configchangeconfirm'] = 'I confirm that I want to change the template used for this question.';
