@@ -30,15 +30,14 @@ require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
 
 /**
  * Represents a ShortMath question.
- *
- * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author André Storhaug <andr3.storhaug@gmail.com>
+ * @copyright 2018 NTNU
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath_question extends qtype_shortanswer_question {
 
     /**
-     * Function of summarise_response
+     * Function of summarise_response.
      * @param array $response
      * @return string|null
      */
