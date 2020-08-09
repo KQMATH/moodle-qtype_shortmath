@@ -91,7 +91,7 @@ function xmldb_qtype_shortmath_install()
 
     //Empty template
     $record = new stdClass;
-    $record->contextid = time(); //TODO: must change
+    $record->contextid = time() + 1; //TODO: must change
     $record->name = 'None';
     $record->template = '[]';
     $DB->insert_record('qtype_shortmath_templates', $record);
