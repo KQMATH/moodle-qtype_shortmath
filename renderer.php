@@ -39,6 +39,12 @@ require_once($CFG->dirroot . '/question/type/shortanswer/renderer.php');
  */
 class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
 
+    /**
+     * fomulation_and_controls function
+     * @param question_attempt $qa
+     * @param question_display_options $options
+     * @return string
+     */
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
         global $PAGE;
         $result = '';
@@ -62,6 +68,10 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
         return $result;
     }
 
+    /**
+     * qtype_shortmath_renderer::head_code
+     * @param question_attempt $qa
+     */
     public function head_code(question_attempt $qa) {
         global $PAGE;
 

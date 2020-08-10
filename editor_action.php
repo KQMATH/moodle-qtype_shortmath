@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once(__DIR__ . '/../../../config.php');
 
@@ -10,14 +24,14 @@ $name = optional_param('name', '', PARAM_TEXT);
 $type = optional_param('type', '', PARAM_TEXT);
 
 $record = new stdClass;
-//$record->contextid = context_user::instance($USER->id)->id;
+// $record->contextid = context_user::instance($USER->id)->id;
 $record->id = $id;
 $record->template = $data;
 $record->name = $name;
 if ($id > 0) {
     if ($type == 'delete') {
         $return = $DB->delete_records('qtype_shortmath_templates', array_filter((array)$record));
-    } elseif ($type == 'get') {
+    } else if ($type == 'get') {
         $return = json_encode($DB->get_record('qtype_shortmath_templates', array_filter((array)$record)));
     } else {
         $return = $DB->update_record('qtype_shortmath_templates', $record);

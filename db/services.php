@@ -1,6 +1,21 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Declaration of web service and web service function for retrieving ShortMath question template
+ * Declaration of web service and web service function for retrieving ShortMath question template.
  *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
@@ -30,7 +45,7 @@ $functions = array(
         'description' => 'Get the shortmath question template.',
         'type' => 'read',
         'ajax' => true,
-        //'capabilities' => 'moodle/course:managegroups',
+        // 'capabilities' => 'moodle/course:managegroups',
         'capabilities' => array(),   // TODO: capabilities required by the function.
         'loginrequired' => true
     )

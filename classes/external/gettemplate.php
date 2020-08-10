@@ -1,11 +1,25 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * External (web service) function calls for retrieving ShortMath question template.
  *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
- *
  */
 
 namespace qtype_shortmath\external;
@@ -29,8 +43,7 @@ class gettemplate extends external_api
      * Returns description of method parameters
      * @return external_function_parameters
      */
-    public static function get_template_parameters()
-    {
+    public static function get_template_parameters() {
         return new external_function_parameters(
             array('questionid' => new \external_value(PARAM_INT, 'question id'))
         );
@@ -40,8 +53,7 @@ class gettemplate extends external_api
      * Returns description of method result value
      * @return external_single_structure
      */
-    public static function get_template_returns()
-    {
+    public static function get_template_returns() {
         return new external_single_structure(
             array(
                 'template' => new \external_value(PARAM_RAW, 'toolbar template'),
@@ -59,21 +71,20 @@ class gettemplate extends external_api
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_template($questionid)
-    {
+    public static function get_template($questionid) {
         global $USER, $DB;
 
         $editorconfig = '';
         $warnings = array();
 
-        //Parameter validation
+        // Parameter validation.
         $params = self::validate_parameters(self::get_template_parameters(),
             array(
                 'questionid' => $questionid,
             )
         );
 
-        //Context validation
+        // Context validation.
         // TODO: ensure proper validation....
         $context = \context_user::instance($USER->id);
         self::validate_context($context);
