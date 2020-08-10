@@ -63,32 +63,28 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
     }
 
     if ($oldversion < 2020062500) {
-        // Define tables user to be created
+        // Define tables user to be created.
         $table = new xmldb_table('qtype_shortmath_templates');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('contextid', XMLDB_TYPE_INTEGER, 10, null, XMLDB_NOTNULL, null, '0');
         $table->add_field('template', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
         $table->add_index('contextid', XMLDB_KEY_FOREIGN, array('contextid'));
-        
+
         // Conditionally launch create table for qtype_shortmath_templates.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        
-         // Define field editorconfig to be added to qtype_shortmath_options.         
-         $table = new xmldb_table('qtype_shortmath_options');
-         $field = new xmldb_field('editorconfig', XMLDB_TYPE_TEXT, null, null, null, null, null);
-         
 
+        // Define field editorconfig to be added to qtype_shortmath_options.
+        $table = new xmldb_table('qtype_shortmath_options');
+        $field = new xmldb_field('editorconfig', XMLDB_TYPE_TEXT, null, null, null, null, null);
         // Conditionally launch add field for qtype_shortmath_options.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        
         // Savepoint reached.
         upgrade_plugin_savepoint(true, 2020062500, 'qtype', 'shortmath');
     }
-
     return true;
 }
