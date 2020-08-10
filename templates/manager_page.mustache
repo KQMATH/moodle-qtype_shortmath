@@ -20,10 +20,34 @@
     Example context (json):
     {
             "buttonClass" : "btn btn-primary",
-            "templates" : new \ArrayIterator($this->templates),
-            "editor_path" : shortmath_urls::$editorpath,
-            "editor_action_path" : shortmath_urls::$editoractionpath,
-            "plugin_settings_path" : shortmath_urls::$pluginsettingspath
+            "templates" : [
+                {
+                    "id": 1,
+                    "name": "Default",
+                    "contextid": 1000001,
+                    "template" : [
+                        {
+                            "name" : "default_1,
+                            "button" : "<span class=\"mq-root-block\">&plusmn;</span>",
+                            "expression" : "\\pm"
+                        },
+                        {
+                            "name" : "default_2,
+                            "button" : "<span class=\"mq-root-block\">&pi;</span>",
+                            "expression" : "\\pi"
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "None",
+                    "contextid": 1000002,
+                    "template" : []
+                }
+            ],
+            "editor_path" : "/question/type/shortmath/view_editor.php",
+            "editor_action_path" : "/question/type/shortmath/editor_action.php",
+            "plugin_settings_path" : "/admin/settings.php?section=qtypesettingshortmath"
     }
 }}
 

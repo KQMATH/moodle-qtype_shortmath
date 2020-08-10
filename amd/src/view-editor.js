@@ -27,7 +27,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
     function ($, VisualMath, Templates, notification) {
         let lastFocusedInput = null;
         let dragged;
-        let target;
         let nodes;
         let draggedIndex;
         let isSuccess = true;
@@ -125,6 +124,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
             }
 
             /**
+             * Add buttons to toolbar.
              *
              * @param buttonField
              * @param expressionField
@@ -228,6 +228,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 let $parent;
                 let $testBox;
                 let controlsWrapper;
+                let target;
 
                 let buttonInput;
                 let expressionInput;
