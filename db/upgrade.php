@@ -76,7 +76,7 @@ function xmldb_qtype_shortmath_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        //Define field editorconfig to be added to qtype_shortmath_options.
+        // Define field editorconfig to be added to qtype_shortmath_options.
         $table = new xmldb_table('qtype_shortmath_options');
         $field = new xmldb_field('editorconfig', XMLDB_TYPE_TEXT, null, null, null, null, null);
         // Conditionally launch add field for qtype_shortmath_options.
