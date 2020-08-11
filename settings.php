@@ -16,10 +16,10 @@
 
 /**
  * ShortMath settings.
- *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
+ * @license
  */
 
 use qtype_shortmath\shortmath_urls;

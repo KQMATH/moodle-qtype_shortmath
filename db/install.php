@@ -17,19 +17,22 @@
 /**
  * This script inserts a record for default editor template in the
  * qtype_shortmath_templates table during installation.
- *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
+ * @license
  */
-
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * xml databse installation function.
+ * @return bool
+ */
 function xmldb_qtype_shortmath_install() {
     global $DB;
 
     $record = new stdClass;
-    $record->contextid = time(); // TODO: must change
+    $record->contextid = time();
     $record->name = 'Default';
 
     $data = [];
@@ -112,6 +115,13 @@ function xmldb_qtype_shortmath_install() {
     return true;
 }
 
+/**
+ * get data object.
+ * @param $name
+ * @param $button
+ * @param $expression
+ * @return stdClass
+ */
 function get_data_object($name, $button, $expression) {
     $object = new stdClass();
     $object->name = 'default_' . $name;

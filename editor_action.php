@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Editor Action.
+ * @package    qtype_shortmath
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
+ * @license
+ */
+
 require_once(__DIR__ . '/../../../config.php');
 
 require_login();
