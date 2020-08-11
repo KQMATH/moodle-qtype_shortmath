@@ -23,7 +23,7 @@
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/notification', 'theme_boost/popover'],
+define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/notification'],
     function ($, VisualMath, Templates, notification) {
         let lastFocusedInput = null;
         let dragged;
@@ -35,7 +35,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
             constructor(input, parent) {
                 super(input, parent);
-                this.$textarea.on('blur', () => lastFocusedInput = this);
+                this.$textarea.on('blur', () => {
+                    lastFocusedInput = this;
+                });
                 this.$input.prop('required', true);
                 this.$input.addClass('form-control');
                 let errorDiv = document.createElement('div');
@@ -81,7 +83,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                     if (lastFocusedInput !== null) {
                         if (lastFocusedInput.field === undefined) {
-                            console.log('Plain text field');
+                            // For plain text field.
                             lastFocusedInput.focus();
                             return;
                         }
@@ -139,26 +141,30 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
 
                 let $html = $(html);
 
-                $html.find('.mq-empty').remove(); // Removes white space from buttons
+                let $empty = $html.find('.mq-empty');
+                if ($empty.parents('.mq-int').length > 0 && $empty.length > 1) {
+                    $empty.parents('.mq-supsub').remove(); // Removes super/subscript white space in buttons.
+                }
+                $empty.remove(); // Removes white space from buttons.
 
                 $html.find('big').replaceWith((i, element) => {
                     return '<span>' + element + '</span>';
                 });
 
-                let $frac = $html.find('.mq-fraction'); //division
+                let $frac = $html.find('.mq-fraction'); // Division symbol.
                 if ($frac.length > 0) {
-                    $html.append('<var>' + $html.find('.mq-numerator').text()
-                        + '/' + $html.find('.mq-denominator').text() + '</var>');
+                    $html.append('<var>' + $html.find('.mq-numerator').text() + '</var>' +
+                        '<span>/</span><var>' + $html.find('.mq-denominator').text() + '</var>');
                     $frac.remove();
                 }
 
-                let $binom = $html.find('.mq-paren.mq-scaled'); //nCr
-                let $supsub = $html.find('.mq-supsub'); //power
+                let $binom = $html.find('.mq-paren.mq-scaled'); // Binomial symbol.
+                let $supsub = $html.find('.mq-supsub'); // Power symbol.
                 let $vars = $html.find('var');
 
                 if ($binom.length > 0 || $supsub.length > 0 || $vars.length > 0) {
                     if ($binom.length > 0) {
-                        $binom.css('transform', 'scale(0.8, 1.5)'); //resize binomial
+                        $binom.css('transform', 'scale(0.8, 1.5)'); // Resize binomial.
                         $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
                         $html.find('var').parent().css('font-size', '14px');
                     }
@@ -233,6 +239,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 let buttonInput;
                 let expressionInput;
                 let testInput;
+                let buttonField;
+                let expressionField;
+                let testField;
                 let controls;
 
                 // To prevent calls to show test box repeatedly
@@ -253,9 +262,10 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     testInput = new EditorInput($shortanswerInput, $parent);
                     testInput.$input.hide();
                     testInput.change();
+                    testField = testInput.field;
 
                     if ($shortanswerInput.val()) {
-                        testInput.field.write(
+                        testField.write(
                             $shortanswerInput.val()
                         );
                     }
@@ -267,6 +277,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     buttonInput = new EditorInput($btnInput, $parent);
                     buttonInput.$input.hide();
                     buttonInput.change();
+                    buttonField = buttonInput.field;
 
                     // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
                     $expInput.removeClass('d-inline');
@@ -275,6 +286,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                     expressionInput = new EditorInput($expInput, $parent);
                     expressionInput.$input.hide();
                     expressionInput.change();
+                    expressionField = expressionInput.field;
 
                 };
 
@@ -360,8 +372,6 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                 const initAddForm = () => {
                     let $addButton = $('#' + $.escapeSelector('add'));
                     let $addForm = $('#' + $.escapeSelector('addForm'));
-                    let buttonField = buttonInput.field;
-                    let expressionField = expressionInput.field;
 
                     $testBox = $('.test-box');
                     controls = new EditorControlList(controlsWrapper);
@@ -445,7 +455,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         if (parentNode !== null) {
                             parentNode.removeChild(dragged);
                             if (parentNode.firstElementChild === null) {
-                                testInput.field.latex('');
+                                testField.latex('');
                                 $testBox.hide();
                                 isDataVisible = false;
                             }
@@ -519,7 +529,9 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                                         controlsWrapper.html('');
                                         controls = new EditorControlList(controlsWrapper);
                                         $templateNameInput.val('');
-                                        testInput.field.latex('');
+                                        testField.latex('');
+                                        buttonField.latex('');
+                                        expressionField.latex('');
                                         $testBox.hide();
                                         isDataVisible = false;
                                     }
@@ -571,9 +583,7 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/templates', 'core/n
                         initDeleteButton();
                         initSaveForm();
                         initBackButton();
-                    }).fail(function (ex) {
-                    // Deal with this exception (I recommend core/notify exception function for this).
-                });
+                    }).fail(notification.exception);
             }
         };
     });

@@ -23,7 +23,7 @@
  * @module qtype_shortmath/editor-manager
  */
 define(['jquery', 'core/notification', 'theme_boost/tooltip', 'theme_boost/popover'],
-    function ($, notification) {
+    ($, notification) => {
         return {
             initialize: (editorPath, actionPath, pluginSettingsPath) => {
                 $('.edit-template, .delete-template').each((index, element) => {
