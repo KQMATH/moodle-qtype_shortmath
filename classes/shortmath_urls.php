@@ -32,8 +32,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 class shortmath_urls
 {
+    // editor path.
     public static $editorpath = '/question/type/shortmath/view_editor.php';
+    // editor action path.
     public static $editoractionpath = '/question/type/shortmath/editor_action.php';
+    // editor manager path.
     public static $editormanagerpath = '/question/type/shortmath/editor_manager.php';
+    // plugin setting path.
     public static $pluginsettingspath = '/admin/settings.php?section=qtypesettingshortmath';
 }

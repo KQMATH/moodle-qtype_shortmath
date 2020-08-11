@@ -14,6 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * qtype_shortmath\output.
+ * @package    qtype_shortmath
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
+ * @license
+ */
 namespace qtype_shortmath\output;
 
 defined('MOODLE_INTERNAL') || die();
@@ -24,8 +31,13 @@ use renderer_base;
 use stdClass;
 use templatable;
 
+/**
+ * Class manager_page.
+ * @package qtype_shortmath\output
+ */
 class manager_page implements renderable, templatable
 {
+    // template variable.
     protected $templates = array();
 
     /**

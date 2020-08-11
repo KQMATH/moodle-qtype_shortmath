@@ -93,6 +93,12 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
         $this->add_interactive_settings();
     }
 
+    /**
+     * edit form validdation.
+     * @param $data
+     * @param $files
+     * @return mixed
+     */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
