@@ -40,16 +40,21 @@ require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.p
 class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
     /**
-     * Function qtype_shortmath_edit_form::qtype
-     * @return string
+     * Overridden to return question type name.
+     *
+     * @return string The question type name, should be the same as the name() method
+     * in the question type class.
      */
     public function qtype() {
         return 'shortmath';
     }
 
     /**
-     * Function qtype_shortmath_edit_form::definition_inner
+     * Add any question-type specific form fields.
+     *
      * @param $mform
+     * @throws coding_exception
+     * @throws dml_exception
      */
     protected function definition_inner($mform) {
         global $DB;
@@ -94,10 +99,12 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
     }
 
     /**
-     * edit form validdation.
+     * ShortMath question edit form validation.
+     *
      * @param $data
      * @param $files
      * @return mixed
+     * @throws coding_exception
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);

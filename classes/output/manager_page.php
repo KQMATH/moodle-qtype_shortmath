@@ -15,12 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * qtype_shortmath\output.
- * @package    qtype_shortmath
- * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
- * @copyright  2020 NTNU
- * @license
+ * Editor manager page class.
+ *
+ * @package     qtype_shortmath
+ * @author      Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright   2020 NTNU
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace qtype_shortmath\output;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,12 +34,18 @@ use stdClass;
 use templatable;
 
 /**
- * Class manager_page.
- * @package qtype_shortmath\output
+ * Class containing data for editor manager page.
+ *
+ * @package     qtype_shortmath
+ * @author      Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright   2020 NTNU
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class manager_page implements renderable, templatable
 {
-    // template variable.
+    /**
+     * @var array Array of template records.
+     */
     protected $templates = array();
 
     /**

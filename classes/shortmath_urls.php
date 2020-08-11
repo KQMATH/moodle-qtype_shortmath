@@ -15,11 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *  Page url constants for ShortMath.
+ * ShortMath urls class.
  *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace qtype_shortmath;
@@ -27,17 +28,32 @@ namespace qtype_shortmath;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Class shortmath_urls for definition of urls used in configuration editor
+ * Page url constants for ShortMath.
+ *
  * @package qtype_shortmath
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class shortmath_urls
 {
-    // editor path.
+    /**
+     * @var string Editor page path.
+     */
     public static $editorpath = '/question/type/shortmath/view_editor.php';
-    // editor action path.
+
+    /**
+     * @var string Editor action url path.
+     */
     public static $editoractionpath = '/question/type/shortmath/editor_action.php';
-    // editor manager path.
+
+    /**
+     * @var string Editor manager path.
+     */
     public static $editormanagerpath = '/question/type/shortmath/editor_manager.php';
-    // plugin setting path.
+
+    /**
+     * @var string ShortMath settings page path.
+     */
     public static $pluginsettingspath = '/admin/settings.php?section=qtypesettingshortmath';
 }

@@ -64,16 +64,18 @@ define(['jquery', 'qtype_shortmath/visual-math-input', 'core/ajax', 'core/notifi
                         var controls = new VisualMath.ControlList(controlsWrapper);
 
                         let template = JSON.parse(response['template']);
-                        template != null ? template.forEach(value => {
-                            let html = value['button'];
-                            let command = value['expression'];
-                            controls.define(command, html, field => field.write(command));
-                        }) : controls.defineDefault();
+                        if (template === null) {
+                            controls.defineDefault();
+                        } else {
+                            template.forEach(value => {
+                                let html = value['button'];
+                                let command = value['expression'];
+                                controls.define(command, html, field => field.write(command));
+                            });
+                        }
 
                         controls.enableAll();
-                    }).fail((jqXHR, textStatus, errorThrown) => {
-                        notification.alert(jqXHR.debuginfo, jqXHR.message, 'OK');
-                    });
+                    }).fail(notification.exception);
                 }
             }
         };

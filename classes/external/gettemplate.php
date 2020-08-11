@@ -20,7 +20,7 @@
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
- * @license
+ * @@license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace qtype_shortmath\external;
@@ -38,8 +38,12 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . "/externallib.php");
 
 /**
- * Class gettemplate.
- * @package qtype_shortmath\external
+ * Get template web service class.
+ *
+ * @package     qtype_shortmath
+ * @author      Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright   2020 NTNU
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gettemplate extends external_api
 {
@@ -70,6 +74,10 @@ class gettemplate extends external_api
      * Returns ShortMath question template.
      * @param $questionid
      * @return array
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
      */
     public static function get_template($questionid) {
         global $USER, $DB;
