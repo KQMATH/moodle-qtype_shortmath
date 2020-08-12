@@ -70,7 +70,6 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
     /**
      * Return any HTML that needs to be included in the page's <head> when this
      * question is used.
-     * 
      * @param question_attempt $qa
      * @throws coding_exception
      */
