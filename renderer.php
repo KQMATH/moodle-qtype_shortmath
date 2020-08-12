@@ -46,7 +46,6 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
      * @return string
      */
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
-        global $PAGE;
         $result = '';
         $inputname = $qa->get_qt_field_name('answer');
         $questionid = $qa->get_question()->id;
@@ -64,20 +63,21 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
             $params['readonly'] = true;
         }
 
-        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize', $params);
+        $this->page->requires->js_call_amd('qtype_shortmath/input', 'initialize', $params);
         return $result;
     }
 
     /**
-     * qtype_shortmath_renderer::head_code
+     * Return any HTML that needs to be included in the page's <head> when this
+     * question is used.
+     * 
      * @param question_attempt $qa
+     * @throws coding_exception
      */
     public function head_code(question_attempt $qa) {
-        global $PAGE;
-
         parent::head_code($qa);
 
-        $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
-        $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
+        $this->page->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
+        $this->page->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
     }
 }

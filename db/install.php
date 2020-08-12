@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This script inserts a record for the default editor template and an empty template
- * in the qtype_shortmath_templates table during installation.
+ * Inserts records into qtype_shortmath_templates table during installation.
  *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * xml databse installation function.
+ * Creates records for default editor template and empty template in the database.
+ *
  * @return bool
  * @throws dml_exception
  */
@@ -119,9 +120,10 @@ function xmldb_qtype_shortmath_install() {
 
 /**
  * Get data object helper function.
- * @param $name
- * @param $button
- * @param $expression
+ *
+ * @param int $name
+ * @param string $button
+ * @param string $expression
  * @return stdClass
  */
 function get_data_object($name, $button, $expression) {

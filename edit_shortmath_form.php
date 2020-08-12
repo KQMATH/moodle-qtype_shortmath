@@ -52,7 +52,7 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
     /**
      * Add any question-type specific form fields.
      *
-     * @param $mform
+     * @param object $mform
      * @throws coding_exception
      * @throws dml_exception
      */
@@ -101,8 +101,8 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
     /**
      * ShortMath question edit form validation.
      *
-     * @param $data
-     * @param $files
+     * @param array $data
+     * @param array $files
      * @return mixed
      * @throws coding_exception
      */

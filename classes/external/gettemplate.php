@@ -20,7 +20,7 @@
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
- * @@license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace qtype_shortmath\external;
@@ -49,6 +49,7 @@ class gettemplate extends external_api
 {
     /**
      * Returns description of method parameters.
+     *
      * @return external_function_parameters
      */
     public static function get_template_parameters() {
@@ -58,7 +59,8 @@ class gettemplate extends external_api
     }
 
     /**
-     * Returns description of method result value
+     * Returns description of method result value.
+     *
      * @return external_single_structure
      */
     public static function get_template_returns() {
@@ -72,7 +74,8 @@ class gettemplate extends external_api
 
     /**
      * Returns ShortMath question template.
-     * @param $questionid
+     *
+     * @param int $questionid
      * @return array
      * @throws dml_exception
      * @throws invalid_parameter_exception
