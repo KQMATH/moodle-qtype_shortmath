@@ -50,7 +50,7 @@ class qtype_shortmath_test extends advanced_testcase {
         $this->qtype = new qtype_shortmath();
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->qtype = null;
     }
 
