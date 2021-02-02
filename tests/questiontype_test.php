@@ -46,7 +46,7 @@ class qtype_shortmath_test extends advanced_testcase {
 
     protected $qtype;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->qtype = new qtype_shortmath();
     }
 
