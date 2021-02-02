@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Changed
 - 
 
+## [0.4.2] - 2021-02-03
+### Fixed
+- Fixed bug #33 regarding backup and restore problems.
+
+
 ## [0.4.1] - 2019-05-29
 ### Fixed
 - Fixed bug #26 regarding multiple ShortMath questions in one quiz page.
@@ -32,7 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Added
 - 
 
-[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.3.0...v0.3.1
