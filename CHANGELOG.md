@@ -12,7 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Fixed
 - Fixed bug #33 regarding backup and restore problems.
 
-
 ## [0.4.1] - 2019-05-29
 ### Fixed
 - Fixed bug #26 regarding multiple ShortMath questions in one quiz page.
