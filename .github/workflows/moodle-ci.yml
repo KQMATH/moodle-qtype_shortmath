@@ -102,6 +102,12 @@ jobs:
       - name: Behat features
         if: ${{ always() }}
         run: moodle-plugin-ci behat --profile chrome
+      
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          name: coverage.xml
+          path: ./coverage.xml
         
       - name: Coveralls Parallel
         if: ${{ always() }}
