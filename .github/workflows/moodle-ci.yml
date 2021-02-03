@@ -104,6 +104,7 @@ jobs:
         run: moodle-plugin-ci behat --profile chrome
         
       - name: Coveralls Parallel
+        if: ${{ always() }}
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
