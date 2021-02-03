@@ -64,20 +64,10 @@ class restore_qtype_shortmath_plugin extends restore_qtype_plugin {
         if ($questioncreated) {
             // Adjust some columns.
             $data->questionid = $newquestionid;
-            // Map sequence of question_answer ids.
-            $answersarr = explode(',', $data->answers);
-            foreach ($answersarr as $key => $answer) {
-                // Postgresql does not handle empty strings as integer values.
-                if ($answer == '') {
-                    $answer = null;
-                }
-                $answersarr[$key] = $this->get_mappingid('question_answer', $answer);
-            }
-            $data->answers = implode(',', $answersarr);
             // Insert record.
-            $newitemid = $DB->insert_record('qtype_shortmath', $data);
+            $newitemid = $DB->insert_record('qtype_shortmath_options', $data);
             // Create mapping.
-            $this->set_mapping('qtype_shortmath', $oldid, $newitemid);
+            $this->set_mapping('qtype_shortmath_options', $oldid, $newitemid);
         }
     }
 }
