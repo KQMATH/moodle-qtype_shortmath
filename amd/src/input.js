@@ -19,64 +19,62 @@
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
  */
-
+import VisualMath from "???";
+import Ajax from "core/ajax";
+import notification from "???";
 /**
  * @module qtype_shortmath/input
  */
-define(['jquery', 'qtype_shortmath/visual-math-input', 'core/ajax', 'core/notification'],
-    function ($, VisualMath, Ajax, notification) {
-        return {
-            initialize: function (inputname, readonly, questionId) {
-                var readOnly = readonly;
-                var $shortanswerInput = $('#' + $.escapeSelector(inputname));
-                // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-                $shortanswerInput.removeClass('d-inline');
-                var $parent = $('#' + $.escapeSelector(inputname)).parent('.answer');
 
-                var input = new VisualMath.Input($shortanswerInput, $parent);
-                input.$input.hide();
+export const initialize = (inputname, readonly, questionId) => {
+    var readOnly = readonly;
+    var shortanswerInput = document.querySelector(`#${inputname}`);
+    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+    shortanswerInput.classList.remove('d-inline');
+    var $parent = shortanswerInput.parentElement;
 
-                if (!readonly) {
-                    input.onEdit = function ($input, field) {
-                        $input.val(field.latex());
-                        $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
-                    };
+    var input = new VisualMath.Input(shortanswerInput, $parent);
+    input.$input.hide();
 
-                } else {
-                    readOnly = true;
-                    input.disable();
-                }
-
-                if ($shortanswerInput.val()) {
-                    input.field.write(
-                        $shortanswerInput.val()
-                    );
-                }
-
-                if (!readOnly) {
-                    Ajax.call([{
-                        methodname: 'qtype_shortmath_get_template',
-                        args: {
-                            'questionid': questionId
-                        }
-                    }])[0].done(response => {
-                        var controlsWrapper = $('#' + $.escapeSelector(inputname)).parents('.shortmath').find('.controls_wrapper');
-                        var controls = new VisualMath.ControlList(controlsWrapper);
-
-                        let template = JSON.parse(response['template']);
-                        if (template === null) {
-                            controls.defineDefault();
-                        } else {
-                            template.forEach(value => {
-                                let html = value['button'];
-                                let command = value['expression'];
-                                controls.define(command, html, field => field.write(command));
-                            });
-                        }
-
-                        controls.enableAll();
-                    }).fail(notification.exception);
-                }
-            }
+    if (!readonly) {
+        input.onEdit = function ($input, field) {
+            $input.val(field.latex());
+            $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
         };
-    });
+
+    } else {
+        readOnly = true;
+        input.disable();
+    }
+
+    if (shortanswerInput.val()) {
+        input.field.write(
+            shortanswerInput.val()
+        );
+    }
+
+    if (!readOnly) {
+        Ajax.call([{
+            methodname: 'qtype_shortmath_get_template',
+            args: {
+                'questionid': questionId
+            }
+        }])[0].done(response => {
+            var controlsWrapper = shortanswerInput.parents('.shortmath').find('.controls_wrapper');
+            var controls = new VisualMath.ControlList(controlsWrapper);
+
+            let template = JSON.parse(response['template']);
+            if (template === null) {
+                controls.defineDefault();
+            } else {
+                template.forEach(value => {
+                    let html = value['button'];
+                    let command = value['expression'];
+                    controls.define(command, html, field => field.write(command));
+                });
+            }
+
+            controls.enableAll();
+        }).fail(notification.exception);
+    }
+};
