@@ -42,7 +42,7 @@ class EditorInput extends VisualMath.Input {
         this.$input.prop('required', true);
         this.$input.addClass('form-control');
         let errorDiv = document.createElement('div');
-        $(errorDiv).addClass('invalid-feedback text-nowrap');
+        errorDiv.classList.add("invalid-feedback text-nowrap");
         this.$parent.append(errorDiv);
     }
 
@@ -79,7 +79,10 @@ class EditorControl extends VisualMath.Control {
         this.$element.on('click', event => {
             event.preventDefault();
 
-            $(':focus').blur();
+            // TODO: what is non-jquery alternative to blur()
+            document.querySelector(":focus").blur();
+            // $(':focus').blur();
+
 
             if (lastFocusedInput !== null) {
                 if (lastFocusedInput.field === undefined) {
@@ -103,16 +106,18 @@ class EditorControl extends VisualMath.Control {
             event.originalEvent.dataTransfer.setData("text", event.target.id);
             event.originalEvent.dataTransfer.dropEffect = "move";
             event.target.style.opacity = 0.5;
-            $('.delete-box').removeClass('d-none');
+            document.querySelector(".delete-box").classList.remove("d-none");
         });
 
         this.$element.on('dragend', event => {
             event.target.style.opacity = "";
-            $(':focus').blur();
+            // TODO: what is non-jquery alternative to blur()
+            document.querySelector(":focus").blur();
+            // $(':focus').blur();
             if (document.getElementById('placeholder') !== null) {
                 document.getElementById('placeholder').replaceWith(dragged);
             }
-            $('.delete-box').addClass('d-none');
+            document.querySelector(".delete-box").classList.add("d-none");
         });
 
     }
@@ -133,15 +138,21 @@ class EditorControlList extends VisualMath.ControlList {
      * @returns {boolean}
      */
     add(buttonField, expressionField) {
-        let $buttonFieldRoot = $(buttonField.el());
 
-        $(':focus').blur();
+        const $buttonFieldRoot = buttonField.el();
 
-        let html = $buttonFieldRoot.find('.mq-root-block').prop('outerHTML');
+        // TODO: what is non-jquery alternative to blur()
+        document.querySelector(":focus").blur();
+        // $(':focus').blur();
 
-        let $html = $(html);
+        // We're using DOMParser because we are getting a html string
+        // as an argument to add(). We need to turn this string into
+        // actual html in order to
 
-        let $empty = $html.find('.mq-empty');
+        let html = $buttonFieldRoot.querySelector('.mq-root-block').outerHTML;
+        const $html = DOMParser.prototype.parseFromString(html);
+
+        let $empty = $html.querySelector('.mq-empty');
         if ($empty.parents('.mq-int').length > 0 && $empty.length > 1) {
             $empty.parents('.mq-supsub').remove(); // Removes super/subscript white space in buttons.
         }
@@ -171,7 +182,7 @@ class EditorControlList extends VisualMath.ControlList {
             html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${Date.now()}">`;
             html += $html.prop('outerHTML');
             html += '</div>';
-            $html = $(html);
+            $html = DOMParser.prototype.parseFromString(html);
         }
 
         html = $html.prop('outerHTML');
@@ -239,10 +250,11 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * Shortmath input fields
      */
     const initInputFields = () => {
-        $shortanswerInput = $('#' + $.escapeSelector(testInputId));
-        $btnInput = $('#' + $.escapeSelector(btnInputId));
-        $expInput = $('#' + $.escapeSelector(expInputId));
 
+        // $shortanswerInput = $('#' + $.escapeSelector(testInputId));
+        $shortanswerInput = document.querySelector(`#${testInputId}`);
+        $btnInput = document.querySelector(`#${btnInputId}`);
+        $btnInput = document.querySelector(`#${expInputId}`);
         // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
         $shortanswerInput.removeClass('d-inline');
         $parent = $shortanswerInput.parent('.answer');
@@ -282,10 +294,26 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * Wrapper for toolbar and drag and drop functionality for buttons
      */
     const initControlsWrapper = () => {
-        controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
 
-        controlsWrapper.addClass('visual-math-input-wrapper');
-        controlsWrapper.attr('id', 'target');
+        // TODO: Do we REALLY have to traverse like this? Can't we just
+        // go directly to the controls_wrapper?
+        controlsWrapper = document.querySelector(`#${testInputId}`).closest(".shortmath").querySelector(".controls_wrapper");
+        // controlsWrapper = $('#' + $.escapeSelector(testInputId)).parents('.shortmath').find('.controls_wrapper');
+
+        controlsWrapper.classList.add('visual-math-input-wrapper');
+        controlsWrapper.id = "target";
+
+        controlsWrapper.addEventListener("drop", event => {
+            event.preventDefault();
+
+            if (target.id === dragged.id) {
+                event.originalEvent.dataTransfer.clearData();
+                return;
+            }
+
+            document.getElementById('placeholder').replaceWith(dragged);
+            event.originalEvent.dataTransfer.clearData();
+        });
 
         controlsWrapper.on('drop', event => {
             event.preventDefault();
@@ -307,10 +335,10 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
         controlsWrapper.on('dragenter', event => {
 
             let targetId;
-            if ($(event.target).hasClass('visual-math-input-wrapper')) {
+            if (event.target.classList.includes('visual-math-input-wrapper')) {
                 targetId = event.target.lastChild.id;
             } else if (event.target.nodeName !== 'BUTTON') {
-                targetId = $(event.target).parents('button').attr('id');
+                targetId = event.target.closest("button").id;
             } else {
                 targetId = event.target.id;
             }
@@ -327,11 +355,10 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
             }
 
             let empty = document.createElement('button');
-            $(empty).html('');
-            $(empty).addClass('visual-math-input-control btn btn-primary');
-            $(empty).attr('draggable', true);
-            $(empty).attr('id', 'placeholder');
-            $(empty).css('border', '2px solid red');
+            empty.id = 'placeholder';
+            empty.classList.add('visual-math-input-control btn btn-primary');
+            empty.setAttribute('draggable', true);
+            empty.style.border = '2px solid red';
 
             if (target.parentNode.contains(dragged)) {
                 target.parentNode.removeChild(dragged);
@@ -358,16 +385,16 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * To add buttons to toolbar in create mode/load buttons in edit mode
      */
     const initAddForm = () => {
-        let $addButton = $('#' + $.escapeSelector('add'));
-        let $addForm = $('#' + $.escapeSelector('addForm'));
+        let $addButton = document.querySelector("#addForm");
+        let $addForm = document.querySelector("#add");
 
-        $testBox = $('.test-box');
+        $testBox = document.querySelector(".test-box");
         controls = new EditorControlList(controlsWrapper);
 
-        buttonInput.$parent.find('.invalid-feedback').text('Button is empty or invalid!');
-        expressionInput.$parent.find('.invalid-feedback').text('Expression is empty or invalid!');
+        buttonInput.$parent.querySelector('.invalid-feedback').textContent = 'Button is empty or invalid!';
+        expressionInput.$parent.querySelector('.invalid-feedback').textContent = 'Expression is empty or invalid!';
 
-        $addButton.click(event => {
+        $addButton.addEventListener("click", event => {
             event.preventDefault();
 
             $addForm.submit();
@@ -377,12 +404,15 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
             if ($addForm[0].checkValidity() === false) {
                 isSuccess = false;
 
-                $(':focus').blur();
+                // TODO: what is non-jquery alternative to blur()
+                document.querySelector(":focus").blur();
+                // $(':focus').blur();
 
-                $addForm.find('input:text.form-control').each((index, element) => {
-                    let $element = $(element);
-                    if ($element.val() === '') {
-                        $element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
+                $addForm.querySelectorAll('input:text.form-control').forEach(element => {
+                    if (element.value.length === 0) {
+                        // TODO: I don't understand the original intent. Look at original
+                        // code to see context.
+                        element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
                     }
                 });
                 event.preventDefault();
@@ -408,21 +438,23 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
         if (templateId === 0) {
             $testBox.hide();
         } else {
-            $.post(actionPath,
-                {
-                    'id': templateId,
-                    'type': 'get'
-                }
-            ).done(message => {
-                let data = JSON.parse(message);
-                isDataVisible = true;
-                JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
-            }).fail((jqXHR, textStatus, errorThrown) => {
-                notification.addNotification({
-                    message: textStatus + ': ' + errorThrown,
-                    type: "error"
-                });
-            });
+            // TODO: Figure out core/ajax
+
+            // $.post(actionPath,
+            //     {
+            //         'id': templateId,
+            //         'type': 'get'
+            //     }
+            // ).done(message => {
+            //     let data = JSON.parse(message);
+            //     isDataVisible = true;
+            //     JSON.parse(data['template']).forEach(controls.addAll.bind(controls));
+            // }).fail((jqXHR, textStatus, errorThrown) => {
+            //     notification.addNotification({
+            //         message: textStatus + ': ' + errorThrown,
+            //         type: "error"
+            //     });
+            // });
         }
     };
 
@@ -430,7 +462,7 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * To delete buttons from toolbar
      */
     const initDeleteButton = () => {
-        let deleteIcon = $('.delete-icon');
+        let deleteIcon = document.querySelector(".delete-icon");
 
         deleteIcon.on('dragover', event => {
             event.preventDefault();
@@ -461,9 +493,9 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * To save toolbar template in database
      */
     const initSaveForm = () => {
-        let $saveButton = $('#' + $.escapeSelector('save'));
-        let $templateNameInput = $('#' + $.escapeSelector('name'));
-        let $saveForm = $('#' + $.escapeSelector('saveForm'));
+        const $saveButton = document.querySelector('#save');
+        const $templateNameInput = document.querySelector('#name');
+        const $saveForm = document.querySelector('#saveForm');
 
         $templateNameInput.val(templateName)
             .on('blur', () => {
@@ -472,7 +504,9 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
 
         $saveForm.submit(event => {
             if ($saveForm[0].checkValidity() === false) {
-                $(':focus').blur();
+                // TODO: what is non-jquery alternative to blur()
+                document.querySelector(":focus").blur();
+                // $(':focus').blur();
                 $saveForm.addClass('was-validated');
                 event.preventDefault();
                 event.stopPropagation();
@@ -489,54 +523,55 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
                     });
                 });
 
-                $.post(actionPath,
-                    {
-                        'data': JSON.stringify(data),
-                        'name': $templateNameInput.val().trim(),
-                        'id': templateId
-                    }
-                ).done(message => {
-                    if (message > 0) {
-                        if (templateId > 0) {
-                            notification.addNotification({
-                                message: "Configuration saved! Please wait...",
-                                type: "success"
-                            });
+                // $.post(actionPath,
+                //     {
+                //         'data': JSON.stringify(data),
+                //         'name': $templateNameInput.val().trim(),
+                //         'id': templateId
+                //     }
+                // ).done(message => {
+                //     if (message > 0) {
+                //         if (templateId > 0) {
+                //             notification.addNotification({
+                //                 message: "Configuration saved! Please wait...",
+                //                 type: "success"
+                //             });
 
-                            $('#' + $.escapeSelector('overlay-div')).show();
+                //             // TODO: display: block; or visibility: visible; ?
+                //             document.querySelector("overlay-div").style.display = "block";
 
-                            setTimeout(() => {
-                                window.location.replace(managerPath);
-                            }, 5000);
-                        } else {
-                            notification.addNotification({
-                                message: "Configuration saved!",
-                                type: "success"
-                            });
+                //             setTimeout(() => {
+                //                 window.location.replace(managerPath);
+                //             }, 5000);
+                //         } else {
+                //             notification.addNotification({
+                //                 message: "Configuration saved!",
+                //                 type: "success"
+                //             });
 
-                            controlsWrapper.html('');
-                            controls = new EditorControlList(controlsWrapper);
-                            $templateNameInput.val('');
-                            testField.latex('');
-                            buttonField.latex('');
-                            expressionField.latex('');
-                            $testBox.hide();
-                            isDataVisible = false;
-                        }
-                    } else {
-                        notification.addNotification({
-                            message: "Something went wrong!",
-                            type: "error"
-                        });
-                    }
-                    $saveButton.blur();
-                }).fail((jqXHR, textStatus, errorThrown) => {
-                    notification.addNotification({
-                        message: textStatus + ': ' + errorThrown,
-                        type: "error"
-                    });
-                    $saveButton.blur();
-                });
+                //             controlsWrapper.html('');
+                //             controls = new EditorControlList(controlsWrapper);
+                //             $templateNameInput.val('');
+                //             testField.latex('');
+                //             buttonField.latex('');
+                //             expressionField.latex('');
+                //             $testBox.hide();
+                //             isDataVisible = false;
+                //         }
+                //     } else {
+                //         notification.addNotification({
+                //             message: "Something went wrong!",
+                //             type: "error"
+                //         });
+                //     }
+                //     $saveButton.blur();
+                // }).fail((jqXHR, textStatus, errorThrown) => {
+                //     notification.addNotification({
+                //         message: textStatus + ': ' + errorThrown,
+                //         type: "error"
+                //     });
+                //     $saveButton.blur();
+                // });
                 $saveForm.removeClass('was-validated');
                 event.preventDefault();
             }
@@ -546,7 +581,9 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
             event.preventDefault();
 
             // Clear notifications
-            $('.alert').alert('close');
+            // TODO: What is alert()?
+            document.querySelector(".alert");
+            // $('.alert').alert('close');
             $saveForm.submit();
         });
     };
@@ -555,8 +592,9 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      * To add back button to editor page
      */
     const initBackButton = () => {
-        let $backButton = $('#' + $.escapeSelector('back'));
-        $backButton.on('click', event => {
+        let $backButton = document.querySelector("#back");
+
+        $backButton.addEventListener('click', event => {
             event.preventDefault();
             window.location.replace(managerPath);
         });

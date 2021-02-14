@@ -24,28 +24,22 @@ import Ajax from "../../../../lib/amd/build/ajax.min.js";
  */
 // import * as Str from "core/str";
 export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
-    const _templateElements = document.querySelectorAll(".edit-template, .delete-template");
-    // Since the NodeList type doesn't support iteration, convert it to the Array type
-    const templateElements = Array.from(_templateElements);
-    for (const element of templateElements) {
-        // Create a tooltip with something inside it
-    }
+    document.querySelectorAll(".edit-template, .delete-template").forEach(element => {
+
+    });
     // $('.edit-template, .delete-template').each((index, element) => {
     //     $(element).tooltip({
     //         container: element.parentElement
     //     });
     // });
 
-    const _truncateElements = document.querySelectorAll(".text-truncate");
-    // Since the NodeList type doesn't support iteration, convert it to the Array type
-    const truncateElements = Array.from(_truncateElements);
-    for (const element of truncateElements) {
+    document.querySelectorAll(".text-truncate").forEach(element => {
         if (element.offsetWidth < element.scrollWidth) {
             // If the element overflows its parent, show
             // a popover (???) when you hover over
             // the element
         }
-    }
+    });
 
     // $('.text-truncate').each((index, element) => {
     //     let $ele = $(element);
@@ -65,9 +59,7 @@ export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
     // });
 
 
-    const _editTemplateElements = document.querySelectorAll(".edit-template");
-    const editTemplateElements = Array.from(_editTemplateElements);
-    for (const element of editTemplateElements) {
+    document.querySelectorAll(".edit-template").forEach(element => {
         element.addEventListener("click", event => {
             event.preventDefault();
             const form = event.target.closest(".template-box").querySelector("form");
@@ -75,7 +67,7 @@ export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
             form.setAttribute("method", "post");
             form.submit();
         });
-    }
+    });
 
     // $('.edit-template').click(event => {
     //     event.preventDefault();
@@ -110,7 +102,7 @@ export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
             ]);
 
             promises[0].done(response => {
-
+                
             });
         });
     });
