@@ -34,22 +34,23 @@ export const initialize = (inputname, readonly, questionId) => {
     var $parent = shortanswerInput.parentElement;
 
     var input = new VisualMath.Input(shortanswerInput, $parent);
-    input.$input.hide();
+    // TODO: display none or visibility hidden?
+    input.$input.style.visibility = "hidden";
 
     if (!readonly) {
         input.onEdit = function ($input, field) {
-            $input.val(field.latex());
-            $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
+            $input.value = field.latex();
+            $input.dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
         };
 
     } else {
         readOnly = true;
-        input.disable();
+        input.disabled = true;
     }
 
-    if (shortanswerInput.val()) {
+    if (shortanswerInput.value.length > 0) {
         input.field.write(
-            shortanswerInput.val()
+            shortanswerInput.value
         );
     }
 
@@ -60,7 +61,7 @@ export const initialize = (inputname, readonly, questionId) => {
                 'questionid': questionId
             }
         }])[0].done(response => {
-            var controlsWrapper = shortanswerInput.parents('.shortmath').find('.controls_wrapper');
+            var controlsWrapper = shortanswerInput.closest('.shortmath').querySelector('.controls_wrapper');
             var controls = new VisualMath.ControlList(controlsWrapper);
 
             let template = JSON.parse(response['template']);

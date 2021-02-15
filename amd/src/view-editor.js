@@ -36,31 +36,34 @@ class EditorInput extends VisualMath.Input {
 
     constructor(input, parent) {
         super(input, parent);
-        this.$textarea.on('blur', () => {
+        // $textarea doesn't even exist?
+        this.$textarea.addEventListener("focusout", () => {
             lastFocusedInput = this;
         });
-        this.$input.prop('required', true);
-        this.$input.addClass('form-control');
+        this.$input.setAttribute("required", true);
+        this.$input.classList.add("form-control");
         let errorDiv = document.createElement('div');
         errorDiv.classList.add("invalid-feedback text-nowrap");
-        this.$parent.append(errorDiv);
+        this.$parent.appendChild(errorDiv);
     }
 
     change() {
-        super.onEdit = ($input, field) => {
-            $input.val(field.latex());
-            if (!isSuccess && !$input.parents('.test-box').length) {
-                if ($input.val() === '') {
-                    $input.siblings('.visual-math-input-field')
-                        .removeClass('form-control is-valid')
-                        .addClass('form-control is-invalid');
+        super.onEdit = (inputElement, field) => {
+            inputElement.value = field.latex();
+            if (!isSuccess && inputElement.closest('.test-box') !== null) {
+                if (inputElement.value.length === 0) {
+                    inputElement.parentElement.children.forEach(element => {
+                        element.classList.remove("form-control is-valid")
+                        element.classList.add("form-control is-invalid")
+                    });
                 } else {
-                    $input.siblings('.visual-math-input-field')
-                        .removeClass('form-control is-invalid')
-                        .addClass('form-control is-valid');
+                    inputElement.parentElement.children.forEach(element => {
+                        element.classList.remove("form-control is-invalid")
+                        element.classList.add("form-control is-valid")
+                    });
                 }
             }
-            $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
+            inputElement.dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
         };
     }
 }
@@ -75,13 +78,11 @@ class EditorControl extends VisualMath.Control {
     enable() {
         super.enable();
 
-        this.$element.off('click');
-        this.$element.on('click', event => {
+        this.$element.removeEventListener("click");
+        this.$element.addEventListener("click", event => {
             event.preventDefault();
 
-            // TODO: what is non-jquery alternative to blur()
             document.querySelector(":focus").blur();
-            // $(':focus').blur();
 
 
             if (lastFocusedInput !== null) {
@@ -95,25 +96,23 @@ class EditorControl extends VisualMath.Control {
             }
         });
 
-        this.$element.attr('id', this.name);
-        this.$element.attr('draggable', true);
+        this.$element.id = this.name;
+        this.$element.setAttribute('draggable', true);
 
-        this.$element.on('dragstart', event => {
+        this.$element.addEventListener("dragstart", event => {
             dragged = event.target;
             nodes = Array.from(dragged.parentNode.children); //buttons on the control list
             draggedIndex = nodes.indexOf(dragged);
             // Add the target element's id to the data transfer object
-            event.originalEvent.dataTransfer.setData("text", event.target.id);
-            event.originalEvent.dataTransfer.dropEffect = "move";
+            event.dataTransfer.setData("text", event.target.id);
+            event.dataTransfer.dropEffect = "move";
             event.target.style.opacity = 0.5;
             document.querySelector(".delete-box").classList.remove("d-none");
         });
 
-        this.$element.on('dragend', event => {
+        this.$element.addEventListener('dragend', event => {
             event.target.style.opacity = "";
-            // TODO: what is non-jquery alternative to blur()
             document.querySelector(":focus").blur();
-            // $(':focus').blur();
             if (document.getElementById('placeholder') !== null) {
                 document.getElementById('placeholder').replaceWith(dragged);
             }
@@ -139,48 +138,45 @@ class EditorControlList extends VisualMath.ControlList {
      */
     add(buttonField, expressionField) {
 
-        const $buttonFieldRoot = buttonField.el();
-
-        // TODO: what is non-jquery alternative to blur()
         document.querySelector(":focus").blur();
-        // $(':focus').blur();
 
-        // We're using DOMParser because we are getting a html string
-        // as an argument to add(). We need to turn this string into
-        // actual html in order to
-
-        let html = $buttonFieldRoot.querySelector('.mq-root-block').outerHTML;
+        
+        // TODO: Why get the outerHTML?
+        let html = buttonField.querySelector('.mq-root-block').outerHTML;
         const $html = DOMParser.prototype.parseFromString(html);
 
         let $empty = $html.querySelector('.mq-empty');
-        if ($empty.parents('.mq-int').length > 0 && $empty.length > 1) {
-            $empty.parents('.mq-supsub').remove(); // Removes super/subscript white space in buttons.
+        if ($empty.closest('.mq-int') !== null && $empty !== null) {
+            // TODO: Quite verbose. Maybe make a function for it?
+            $empty.closest('.mq-supsub').parentElement.removeChild($empty.closest('.mq-supsub')); // Removes super/subscript white space in buttons.
         }
-        $empty.remove(); // Removes white space from buttons.
+        $empty.parentElement.removeChild($empty); // Removes white space from buttons.
 
-        $html.find('big').replaceWith((i, element) => {
+        const span = document.createElement("span");
+        span.appendChild()
+        $html.querySelector('big').replaceWith((i, element) => {
             return '<span>' + element + '</span>';
         });
 
-        let $frac = $html.find('.mq-fraction'); // Division symbol.
+        let $frac = $html.querySelector('.mq-fraction'); // Division symbol.
         if ($frac.length > 0) {
-            $html.append('<var>' + $html.find('.mq-numerator').text() + '</var>' +
-                '<span>/</span><var>' + $html.find('.mq-denominator').text() + '</var>');
+            $html.append('<var>' + $html.querySelector('.mq-numerator').text() + '</var>' +
+                '<span>/</span><var>' + $html.querySelector('.mq-denominator').text() + '</var>');
             $frac.remove();
         }
 
-        let $binom = $html.find('.mq-paren.mq-scaled'); // Binomial symbol.
-        let $supsub = $html.find('.mq-supsub'); // Power symbol.
-        let $vars = $html.find('var');
+        let $binom = $html.querySelector('.mq-paren.mq-scaled'); // Binomial symbol.
+        let $supsub = $html.querySelector('.mq-supsub'); // Power symbol.
+        let $vars = $html.querySelector('var');
 
         if ($binom.length > 0 || $supsub.length > 0 || $vars.length > 0) {
             if ($binom.length > 0) {
                 $binom.css('transform', 'scale(0.8, 1.5)'); // Resize binomial.
-                $html.find('.mq-array.mq-non-leaf').parent().addClass('mt-0');
-                $html.find('var').parent().css('font-size', '14px');
+                $html.querySelector('.mq-array.mq-non-leaf').parentElement.classList.add('mt-0');
+                $html.querySelector('var').parentElement.style.fontSize = '14px';
             }
             html = `<div class="mq-math-mode" style="cursor:pointer;font-size:100%;" id="${Date.now()}">`;
-            html += $html.prop('outerHTML');
+            html += $html.outerHTML;
             html += '</div>';
             $html = DOMParser.prototype.parseFromString(html);
         }
@@ -204,7 +200,6 @@ class EditorControlList extends VisualMath.ControlList {
         control.enable();
         this.$wrapper.append(control.$element);
     }
-
 }
 
 export const initialize = (testInputId, btnInputId, expInputId, templateId, templateName, actionPath, managerPath) => {
@@ -251,40 +246,42 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
      */
     const initInputFields = () => {
 
-        // $shortanswerInput = $('#' + $.escapeSelector(testInputId));
         $shortanswerInput = document.querySelector(`#${testInputId}`);
         $btnInput = document.querySelector(`#${btnInputId}`);
         $btnInput = document.querySelector(`#${expInputId}`);
         // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-        $shortanswerInput.removeClass('d-inline');
-        $parent = $shortanswerInput.parent('.answer');
+        $shortanswerInput.classList.remove('d-inline');
+        $parent = $shortanswerInput.closest('.answer');
 
         testInput = new EditorInput($shortanswerInput, $parent);
-        testInput.$input.hide();
+        // TODO: visibility hidden, or display none?
+        testInput.$input.style.visibility = "hidden";
         testInput.change();
         testField = testInput.field;
 
-        if ($shortanswerInput.val()) {
+        if ($shortanswerInput.value) {
             testField.write(
                 $shortanswerInput.val()
             );
         }
 
         // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-        $btnInput.removeClass('d-inline');
-        $parent = $btnInput.parent('.answer');
+        $btnInput.classList.remove('d-inline');
+        $parent = $btnInput.closest('.answer');
 
         buttonInput = new EditorInput($btnInput, $parent);
-        buttonInput.$input.hide();
+        // TODO: display none or visibility hidden?
+        buttonInput.$input.style.visibility = "hidden";
         buttonInput.change();
         buttonField = buttonInput.field;
 
         // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-        $expInput.removeClass('d-inline');
-        $parent = $expInput.parent('.answer');
+        $expInput.classList.remove('d-inline');
+        $parent = $expInput.closest('.answer');
 
         expressionInput = new EditorInput($expInput, $parent);
-        expressionInput.$input.hide();
+        // TODO: display none or visibility hidden?
+        expressionInput.$input.style.visibility = "hidden";
         expressionInput.change();
         expressionField = expressionInput.field;
 
@@ -307,32 +304,32 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
             event.preventDefault();
 
             if (target.id === dragged.id) {
-                event.originalEvent.dataTransfer.clearData();
+                event.dataTransfer.clearData();
                 return;
             }
 
             document.getElementById('placeholder').replaceWith(dragged);
-            event.originalEvent.dataTransfer.clearData();
+            event.dataTransfer.clearData();
         });
 
-        controlsWrapper.on('drop', event => {
+        controlsWrapper.addEventListener('drop', event => {
             event.preventDefault();
 
             if (target.id === dragged.id) {
-                event.originalEvent.dataTransfer.clearData();
+                event.dataTransfer.clearData();
                 return;
             }
 
             document.getElementById('placeholder').replaceWith(dragged);
-            event.originalEvent.dataTransfer.clearData();
+            event.dataTransfer.clearData();
         });
 
-        controlsWrapper.on('dragover', event => {
+        controlsWrapper.addEventListener('dragover', event => {
             event.preventDefault();
-            event.originalEvent.dataTransfer.dropEffect = "move";
+            event.dataTransfer.dropEffect = "move";
         });
 
-        controlsWrapper.on('dragenter', event => {
+        controlsWrapper.addEventListener('dragenter', event => {
 
             let targetId;
             if (event.target.classList.includes('visual-math-input-wrapper')) {
@@ -404,15 +401,13 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
             if ($addForm[0].checkValidity() === false) {
                 isSuccess = false;
 
-                // TODO: what is non-jquery alternative to blur()
                 document.querySelector(":focus").blur();
-                // $(':focus').blur();
 
                 $addForm.querySelectorAll('input:text.form-control').forEach(element => {
                     if (element.value.length === 0) {
                         // TODO: I don't understand the original intent. Look at original
                         // code to see context.
-                        element.siblings('.visual-math-input-field').addClass('form-control is-invalid');
+                        element.siblings('.visual-math-input-field').classList.add('form-control is-invalid');
                     }
                 });
                 event.preventDefault();
@@ -421,11 +416,12 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
                 isSuccess = controls.add(buttonField, expressionField);
                 if (isSuccess) {
                     if (!isDataVisible) {
-                        $testBox.show();
+                        // TODO: display block or visibility visible?
+                        $testBox.style.visibility = "visible"
                         isDataVisible = true;
                     }
 
-                    $addForm.find('.visual-math-input-field').removeClass('form-control is-valid');
+                    $addForm.querySelector('.visual-math-input-field').classList.remove('form-control is-valid');
 
                     //clear inputs
                     buttonField.latex('');
@@ -436,7 +432,8 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
         });
 
         if (templateId === 0) {
-            $testBox.hide();
+            // TODO: display none or visibility hidden?
+            $testBox.style.visibility = "hidden";
         } else {
             // TODO: Figure out core/ajax
 
@@ -464,19 +461,20 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
     const initDeleteButton = () => {
         let deleteIcon = document.querySelector(".delete-icon");
 
-        deleteIcon.on('dragover', event => {
+        deleteIcon.addEventListener('dragover', event => {
             event.preventDefault();
-            event.originalEvent.dataTransfer.dropEffect = "move";
+            event.dataTransfer.dropEffect = "move";
         });
 
-        deleteIcon.on('drop', event => {
+        deleteIcon.addEventListener('drop', event => {
             event.preventDefault();
             let parentNode = dragged.parentNode;
             if (parentNode !== null) {
                 parentNode.removeChild(dragged);
                 if (parentNode.firstElementChild === null) {
                     testField.latex('');
-                    $testBox.hide();
+                    // TODO: display none or visibility hidden?
+                    $testBox.style.visibility = "hidden";
                     isDataVisible = false;
                 }
             } else {
@@ -485,7 +483,7 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
                     placeholder.parentNode.removeChild(placeholder);
                 }
             }
-            event.originalEvent.dataTransfer.clearData();
+            event.dataTransfer.clearData();
         });
     };
 
@@ -497,17 +495,14 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
         const $templateNameInput = document.querySelector('#name');
         const $saveForm = document.querySelector('#saveForm');
 
-        $templateNameInput.val(templateName)
-            .on('blur', () => {
+        $templateNameInput.addEventListener('blur', () => {
                 lastFocusedInput = $templateNameInput;
             });
 
         $saveForm.submit(event => {
             if ($saveForm[0].checkValidity() === false) {
-                // TODO: what is non-jquery alternative to blur()
                 document.querySelector(":focus").blur();
-                // $(':focus').blur();
-                $saveForm.addClass('was-validated');
+                $saveForm.classList.add('was-validated');
                 event.preventDefault();
                 event.stopPropagation();
             } else {
@@ -555,7 +550,8 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
                 //             testField.latex('');
                 //             buttonField.latex('');
                 //             expressionField.latex('');
-                //             $testBox.hide();
+                //             // TODO: display none or visibility hidden?
+                //             $testBox.style.visibility = "hidden";
                 //             isDataVisible = false;
                 //         }
                 //     } else {
@@ -572,12 +568,12 @@ export const initialize = (testInputId, btnInputId, expInputId, templateId, temp
                 //     });
                 //     $saveButton.blur();
                 // });
-                $saveForm.removeClass('was-validated');
+                $saveForm.classList.remove('was-validated');
                 event.preventDefault();
             }
         });
 
-        $saveButton.on('click', event => {
+        $saveButton.addEventListener('click', event => {
             event.preventDefault();
 
             // Clear notifications
