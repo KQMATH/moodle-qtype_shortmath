@@ -63,7 +63,8 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
             $params['readonly'] = true;
         }
 
-        $this->page->requires->js_call_amd('qtype_shortmath/input', 'initialize', $params);
+        $this->page->requires->js_call_amd('qtype_shortmath/input',
+                                           'initialize', $params);
         return $result;
     }
 
