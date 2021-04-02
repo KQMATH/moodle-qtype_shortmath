@@ -22,47 +22,29 @@
 
 import Ajax from "core/ajax";
 import notification from "core/notification";
-import Ajax from "../../../../lib/amd/build/ajax.min.js";
-/**
- * @module qtype_shortmath/editor-manager
- */
+import { Popover } from "theme_boost/popover";
 // import * as Str from "core/str";
 
 export const initialize = (editorPath, pluginSettingsPath) => {
     document.querySelectorAll(".edit-template, .delete-template").forEach(element => {
-
+        new Popover(element, {
+            placement: "top",
+            trigger: "hover"
+        });
     });
-    // $('.edit-template, .delete-template').each((index, element) => {
-    //     $(element).tooltip({
-    //         container: element.parentElement
-    //     });
-    // });
 
     document.querySelectorAll(".text-truncate").forEach(element => {
         if (element.offsetWidth < element.scrollWidth) {
-            // If the element overflows its parent, show
-            // a popover (???) when you hover over
-            // the element
+            new Popover(element, {
+                delay: {
+                    show: 0,
+                    delay: 300
+                },
+                placement: "top",
+                trigger: "hover"
+            });
         }
     });
-
-    // $('.text-truncate').each((index, element) => {
-    //     let $ele = $(element);
-    //     if (element.offsetWidth < element.scrollWidth) {
-    //         $ele.popover({
-    //             container: element,
-    //             delay: {
-    //                 show: 0,
-    //                 delay: 300
-    //             },
-    //             placement: 'top',
-    //             trigger: 'hover'
-    //         });
-    //     } else {
-    //         $ele.attr('title', '');
-    //     }
-    // });
-
 
     document.querySelectorAll(".edit-template").forEach(element => {
         element.addEventListener("click", event => {
