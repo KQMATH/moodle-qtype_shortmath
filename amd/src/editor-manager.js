@@ -18,12 +18,16 @@
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
  * @copyright  2020 NTNU
  */
+
+import Ajax from "core/ajax";
+import notification from "core/notification";
 import Ajax from "../../../../lib/amd/build/ajax.min.js";
 /**
  * @module qtype_shortmath/editor-manager
  */
 // import * as Str from "core/str";
-export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
+
+export const initialize = (editorPath, pluginSettingsPath) => {
     document.querySelectorAll(".edit-template, .delete-template").forEach(element => {
 
     });
@@ -69,40 +73,29 @@ export const initialize = (editorPath, actionPath, pluginSettingsPath) => {
         });
     });
 
-    // $('.edit-template').click(event => {
-    //     event.preventDefault();
-    //     let $form = $(event.target).closest('.template-box').find('form');
-    //     $form.attr('action', editorPath);
-    //     $form.attr('method', 'post');
-    //     $form.submit();
-    // });
+    document.querySelectorAll(".delete-template").forEach(deleteButton => {
+        deleteButton.addEventListener("click", event => {
+            event.preventDefault();
 
-    document.querySelector(".delete-template").addEventListener("click", event => {
-        event.preventDefault();
+            const form = event.target.closest(".template-box").querySelector("form");
+            const templateId = form.querySelector(`input[name="templateId"]`).value;
+            const templateName = form.querySelector(`input[name="templateName"]`).value;
 
-        const templateBox = event.target.closest(".template-box");
-        const form = templateBox.querySelector("form");
-        const templateId = form.querySelector(`input[name="templateId"`);
-
-        const templateName = form.querySelector(`input[name="templateName"`).value;
-
-        // I'm guessing Moodle as a system has measures to prevent XSS?
-        notification.confirm(`Delete Template <b>${templateName}</b> from database?`, "OK", "Cancel", () => {
-            // Clear notifications
-            // The jQuery solution uses a 3rd party alert plugin. I have
-            // no idea what the result of ".alert("close")" is supposed
-            // to be
-            document.querySelector(".alert");
-
-            // Not sure what to do about the whole ajax section.
-            // The moodle docs for it aren't that great,
-            // and I'll read up on it sometime later
-            const promises = Ajax.call([
-                {}
-            ]);
-
-            promises[0].done(response => {
-                
+            // title, question, saveLabel, saveCallback, cancelCallback
+            notification.saveCancel(`Delete Template <b>${templateName}</b>`,
+                `Delete Template <b>${templateName}</b> from database?`,
+                "Delete", () => {
+                // TODO: Clear notifications
+                //
+                Ajax.call([{
+                    methodname: "qtype_shortmath_delete_template",
+                    args: { questionid: templateId },
+                    done: response => {
+                        XD(response);
+                        XD("wejfoiewjfewoije");
+                    },
+                    fail: notification.exception
+                }]);
             });
         });
     });

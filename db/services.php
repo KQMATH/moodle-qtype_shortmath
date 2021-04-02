@@ -29,7 +29,9 @@ defined('MOODLE_INTERNAL') || die;
 $services = array(
     'Shortmath template service' => array(
         'functions' => array(
-            'qtype_shortmath_get_template'
+            'qtype_shortmath_get_template',
+            'qtype_shortmath_save_template',
+            'qtype_shortmath_delete_template'
         ),
         'restrictedusers' => 0,
         'enabled' => 1
@@ -39,11 +41,33 @@ $services = array(
 // We define the web service functions to install.
 $functions = array(
     'qtype_shortmath_get_template' => array(
-        'classname' => 'qtype_shortmath\external\gettemplate',
+        'classname' => 'qtype_shortmath\external\editor_template',
         'methodname' => 'get_template',
         'classpath' => '',
         'description' => 'Get the shortmath question template.',
         'type' => 'read',
+        'ajax' => true,
+        // 'capabilities' => 'moodle/course:managegroups',
+        'capabilities' => array(),   // TODO: capabilities required by the function.
+        'loginrequired' => true
+    ),
+    'qtype_shortmath_save_template' => array(
+        'classname' => 'qtype_shortmath\external\editor_template',
+        'methodname' => 'save_template',
+        'classpath' => '',
+        'description' => 'Save the shortmath question template.',
+        'type' => 'write',
+        'ajax' => true,
+        // 'capabilities' => 'moodle/course:managegroups',
+        'capabilities' => array(),   // TODO: capabilities required by the function.
+        'loginrequired' => true
+    ),
+    'qtype_shortmath_delete_template' => array(
+        'classname' => 'qtype_shortmath\external\editor_template',
+        'methodname' => 'delete_template',
+        'classpath' => '',
+        'description' => 'Delete the shortmath question template.',
+        'type' => 'write',
         'ajax' => true,
         // 'capabilities' => 'moodle/course:managegroups',
         'capabilities' => array(),   // TODO: capabilities required by the function.

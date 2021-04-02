@@ -70,7 +70,6 @@ class manager_page implements renderable, templatable
             "buttonClass" => "btn btn-primary",
             "templates" => new \ArrayIterator($this->templates),
             "editor_path" => shortmath_urls::$editorpath,
-            "editor_action_path" => shortmath_urls::$editoractionpath,
             "plugin_settings_path" => shortmath_urls::$pluginsettingspath
         ];
     }
