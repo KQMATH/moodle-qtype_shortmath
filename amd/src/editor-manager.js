@@ -73,9 +73,12 @@ export const initialize = (editorPath, pluginSettingsPath) => {
                 Ajax.call([{
                     methodname: "qtype_shortmath_delete_template",
                     args: { questionid: templateId },
-                    done: response => {
-                        XD(response);
-                        XD("wejfoiewjfewoije");
+                    done: () => {
+                        // Reload webpage after 200 ms to ensure the template is deleted before
+                        // the page is reloaded, or else the template will still show up
+                        setTimeout(() => {
+                            window.location = location;
+                        }, 200);
                     },
                     fail: notification.exception
                 }]);
