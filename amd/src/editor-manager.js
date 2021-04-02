@@ -86,46 +86,6 @@ export const initialize = (editorPath, pluginSettingsPath) => {
         });
     });
 
-    // $('.delete-template').click(event => {
-    //     event.preventDefault();
-
-    //     let $templateBox = $(event.target).closest('.template-box');
-    //     let $form = $templateBox.find('form');
-    //     let id = $form.find('input[name="templateId"]').val();
-
-    //     notification.confirm('Delete Template',
-    //         `Delete<b>&nbsp;${$form.find('input[name="templateName"]').val()}&nbsp;</b>from database?`,
-    //         'OK', 'Cancel', () => {
-    //             // Clear notifications
-    //             $('.alert').alert('close');
-
-    //             $.post(actionPath,
-    //                 {
-    //                     'id': id,
-    //                     'type': 'delete'
-    //                 }
-    //             ).done(message => {
-    //                 if (message > 0) {
-    //                     notification.addNotification({
-    //                         message: "Template deleted!",
-    //                         type: "success"
-    //                     });
-    //                     $templateBox.remove();
-    //                 } else {
-    //                     notification.addNotification({
-    //                         message: "Something went wrong!",
-    //                         type: "error"
-    //                     });
-    //                 }
-    //             }).fail((jqXHR, textStatus, errorThrown) => {
-    //                 notification.addNotification({
-    //                     message: textStatus + ': ' + errorThrown,
-    //                     type: "error"
-    //                 });
-    //             });
-    //         });
-    // });
-
     document.querySelector("#back").addEventListener("click", event => {
         event.preventDefault();
         window.location.replace(pluginSettingsPath);
@@ -135,14 +95,4 @@ export const initialize = (editorPath, pluginSettingsPath) => {
         event.preventDefault();
         window.location.replace(editorPath);
     });
-
-    // $('#' + $.escapeSelector('back')).click(event => {
-    //     event.preventDefault();
-    //     window.location.replace(pluginSettingsPath);
-    // });
-
-    // $('#' + $.escapeSelector('createTemplates')).click(event => {
-    //     event.preventDefault();
-    //     window.location.replace(editorPath);
-    // });
 };
