@@ -55,8 +55,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 
 // Execute js script.
-$params = ['test', 'btn', 'exp', $id, $name,
-    shortmath_urls::$editoractionpath, shortmath_urls::$editormanagerpath]; // JS params passed here...
+$params = [$id, $name, shortmath_urls::$editormanagerpath]; // JS params passed here...
 $PAGE->requires->js_call_amd('qtype_shortmath/view-editor', 'initialize', $params);
 
 echo $OUTPUT->footer();
