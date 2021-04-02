@@ -14,8 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * @module     qtype_shortmath/editor-manager
  * @package    qtype_shortmath
- * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com> and Simen Wiik <simenwiik@hotmail.com>
  * @copyright  2020 NTNU
  */
 
