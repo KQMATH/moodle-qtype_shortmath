@@ -110,9 +110,11 @@ jobs:
           path: ./coverage.xml
       
       - name: Debug
+        if: ${{ always() }}
         run: |
           ls
           pwd
+          echo "$NAME"
       
       - name: Coverage Clover2LCOV
         uses: andstor/clover2lcov-action@v1
