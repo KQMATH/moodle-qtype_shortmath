@@ -116,7 +116,7 @@ jobs:
           pwd
           echo "$GITHUB_WORKSPACE"
       
-      - name: Coverage Clover2LCOV
+      - name: Convert Coverage (clover2lcov)
         uses: andstor/clover2lcov-action@v1
         if: ${{ always() }}
         with:
