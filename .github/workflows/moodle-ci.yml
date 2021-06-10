@@ -114,7 +114,7 @@ jobs:
         run: |
           ls
           pwd
-          echo "$NAME"
+          echo "$GITHUB_WORKSPACE"
       
       - name: Coverage Clover2LCOV
         uses: andstor/clover2lcov-action@v1
