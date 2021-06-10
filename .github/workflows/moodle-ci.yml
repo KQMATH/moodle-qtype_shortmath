@@ -108,6 +108,12 @@ jobs:
         with:
           name: coverage.xml
           path: ./coverage.xml
+          
+      - uses: andstor/clover2lcov-action@v1
+        if: ${{ always() }}
+        with:
+          src: ./coverage.xml
+          dst: ./coverage.lcov
         
       - name: Coveralls Parallel
         if: ${{ always() }}
