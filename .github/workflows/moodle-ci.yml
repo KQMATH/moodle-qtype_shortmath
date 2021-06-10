@@ -102,20 +102,14 @@ jobs:
       - name: Behat features
         if: ${{ always() }}
         run: moodle-plugin-ci behat --profile chrome
-      
-      - uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          name: coverage.xml
-          path: ./coverage.xml
-          
-      - name: Coverage Clover2LCOV
+
+      - name: Convert Coverage (clover2lcov)
         uses: andstor/clover2lcov-action@v1
         if: ${{ always() }}
         with:
           src: ./coverage.xml
           dst: ./coverage/lcov.info
-        
+
       - name: Coveralls Parallel
         if: ${{ always() }}
         uses: coverallsapp/github-action@master
