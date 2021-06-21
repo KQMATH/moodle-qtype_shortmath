@@ -19,6 +19,7 @@
     <TABLE NAME="qtype_shortmath_templates" COMMENT="Template for shortmath questions">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The template name."/>
         <FIELD NAME="contextid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The contextid that the template was created with."/>
         <FIELD NAME="template" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The JSON encoded editor configuration template."/>
       </FIELDS>

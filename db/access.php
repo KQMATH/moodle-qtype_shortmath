@@ -15,35 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * ShortMath question definition class.
+ * ShortMath urls class.
  *
  * @package    qtype_shortmath
- * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @copyright  2018 NTNU
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
-
-/**
- * Represents a ShortMath question.
- * @author André Storhaug <andr3.storhaug@gmail.com>
- * @copyright 2018 NTNU
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class qtype_shortmath_question extends qtype_shortanswer_question
-{
-
-    /**
-     * Function of summarise_response.
-     * @param array $response
-     * @return string|null
-     */
-    public function summarise_response(array $response)
-    {
-        return isset($response['answer']) ? '\\[' . $response['answer'] . '\\]' : null;
-    }
-}
+$capabilities = array(
+  'qtype/shortmath:viewalltemplates' => array(
+    'riskbitmask' => RISK_SPAM | RISK_XSS,
+    'captype' => 'read',
+    'contextlevel' => CONTEXT_SYSTEM,
+    'archetypes' => array(
+      'manager' => CAP_ALLOW
+    )
+  )
+);

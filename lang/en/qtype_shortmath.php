@@ -35,3 +35,16 @@ $string['pluginnamesummary'] = 'Short answer question type for mathematical expr
 $string['privacy:metadata'] = 'The ShortMath question type plugin does not store any personal data.';
 
 $string['filloutoneanswer'] = 'You must provide at least one possible answer, written in a valid latex math format. Answers left blank will not be used. \'*\' can be used as a wildcard to match any characters. The first matching answer will be used to determine the score and feedback.';
+$string['template_manager_link'] = '<a href="{$a->link}" class="d-inline-block mb-3">Manage templates</a>';
+$string['create_templates'] = 'Create templates';
+$string['default_config'] = 'Default configuration';
+$string['default_config_desc'] = 'The default editor configuration.';
+$string['editor_manager'] = 'Editor Manager';
+$string['manage_templates'] = 'Manage Templates';
+$string['manage_templates_link_desc'] = 'Template Manager';
+$string['edit_template'] = 'Edit template';
+$string['toolbar_template'] = 'Toolbar template';
+$string['cannotgetshortmathoptions'] = 'Cannot get ShortMath options for question ID {$a}.';
+$string['youmustconfirm'] = 'You must confirm here.';
+$string['configchangeconfirm'] = 'I confirm that I want to change the template used for this question.';
+$string['shortmath:viewalltemplates'] = 'View all templates';
