@@ -43,11 +43,6 @@ class shortmath_urls
     public static $editorpath = '/question/type/shortmath/view_editor.php';
 
     /**
-     * @var string Editor action url path.
-     */
-    public static $editoractionpath = '/question/type/shortmath/editor_action.php';
-
-    /**
      * @var string Editor manager path.
      */
     public static $editormanagerpath = '/question/type/shortmath/editor_manager.php';

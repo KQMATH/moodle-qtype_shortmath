@@ -57,7 +57,7 @@ class editor_template extends external_api
     {
         return new external_function_parameters(
             array(
-                'questionid' => new \external_value(PARAM_INT, 'question id', VALUE_OPTIONAL),
+                'id' => new \external_value(PARAM_INT, 'Template Id', VALUE_REQUIRED, 0),
             )
         );
     }
@@ -71,7 +71,7 @@ class editor_template extends external_api
     {
         return new external_single_structure(
             array(
-                'template' => new \external_value(PARAM_RAW, 'toolbar template'),
+                'template' => new \external_value(PARAM_TEXT, 'toolbar template'),
                 'warnings' => new \external_warnings()
             )
         );
@@ -86,6 +86,7 @@ class editor_template extends external_api
     {
         return new external_function_parameters(
             array(
+                'id' => new \external_value(PARAM_INT, 'Template id', VALUE_REQUIRED, 0),
                 'name' => new \external_value(PARAM_TEXT, 'Template name'),
                 'template' => new \external_value(PARAM_RAW, 'Toolbar template')
             )
@@ -137,14 +138,14 @@ class editor_template extends external_api
     /**
      * Returns ShortMath question template.
      *
-     * @param int $questionid question id relating to the mdl_qtype_shortmath_options table
+     * @param int $templateid template id relating to the mdl_qtype_shortmath_templates table
      * @return array
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_template($questionid)
+    public static function get_template($templateid)
     {
         global $USER, $DB;
 
@@ -155,7 +156,7 @@ class editor_template extends external_api
         $params = self::validate_parameters(
             self::get_template_parameters(),
             array(
-                'questionid' => $questionid,
+                'id' => $templateid,
             )
         );
 
@@ -165,26 +166,26 @@ class editor_template extends external_api
         self::validate_context($context);
 
         // TODO: Capability checking
-        /*if (!has_capability('local/qtracker:readissue', $context)) {
-            throw new \moodle_exception('cannotgetissue', 'local_qtracker');
-        }*/
+        if (!has_capability('qtype/shortmath:viewalltemplates', $context)) {
+            throw new \moodle_exception('cannotviewtemplate', 'qtype_shortmath');
+        }
 
         if (!$DB->record_exists_select(
-            'qtype_shortmath_options',
-            'questionid = :questionid',
-            array(
-                'questionid' => $params['questionid'],
-            )
+            'qtype_shortmath_templates',
+            'id = :templateid',
+            array('templateid' => $params['id'])
         )) {
             throw new moodle_exception('cannotgetshortmathoptions', 'qtype_shortmath', '', $params['questionid']);
         }
+        $result = array();
 
         if (empty($warnings)) {
-            $editorconfig = $DB->get_record('qtype_shortmath_options', $params)->editorconfig;
+            $templateFound = $DB->get_record('qtype_shortmath_templates', $params)->template;
         }
 
+
         $result = array();
-        $result['template'] = $editorconfig;
+        $result['template'] = $templateFound;
         $result['warnings'] = $warnings;
 
         return $result;
@@ -192,15 +193,20 @@ class editor_template extends external_api
 
     /**
      * Saves a ShortMath question template to the database.
+     * 
+     * There are three outcomes when using this function:
+     * 1. $newid = -1 => Failed to update existing template
+     * 2. $newid =  0 => Failed to create a new template
+     * 3. $newid >  0 => Success, returning template id
      *
-     * @param int $questionid question id relating to the mdl_qtype_shortmath_options table
+     * @param int $templateid template id relating to the mdl_qtype_shortmath_templates table
      * @return array
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_template($name, $template)
+    public static function save_template($name, $template, $templateid)
     {
         global $USER, $DB;
 
@@ -213,6 +219,7 @@ class editor_template extends external_api
         $params = self::validate_parameters(
             self::save_template_parameters(),
             array(
+                'id' => $templateid,
                 'name' => $name,
                 'template' => $template
             )
@@ -220,28 +227,42 @@ class editor_template extends external_api
 
         // Later, the contextid will be used to let people with the teacher role manage templates. This is 
         // just a temporary solution. https://docs.moodle.org/310/en/Managing_roles
-        $params["contextid"] = time();
+        // $params["contextid"] = time();
 
         // Context validation.
         // TODO: ensure proper validation....
-        $context = \context_user::instance($USER->id);
-        self::validate_context($context);
+        // $context = \context_user::instance($USER->id);
+        // self::validate_context($context);
 
         // TODO: Capability checking
         /*if (!has_capability('local/qtracker:readissue', $context)) {
             throw new \moodle_exception('cannotgetissue', 'local_qtracker');
         }*/
+        // $newid = 0;
 
-        // If insert is successful, id of new row is returned
-        try {
-            $DB->insert_record('qtype_shortmath_templates', $params);
-            $result["success"] = TRUE;
-        } catch (dml_exception $e) {
-            echo $e;
-            $result["success"] = FALSE;
-        }
+        // if ($templateid > 0) {
+        //     try {
+        //         $DB->update_record('qtype_shortmath_templates', $params);
+        //         $result["success"] = TRUE;
+        //     } catch (dml_exception $e) {
+        //         echo $e;
+        //         $result["success"] = FALSE;
+        //     }
+        // } else {
+        //     try {
+        //         $DB->insert_record('qtype_shortmath_templates', $params, $newid);
+        //         $result["success"] = TRUE;
+        //     } catch (dml_exception $e) {
+        //         echo $e;
+        //         $newid = -1;
+        //         $result["success"] = FALSE;
+        //     }
+        // }
 
-        return $result;
+        // $result["newId"] = $newid;
+
+        // return $result;
+        return 15;
     }
 
     /**

@@ -47,3 +47,4 @@ $string['toolbar_template'] = 'Toolbar template';
 $string['cannotgetshortmathoptions'] = 'Cannot get ShortMath options for question ID {$a}.';
 $string['youmustconfirm'] = 'You must confirm here.';
 $string['configchangeconfirm'] = 'I confirm that I want to change the template used for this question.';
+$string['shortmath:viewalltemplates'] = 'View all templates';
