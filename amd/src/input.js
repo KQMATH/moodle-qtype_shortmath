@@ -15,16 +15,15 @@
 
 
 /**
+ * @module     qtype_shortmath/input
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
  */
-import VisualMath from "???";
+
 import Ajax from "core/ajax";
-import notification from "???";
-/**
- * @module qtype_shortmath/input
- */
+import notification from "core/notification";
+import VisualMath from "qtype_shortmath/visual-math-input";
 
 export const initialize = (inputname, readonly, questionId) => {
     var readOnly = readonly;

@@ -20,8 +20,8 @@
  * @copyright  2020 NTNU
  */
 
-import Ajax from "core/ajax";
 import notification from "core/notification";
+import { deleteTemplate } from "qtype_shortmath/api-helpers";
 import { Popover } from "theme_boost/popover";
 // import * as Str from "core/str";
 
@@ -67,22 +67,8 @@ export const initialize = (editorPath, pluginSettingsPath) => {
             // title, question, saveLabel, saveCallback, cancelCallback
             notification.saveCancel(`Delete Template <b>${templateName}</b>`,
                 `Delete Template <b>${templateName}</b> from database?`,
-                "Delete", () => {
-                // TODO: Clear notifications
-                //
-                Ajax.call([{
-                    methodname: "qtype_shortmath_delete_template",
-                    args: { questionid: templateId },
-                    done: () => {
-                        // Reload webpage after 200 ms to ensure the template is deleted before
-                        // the page is reloaded, or else the template will still show up
-                        setTimeout(() => {
-                            window.location = location;
-                        }, 200);
-                    },
-                    fail: notification.exception
-                }]);
-            });
+                "Delete",
+                deleteTemplate(templateId));
         });
     });
 
