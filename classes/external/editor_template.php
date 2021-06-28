@@ -71,7 +71,7 @@ class editor_template extends external_api
     {
         return new external_single_structure(
             array(
-                'template' => new \external_value(PARAM_TEXT, 'toolbar template'),
+                'template' => new \external_value(PARAM_RAW, 'toolbar template'),
                 'warnings' => new \external_warnings()
             )
         );
