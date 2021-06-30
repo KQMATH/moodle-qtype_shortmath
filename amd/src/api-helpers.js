@@ -49,6 +49,40 @@ export const getShortmathTemplate = async (templateId) => {
   return template;
 };
 
+/**
+     * Method to generate the function to save the shortmath template to the database.
+     * The method takes a callback function, and returns a new function that takes
+     * the template name, the template itself as json, and the template id.
+     * You should use the function like this:
+     *
+     * let saveShortmathTemplate = buildShortmathTemplateSaveFunction(result => console.log(result))
+     * saveShortmathTemplate("My template", "[{...template...}]", 2)
+     *
+     * The success callback takes one parameter, which is the return value from the web service. See the function
+     * save_template_returns in the file shortmath/classes/external/editor_template.php
+     * If you only define the success callback, the fail callback will default to a regular modal with the error.
+     *
+     * @param {string} name Name of the template
+     * @param {string} template Template as a string in JSON format
+     * @param {int} templateId id of the template, according to mdl_qtype_shortmath_templates table in the database
+     */
+export const saveShortmathTemplate = async (name, template, templateId) => {
+
+  const succeeded = await new Promise(resolve => {
+    Ajax.call([{
+      methodname: "qtype_shortmath_save_template",
+      args: { name, template, templateId },
+      done: resolve,
+      fail: notification.exception || notification.addNotification({
+        message: `Couldn't save template ${name}`,
+        type: "error"
+      })
+    }]);
+  });
+
+  return succeeded;
+};
+
 
 /**
  * Deletes the shortmath template with given id
