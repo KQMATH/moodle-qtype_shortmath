@@ -5,15 +5,21 @@ import MathQuill from "qtype_shortmath/mathquill";
 let lastFocusedInput = null;
 
 class Input {
+    #rawInput;  // Plain HTMLInputElement
+    #mathInput; // MathQuill Field
+    #parent;
+    #mathquillContainer;
+    #textarea;
 
-    constructor(input, parent) {
-        this.input = input;
-        this.parent = parent;
-        let wrapper = document.createElement('div');
-        wrapper.classList.add('visual-math-input-field');
-        this.wrapper = wrapper;
+    constructor(input, inputParent) {
+        this.#rawInput = input;
+        if (typeof inputParent === "string") {
+            this.#parent = input.closest(inputParent);
+        }
+        this.#mathquillContainer = document.createElement("div");
+        this.#mathquillContainer.classList.add("visual-math-input-field");
         let MQ = MathQuill.getInterface(2);
-        this.field = MQ.MathField(wrapper, {
+        this.#mathInput = MQ.MathField(this.#mathquillContainer, {
             spaceBehavesLikeTab: true,
             handlers: {
                 edit: field => {
@@ -21,64 +27,76 @@ class Input {
                 }
             }
         });
-        this.parent.appendChild(wrapper);
+        this.parent.appendChild(this.#mathquillContainer);
         this.onEdit = ($input, field) => {
-            $input.value = '\\[ ' + field.latex() + ' \\]';
+            $input.value = `\\[ ${field.latex()} \\]`;
         };
-        this.textarea = document.querySelector("textarea");
-        this.textarea.addEventListener('blur', () => {
+        this.#textarea = this.parent.querySelector("textarea");
+        this.textarea.addEventListener("blur", () => {
             lastFocusedInput = this;
         });
     }
 
-    // get textarea() {
-    //     return this.field.querySelector('textarea');
-    // }
+    get parent() {
+        return this.#parent;
+    }
+
+    get textarea() {
+        return this.#textarea;
+    }
+
+    get rawInput() {
+        return this.#rawInput;
+    }
+
+    get mathInput() {
+        return this.#mathInput;
+    }
 
     enable() {
-        this.textarea.setAttribute('disabled', false);
+        this.textarea.setAttribute("disabled", false);
     }
 
     disable() {
-        this.textarea.setAttribute('disabled', true);
+        this.textarea.setAttribute("disabled", true);
     }
 
 }
 
 class Control {
+    element = null;
 
     constructor(name, text, onClick) {
         this.name = name;
         this.text = text;
         this.onClick = onClick;
-        this.element = null;
     }
 
     enable() {
         if (this.element !== null) {
             return;
         }
-        let element = document.createElement('button');
-        this.element = element;
+        this.element = document.createElement("button");
         this.element.innerHTML = this.text;
-        this.element.classList.add('visual-math-input-control btn btn-primary');
-        this.element.addEventListener('click', event => {
-            event.preventDefault();
-            if (lastFocusedInput !== null) {
-                this.addEventListener("click", lastFocusedInput.field);
-                lastFocusedInput.field.focus();
-            }
-        });
+        this.element.classList.add("visual-math-input-control", "btn", "btn-primary");
+        // this.element.addEventListener("click", event => {
+        // event.preventDefault();
+        // if (lastFocusedInput !== null) {
+        // TODO: mathInput or textfield?
+        //     this.addEventListener("click", lastFocusedInput.mathInput);
+        //     lastFocusedInput.mathInput.focus();
+        // }
+        // });
     }
 
 }
 
 class ControlList {
+    controls = [];
 
     constructor(wrapper) {
-        this.controls = [];
         this.wrapper = wrapper;
-        this.wrapper.classList.add('visual-math-input-wrapper');
+        this.wrapper.classList.add("visual-math-input-wrapper");
         this.defineDefault();
     }
 
@@ -90,13 +108,13 @@ class ControlList {
         for (let name of names) {
             let control = this.controls[name];
             control.enable();
-            this.wrapper.appendChild(control.$element);
+            console.log(control);
+            this.wrapper.appendChild(control.element);
         }
     }
 
     enableAll() {
-        for (let name in this.controls) {
-            let control = this.controls[name];
+        for (let control of this.controls) {
             control.enable();
             this.wrapper.appendChild(control.element);
         }
@@ -150,19 +168,19 @@ class ControlList {
         </div>`;
 
 
-        this.define('sqrt', sqrt, field => field.cmd('\\sqrt'));
-        this.define('int', int, field => field.cmd('\\int'));
-        this.define('sum', sum, field => field.cmd('\\sum'));
-        this.define('lim', lim, field => {
-            field.cmd('\\lim').typedText('_').write('x').cmd('\\to').write('0').moveToRightEnd();
+        this.define("sqrt", sqrt, field => field.cmd("\\sqrt"));
+        this.define("int", int, field => field.cmd("\\int"));
+        this.define("sum", sum, field => field.cmd("\\sum"));
+        this.define("lim", lim, field => {
+            field.cmd("\\lim").typedText("_").write("x").cmd("\\to").write("0").moveToRightEnd();
         });
-        this.define('nchoosek', nchoosek, field => field.cmd('\\choose'));
-        this.define('divide', divide, field => field.cmd('\\frac'));
-        this.define('plusminus', plusminus, field => field.cmd('\\pm'));
-        this.define('theta', theta, field => field.cmd('\\theta'));
-        this.define('pi', pi, field => field.cmd('\\pi'));
-        this.define('infinity', infinity, field => field.cmd('\\infinity'));
-        this.define('caret', caret, field => field.cmd('^'));
+        this.define("nchoosek", nchoosek, field => field.cmd("\\choose"));
+        this.define("divide", divide, field => field.cmd("\\frac"));
+        this.define("plusminus", plusminus, field => field.cmd("\\pm"));
+        this.define("theta", theta, field => field.cmd("\\theta"));
+        this.define("pi", pi, field => field.cmd("\\pi"));
+        this.define("infinity", infinity, field => field.cmd("\\infinity"));
+        this.define("caret", caret, field => field.cmd("^"));
     }
 
 }
