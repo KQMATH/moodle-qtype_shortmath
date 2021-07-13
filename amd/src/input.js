@@ -20,21 +20,20 @@
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
  */
-
-import Ajax from "core/ajax";
-import notification from "core/notification";
 import VisualMath from "qtype_shortmath/visual-math-input";
+import { getShortmathTemplate } from "./api-helpers";
 
-export const initialize = (inputname, readonly, questionId) => {
+export const initialize = async (inputname, readonly, questionId) => {
     var readOnly = readonly;
+    inputname = inputname.replace(":", "\\:");
     var shortanswerInput = document.querySelector(`#${inputname}`);
     // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
     shortanswerInput.classList.remove('d-inline');
-    var $parent = shortanswerInput.parentElement;
+    var parent = shortanswerInput.parentElement;
 
-    var input = new VisualMath.Input(shortanswerInput, $parent);
-    // TODO: display none or visibility hidden?
-    input.$input.style.visibility = "hidden";
+    var input = new VisualMath.Input(shortanswerInput, parent);
+    // TODO: Uncomment to hide input element
+    // input.rawInput.style.display = "none";
 
     if (!readonly) {
         input.onEdit = function ($input, field) {
@@ -54,27 +53,18 @@ export const initialize = (inputname, readonly, questionId) => {
     }
 
     if (!readOnly) {
-        Ajax.call([{
-            methodname: 'qtype_shortmath_get_template',
-            args: {
-                'questionid': questionId
-            }
-        }])[0].done(response => {
-            var controlsWrapper = shortanswerInput.closest('.shortmath').querySelector('.controls_wrapper');
-            var controls = new VisualMath.ControlList(controlsWrapper);
-
-            let template = JSON.parse(response['template']);
-            if (template === null) {
-                controls.defineDefault();
-            } else {
-                template.forEach(value => {
-                    let html = value['button'];
-                    let command = value['expression'];
-                    controls.define(command, html, field => field.write(command));
-                });
-            }
-
-            controls.enableAll();
-        }).fail(notification.exception);
+        const template = await getShortmathTemplate(questionId);
+        var controlsWrapper = shortanswerInput.closest('.shortmath').querySelector('.controls_wrapper');
+        var controls = new VisualMath.ControlList(controlsWrapper);
+        if (template === null) {
+            controls.defineDefault();
+        } else {
+            template.forEach(value => {
+                let html = value['button'];
+                let command = value['expression'];
+                controls.define(command, html, field => field.write(command));
+            });
+        }
+        controls.enableAll();
     }
 };
