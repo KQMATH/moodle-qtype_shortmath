@@ -11,10 +11,18 @@ class Input {
     #mathquillContainer;
     #textarea;
 
+    /**
+     * 
+     * @param {HTMLInputElement} input A plain HTML input element
+     * @param {String|HTMLElement} inputParent Some parent element of the input to use when constructing the mathquill input
+     */
     constructor(input, inputParent) {
         this.#rawInput = input;
         if (typeof inputParent === "string") {
             this.#parent = input.closest(inputParent);
+        }
+        else {
+            this.#parent = inputParent;
         }
         this.#mathquillContainer = document.createElement("div");
         this.#mathquillContainer.classList.add("visual-math-input-field");
@@ -79,24 +87,25 @@ class Control {
         this.element = document.createElement("button");
         this.element.innerHTML = this.text;
         this.element.classList.add("visual-math-input-control", "btn", "btn-primary");
-        // this.element.addEventListener("click", event => {
-        // event.preventDefault();
-        // if (lastFocusedInput !== null) {
-        // TODO: mathInput or textfield?
-        //     this.addEventListener("click", lastFocusedInput.mathInput);
-        //     lastFocusedInput.mathInput.focus();
-        // }
-        // });
+        this.element.addEventListener("click", event => {
+            event.preventDefault();
+            if (lastFocusedInput !== null) {
+                // TODO: mathInput or textfield?
+                this.addEventListener("click", lastFocusedInput.mathInput);
+                console.log(lastFocusedInput);
+                lastFocusedInput.textfield.focus();
+            }
+        });
     }
 
 }
 
 class ControlList {
-    controls = [];
 
     constructor(wrapper) {
         this.wrapper = wrapper;
         this.wrapper.classList.add("visual-math-input-wrapper");
+        this.controls = {};
         this.defineDefault();
     }
 
@@ -108,13 +117,12 @@ class ControlList {
         for (let name of names) {
             let control = this.controls[name];
             control.enable();
-            console.log(control);
             this.wrapper.appendChild(control.element);
         }
     }
 
     enableAll() {
-        for (let control of this.controls) {
+        for (const control of Object.values(this.controls)) {
             control.enable();
             this.wrapper.appendChild(control.element);
         }
