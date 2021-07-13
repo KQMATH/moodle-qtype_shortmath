@@ -1,5 +1,7 @@
 /* Visual math input */
 .que.shortmath .visual-math-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
     margin: -12px -20px 20px -20px;
     background-color: #1177d1;
 }
