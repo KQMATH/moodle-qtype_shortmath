@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @module     qtype_shortmath/api_helpers
+ * @module     qtype_shortmath/api-helpers
  * @package    qtype_shortmath
  * @author     Simen Wiik <simenwiik@hotmail.com>
  * @copyright  2021 NTNU
@@ -43,29 +43,19 @@ export const getShortmathTemplate = async (templateId) => {
       },
       fail: notification.exception || defaultFailCallback(`Couldn't get template with id ${templateId}`)
     }]);
-
   });
 
   return template;
 };
 
 /**
-     * Method to generate the function to save the shortmath template to the database.
-     * The method takes a callback function, and returns a new function that takes
-     * the template name, the template itself as json, and the template id.
-     * You should use the function like this:
-     *
-     * let saveShortmathTemplate = buildShortmathTemplateSaveFunction(result => console.log(result))
-     * saveShortmathTemplate("My template", "[{...template...}]", 2)
-     *
-     * The success callback takes one parameter, which is the return value from the web service. See the function
-     * save_template_returns in the file shortmath/classes/external/editor_template.php
-     * If you only define the success callback, the fail callback will default to a regular modal with the error.
-     *
-     * @param {string} name Name of the template
-     * @param {string} template Template as a string in JSON format
-     * @param {int} templateId id of the template, according to mdl_qtype_shortmath_templates table in the database
-     */
+ * Saves shortmath template
+ * 
+ * @param {string} name Name of the template
+ * @param {string} template Template as a string in JSON format
+ * @param {int} templateId id of the template, according to mdl_qtype_shortmath_templates
+ *                         table in the database
+ */
 export const saveShortmathTemplate = async (name, template, templateId) => {
 
   const succeeded = await new Promise(resolve => {
@@ -82,7 +72,6 @@ export const saveShortmathTemplate = async (name, template, templateId) => {
 
   return succeeded;
 };
-
 
 /**
  * Deletes the shortmath template with given id
