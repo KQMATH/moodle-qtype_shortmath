@@ -15,7 +15,7 @@
 
 
 /**
- * @module     qtype_shortmath/input
+ * @module     qtype_shortmath/view-editor
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
