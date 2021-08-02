@@ -46,4 +46,26 @@ class qtype_shortmath extends qtype_shortanswer {
     public function extra_question_fields() {
         return ['qtype_shortmath_options', 'usecase', 'editorconfig'];
     }
+
+    public function save_question_options($question) {
+        global $DB;
+
+        if (is_numeric($question->editorconfig)) {
+            $templateid = $question->editorconfig;
+            $originalconfig = $question->originalconfig;
+            if ($templateid !== '-1') {
+                $template = $DB->get_record('qtype_shortmath_templates', array('id' => $templateid));
+                $question->editorconfig = $template->template;
+            } else {
+                $question->editorconfig = $originalconfig;
+            }
+        }
+
+        parent::save_question_options($question);
+
+        return true;
+    }
+
 }
+
+

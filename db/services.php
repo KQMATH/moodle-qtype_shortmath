@@ -27,11 +27,12 @@ defined('MOODLE_INTERNAL') || die;
 
 // We define the services to install as pre-build services. A pre-build service is not editable by administrator.
 $services = array(
-    'Shortmath template service' => array(
+    'Shortmath editor service' => array(
         'functions' => array(
             'qtype_shortmath_get_template',
             'qtype_shortmath_save_template',
-            'qtype_shortmath_delete_template'
+            'qtype_shortmath_delete_template',
+            'qtype_shortmath_get_editor_config'
         ),
         'restrictedusers' => 0,
         'enabled' => 1
@@ -47,8 +48,6 @@ $functions = array(
         'description' => 'Get the shortmath question template.',
         'type' => 'read',
         'ajax' => true,
-        // 'capabilities' => 'moodle/course:managegroups',
-        'capabilities' => array(),   // TODO: capabilities required by the function.
         'loginrequired' => true
     ),
     'qtype_shortmath_save_template' => array(
@@ -58,8 +57,6 @@ $functions = array(
         'description' => 'Save the shortmath question template.',
         'type' => 'write',
         'ajax' => true,
-        // 'capabilities' => 'moodle/course:managegroups',
-        'capabilities' => array(),   // TODO: capabilities required by the function.
         'loginrequired' => true
     ),
     'qtype_shortmath_delete_template' => array(
@@ -69,8 +66,15 @@ $functions = array(
         'description' => 'Delete the shortmath question template.',
         'type' => 'write',
         'ajax' => true,
-        // 'capabilities' => 'moodle/course:managegroups',
-        'capabilities' => array(),   // TODO: capabilities required by the function.
+        'loginrequired' => true
+    ),
+    'qtype_shortmath_get_editor_config' => array(
+        'classname' => 'qtype_shortmath\external\editor_config',
+        'methodname' => 'get_editor_config',
+        'classpath' => '',
+        'description' => 'Get the shortmath question editor configuration.',
+        'type' => 'read',
+        'ajax' => true,
         'loginrequired' => true
     )
 );

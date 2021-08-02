@@ -18,8 +18,10 @@
  * External (web service) function calls for retrieving ShortMath question template.
  *
  * @package    qtype_shortmath
- * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com> and Simen Wiik <simenwiik@hotmail.com>
- * @copyright  2020 NTNU
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @author     Simen Wiik <simenwiik@hotmail.com>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>
+ * @copyright  2021 NTNU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +31,6 @@ use dml_exception;
 use external_api;
 use external_function_parameters;
 use external_single_structure;
-use external_warnings;
 use invalid_parameter_exception;
 use moodle_exception;
 use restricted_context_exception;
@@ -37,6 +38,7 @@ use restricted_context_exception;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");
+require_once(__DIR__ . '/../../lib.php');
 
 /**
  * Editor template web service class for getting, saving and deleting templates.
@@ -46,91 +48,16 @@ require_once($CFG->libdir . "/externallib.php");
  * @copyright   2020 NTNU
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class editor_template extends external_api
-{
+class editor_template extends external_api {
     /**
      * Returns description of method parameters.
      *
      * @return external_function_parameters
      */
-    public static function get_template_parameters()
-    {
+    public static function get_template_parameters() {
         return new external_function_parameters(
             array(
                 'id' => new \external_value(PARAM_INT, 'Template Id', VALUE_REQUIRED, 0),
-            )
-        );
-    }
-
-    /**
-     * Returns description of method result value.
-     *
-     * @return external_single_structure
-     */
-    public static function get_template_returns()
-    {
-        return new external_single_structure(
-            array(
-                'template' => new \external_value(PARAM_RAW, 'toolbar template'),
-                'warnings' => new \external_warnings()
-            )
-        );
-    }
-
-    /**
-     * Returns description of method parameters.
-     *
-     * @return external_function_parameters
-     */
-    public static function save_template_parameters()
-    {
-        return new external_function_parameters(
-            array(
-                'id' => new \external_value(PARAM_INT, 'Template id', VALUE_REQUIRED, 0),
-                'name' => new \external_value(PARAM_TEXT, 'Template name'),
-                'template' => new \external_value(PARAM_RAW, 'Toolbar template')
-            )
-        );
-    }
-
-    /**
-     * Returns description of method result value.
-     *
-     * @return external_single_structure
-     */
-    public static function save_template_returns()
-    {
-        return new external_single_structure(
-            array(
-                'success' => new \external_value(PARAM_BOOL, 'Success (true=success, false=failure)')
-            )
-        );
-    }
-
-    /**
-     * Returns description of method parameters.
-     *
-     * @return external_function_parameters
-     */
-    public static function delete_template_parameters()
-    {
-        return new external_function_parameters(
-            array(
-                'questionid' => new \external_value(PARAM_INT, 'question id')
-            )
-        );
-    }
-
-    /**
-     * Returns description of method result value.
-     *
-     * @return external_single_structure
-     */
-    public static function delete_template_returns()
-    {
-        return new external_single_structure(
-            array(
-                'success' => new \external_value(PARAM_BOOL, 'Success (true=success, false=failure)')
             )
         );
     }
@@ -145,11 +72,9 @@ class editor_template extends external_api
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_template($templateid)
-    {
+    public static function get_template($templateid) {
         global $USER, $DB;
 
-        $editorconfig = '';
         $warnings = array();
 
         // Parameter validation.
@@ -161,34 +86,58 @@ class editor_template extends external_api
         );
 
         // Context validation.
-        // TODO: ensure proper validation....
         $context = \context_user::instance($USER->id);
         self::validate_context($context);
 
-        // TODO: Capability checking
-        if (!has_capability('qtype/shortmath:viewalltemplates', $context)) {
-            throw new \moodle_exception('cannotviewtemplate', 'qtype_shortmath');
-        }
+        template_require_capability_on($params['id'], 'view');
 
         if (!$DB->record_exists_select(
             'qtype_shortmath_templates',
             'id = :templateid',
             array('templateid' => $params['id'])
         )) {
-            throw new moodle_exception('cannotgetshortmathoptions', 'qtype_shortmath', '', $params['questionid']);
+            throw new moodle_exception('cannotgetshortmathtemplate', 'qtype_shortmath', '', $params['id']);
         }
         $result = array();
 
         if (empty($warnings)) {
-            $templateFound = $DB->get_record('qtype_shortmath_templates', $params)->template;
+            $template = $DB->get_record('qtype_shortmath_templates', $params)->template;
         }
 
-
         $result = array();
-        $result['template'] = $templateFound;
+        $result['template'] = $template;
         $result['warnings'] = $warnings;
 
         return $result;
+    }
+
+    /**
+     * Returns description of method result value.
+     *
+     * @return external_single_structure
+     */
+    public static function get_template_returns() {
+        return new external_single_structure(
+            array(
+                'template' => new \external_value(PARAM_RAW, 'toolbar template'),
+                'warnings' => new \external_warnings()
+            )
+        );
+    }
+
+    /**
+     * Returns description of method parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function save_template_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new \external_value(PARAM_INT, 'Template id', VALUE_REQUIRED, 0),
+                'name' => new \external_value(PARAM_TEXT, 'Template name'),
+                'template' => new \external_value(PARAM_RAW, 'Toolbar template')
+            )
+        );
     }
 
     /**
@@ -206,14 +155,11 @@ class editor_template extends external_api
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_template($name, $template, $templateid)
-    {
+    public static function save_template($name, $template, $templateid) {
         global $USER, $DB;
 
         $result = array();
-
-        // $editorconfig = '';
-        // $warnings = array();
+        $warnings = array();
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -227,109 +173,123 @@ class editor_template extends external_api
 
         // Later, the contextid will be used to let people with the teacher role manage templates. This is 
         // just a temporary solution. https://docs.moodle.org/310/en/Managing_roles
-        // $params["contextid"] = time();
+        $context = context_system::instance();
+        $params["contextid"] = $context->id;
 
         // Context validation.
-        // TODO: ensure proper validation....
-        // $context = \context_user::instance($USER->id);
-        // self::validate_context($context);
+        $context = \context_user::instance($USER->id);
+        self::validate_context($context);
 
-        // TODO: Capability checking
-        /*if (!has_capability('local/qtracker:readissue', $context)) {
-            throw new \moodle_exception('cannotgetissue', 'local_qtracker');
-        }*/
-        // $newid = 0;
+        $newid = 0;
 
-        // if ($templateid > 0) {
-        //     try {
-        //         $DB->update_record('qtype_shortmath_templates', $params);
-        //         $result["success"] = TRUE;
-        //     } catch (dml_exception $e) {
-        //         echo $e;
-        //         $result["success"] = FALSE;
-        //     }
-        // } else {
-        //     try {
-        //         $DB->insert_record('qtype_shortmath_templates', $params, $newid);
-        //         $result["success"] = TRUE;
-        //     } catch (dml_exception $e) {
-        //         echo $e;
-        //         $newid = -1;
-        //         $result["success"] = FALSE;
-        //     }
-        // }
+        if ($params['id'] > 0) {
+            template_require_capability_on($params['id'], 'edit');
+            try {
+                $DB->update_record('qtype_shortmath_templates', $params);
+                $result["success"] = True;
+            } catch (dml_exception $e) {
+                echo $e;
+                $result["success"] = False;
+            }
+        } else {
+            if (!has_capability('qtype/shortmath:add', $context)) {
+                throw new \moodle_exception('cannotsavegettemplate', 'qtype_shortmath');
+            }
+            try {
+                $DB->insert_record('qtype_shortmath_templates', $params, $newid);
+                $result["success"] = True;
+            } catch (dml_exception $e) {
+                echo $e;
+                $newid = -1;
+                $result["success"] = False;
+            }
+        }
 
-        // $result["newId"] = $newid;
+        $result["id"] = $newid;
 
-        // return $result;
-        return 15;
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value.
+     *
+     * @return external_single_structure
+     */
+    public static function save_template_returns() {
+        return new external_single_structure(
+            array(
+                'id' => new \external_value(PARAM_RAW, 'id'),
+                'success' => new \external_value(PARAM_BOOL, 'Success (true=success, false=failure)')
+            )
+        );
+    }
+
+    /**
+     * Returns description of method parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_template_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new \external_value(PARAM_INT, 'template id')
+            )
+        );
     }
 
     /**
      * Deletes a ShortMath question template from the database.
      *
-     * @param int $questionid question id relating to the mdl_qtype_shortmath_options table
+     * @param int $templateid id relating to the mdl_qtype_shortmath_template table
      * @return array
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function delete_template($questionid)
-    {
+    public static function delete_template($templateid) {
         global $USER, $DB;
 
         // Parameter validation.
         $params = self::validate_parameters(
             self::delete_template_parameters(),
             array(
-                'questionid' => $questionid,
+                'id' => $templateid,
             )
         );
 
         // Context validation.
-        // TODO: ensure proper validation....
         $context = \context_user::instance($USER->id);
         self::validate_context($context);
 
-        // TODO: Capability checking
-        /*if (!has_capability('local/qtracker:readissue', $context)) {
-            throw new \moodle_exception('cannotgetissue', 'local_qtracker');
-        }*/
+        template_require_capability_on($params['id'], 'edit');
 
         if (!$DB->delete_records_select(
             'qtype_shortmath_templates',
-            'id = :questionid',
+            'id = :templateid',
             array(
-                'questionid' => $params['questionid'],
+                'templateid' => $params['id'],
             )
         )) {
-            throw new moodle_exception('cannotgetshortmathoptions', 'qtype_shortmath', '', $params['questionid']);
+            throw new moodle_exception('cannotgetshortmathtemplate', 'qtype_shortmath', '', $params['id']);
         }
 
         $result = array();
-        $result['success'] = TRUE;
+        $result['success'] = True;
 
         return $result;
     }
 
-    // $record = new stdClass;
-    // $record->contextid = context_user::instance($USER->id)->id;
-    // $record->id = $id;
-    // $record->template = $data;
-    // $record->name = $name;
-    // if ($id > 0) {
-    //     if ($type == 'delete') {
-    //         $return = $DB->delete_records('qtype_shortmath_templates', array_filter((array)$record));
-    //     } else if ($type == 'get') {
-    //         $return = json_encode($DB->get_record('qtype_shortmath_templates', array_filter((array)$record)));
-    //     } else {
-    //         $return = $DB->update_record('qtype_shortmath_templates', $record);
-    //     }
-    // } else {
-    //     $record->contextid = time();
-    //     $return = $DB->insert_record('qtype_shortmath_templates', $record);
-    // }
-
-    // echo $return;
+    /**
+     * Returns description of method result value.
+     *
+     * @return external_single_structure
+     */
+    public static function delete_template_returns() {
+        return new external_single_structure(
+            array(
+                'success' => new \external_value(PARAM_BOOL, 'Success (true=success, false=failure)')
+            )
+        );
+    }
 }

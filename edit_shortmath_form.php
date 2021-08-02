@@ -63,39 +63,99 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
             get_string('caseno', 'qtype_shortanswer'),
             get_string('caseyes', 'qtype_shortanswer')
         );
-        $mform->addElement('select', 'usecase',
-            get_string('casesensitive', 'qtype_shortanswer'), $menu);
+        $mform->addElement(
+            'select',
+            'usecase',
+            get_string('casesensitive', 'qtype_shortanswer'),
+            $menu
+        );
 
-        $editorconfig = isset($this->question->options->editorconfig) ?
-            $this->question->options->editorconfig : 'none';
-        $mform->addElement('hidden', 'originalconfig', $editorconfig);
+        $mform->addElement('hidden', 'originalconfig');
         $mform->setType('originalconfig', PARAM_RAW);
 
+
         $templates = $DB->get_records('qtype_shortmath_templates', null, 'id');
-        foreach ($templates as $template) {
-            $options[$template->template] = $template->name; // TODO: template value as key is ambiguous.
+
+        $options = array();
+        if (!empty($this->question->options)) {
+            $options['-1'] = '';
         }
 
-        $selecttemplate = $mform->addElement('select', 'editorconfig',
-            get_string('toolbar_template', 'qtype_shortmath'), $options);
+        foreach ($templates as $template) {
+            $options[$template->id] = $template->name;
+        }
+
+
+        $toolbargroup = [
+            $mform->createElement('html', \html_writer::start_tag('div', array('id' => 'template-container', 'class' => 'controlswrapper visual-math-input-wrapper'))),
+            $mform->createElement('html', \html_writer::end_tag('div'))
+
+        ];
+        $mform->addElement('group', 'toolbargroup', get_string('toolbar', 'qtype_shortmath'), $toolbargroup, '', false);
+        $mform->addHelpButton('toolbargroup', 'toolbargroup', 'qtype_shortmath');
+
+
+        $selecttemplate = $mform->addElement(
+            'select',
+            'editorconfig',
+            get_string('toolbar_template', 'qtype_shortmath'),
+            $options
+        );
+        $mform->addHelpButton('editorconfig', 'toolbar_template', 'qtype_shortmath');
 
         $defaultid = get_config('qtype_shortmath', 'defaultconfiguration');
-        $default = $DB->get_field('qtype_shortmath_templates', 'template', array('id' => $defaultid));
-
+        $default = $DB->get_field('qtype_shortmath_templates', 'id', array('id' => $defaultid));
         $selecttemplate->setSelected($default);
 
-        $mform->addElement('advcheckbox', 'configchangeconfirm', '',
-            get_string('configchangeconfirm', 'qtype_shortmath'));
+        $mform->addElement(
+            'advcheckbox',
+            'configchangeconfirm',
+            '',
+            get_string('configchangeconfirm', 'qtype_shortmath')
+        );
 
-        $mform->addElement('static', 'answersinstruct',
+        $mform->addElement(
+            'static',
+            'answersinstruct',
             get_string('correctanswers', 'qtype_shortanswer'),
-            get_string('filloutoneanswer', 'qtype_shortmath'));
+            get_string('filloutoneanswer', 'qtype_shortmath')
+        );
         $mform->closeHeaderBefore('answersinstruct');
 
-        $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_shortanswer', '{no}'),
-            question_bank::fraction_options());
+        $this->add_per_answer_fields(
+            $mform,
+            get_string('answerno', 'qtype_shortanswer', '{no}'),
+            question_bank::fraction_options()
+        );
 
         $this->add_interactive_settings();
+    }
+
+    public function js_call($questionid) {
+        global $PAGE;
+        $PAGE->requires->js_call_amd('qtype_shortmath/question_form', 'init', [$questionid]);
+    }
+
+    public function css_call() {
+        global $PAGE;
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
+        $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
+    }
+
+    protected function data_preprocessing($question) {
+        $question = parent::data_preprocessing($question);
+        if (empty($question->options)) {
+            $question->originalconfig = 'none';
+        } else {
+            $question->originalconfig = $question->options->editorconfig;
+            $question->editorconfig = -1;
+        }
+
+        $questionid = isset($question->id) ? $question->id : null;
+        $this->js_call($questionid);
+        $this->css_call();
+
+        return $question;
     }
 
     /**
@@ -111,8 +171,11 @@ class qtype_shortmath_edit_form extends qtype_shortanswer_edit_form {
 
         $originalconfigvalue = $data['originalconfig'];
 
-        if ($originalconfigvalue !== $data['editorconfig'] && $originalconfigvalue !== 'none'
-            && !$data['configchangeconfirm']) {
+        if (
+            $data['editorconfig'] !== '-1'
+            && $originalconfigvalue !== 'none'
+            && !$data['configchangeconfirm']
+        ) {
             $errors['configchangeconfirm'] = get_string('youmustconfirm', 'qtype_shortmath');
         }
 

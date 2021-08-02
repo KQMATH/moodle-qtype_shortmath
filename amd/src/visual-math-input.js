@@ -20,8 +20,7 @@ class Input {
         this.#rawInput = input;
         if (typeof inputParent === "string") {
             this.#parent = input.closest(inputParent);
-        }
-        else {
+        } else {
             this.#parent = inputParent;
         }
         this.#mathquillContainer = document.createElement("div");
@@ -31,7 +30,7 @@ class Input {
             spaceBehavesLikeTab: true,
             handlers: {
                 edit: field => {
-                    this.onEdit(input, field);
+                    this.onEdit(this.#rawInput, field);
                 }
             }
         });
@@ -61,6 +60,10 @@ class Input {
         return this.#mathInput;
     }
 
+    addClass(className) {
+        this.#mathquillContainer.classList.add(className);
+    }
+
     enable() {
         this.textarea.setAttribute("disabled", false);
     }
@@ -78,6 +81,11 @@ class Control {
         this.name = name;
         this.text = text;
         this.onClick = onClick;
+        this.boundInput = null;
+    }
+
+    bindInput(input) {
+        this.boundInput = input;
     }
 
     enable() {
@@ -86,16 +94,22 @@ class Control {
         }
         this.element = document.createElement("button");
         this.element.innerHTML = this.text;
-        this.element.classList.add("visual-math-input-control", "btn", "btn-primary");
+        this.element.classList.add("visual-math-input-control", "mq-math-mode", "btn", "btn-primary");
         this.element.addEventListener("click", event => {
             event.preventDefault();
-            if (lastFocusedInput !== null) {
-                // TODO: mathInput or textfield?
-                this.addEventListener("click", lastFocusedInput.mathInput);
-                console.log(lastFocusedInput);
-                lastFocusedInput.textfield.focus();
+            if (this.getInput() !== null) {
+                this.onClick(this.getInput().mathInput);
+                this.getInput().mathInput.focus();
             }
         });
+    }
+
+    getInput() {
+        if (this.boundInput !== null) {
+            return this.boundInput;
+        } else {
+            return lastFocusedInput;
+        }
     }
 
 }
@@ -105,27 +119,34 @@ class ControlList {
     constructor(wrapper) {
         this.wrapper = wrapper;
         this.wrapper.classList.add("visual-math-input-wrapper");
-        this.controls = {};
-        this.defineDefault();
+        this.controls = [];
+        this.boundInput = null;
     }
 
     define(name, text, onClick) {
-        this.controls[name] = new Control(name, text, onClick);
+        this.controls.push(new Control(name, text, onClick));
     }
 
     enable(names) {
-        for (let name of names) {
-            let control = this.controls[name];
-            control.enable();
-            this.wrapper.appendChild(control.element);
-        }
+        this.controls.forEach(control => {
+            if (names.indexOf(control.name) !== -1) {
+                if (this.boundInput !== null) {
+                    control.bindInput(this.boundInput);
+                }
+                control.enable();
+                this.wrapper.appendChild(control.element);
+            }
+        });
     }
 
     enableAll() {
-        for (const control of Object.values(this.controls)) {
+        this.controls.forEach(control => {
+            if (this.boundInput !== null) {
+                control.bindInput(this.boundInput);
+            }
             control.enable();
             this.wrapper.appendChild(control.element);
-        }
+        });
     }
 
     defineDefault() {
@@ -189,6 +210,10 @@ class ControlList {
         this.define("pi", pi, field => field.cmd("\\pi"));
         this.define("infinity", infinity, field => field.cmd("\\infinity"));
         this.define("caret", caret, field => field.cmd("^"));
+    }
+
+    bindInput(input) {
+        this.boundInput = input;
     }
 
 }

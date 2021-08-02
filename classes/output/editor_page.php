@@ -27,13 +27,12 @@ namespace qtype_shortmath\output;
 
 defined('MOODLE_INTERNAL') || die();
 
-
+use qtype_shortmath\shortmath_urls;
 use renderable;
 use renderer_base;
 use stdClass;
 use templatable;
-use qtype_shortmath\shortmath_urls;
-use qtype_shortmath\output\templates_table;
+use qtype_shortmath\form\view\editor_template_form;
 
 /**
  * Class containing data for editor manager page.
@@ -43,24 +42,20 @@ use qtype_shortmath\output\templates_table;
  * @copyright   2020 NTNU
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class manager_page implements renderable, templatable
+class editor_page implements renderable, templatable
 {
-    /** @var int default page size for reports. */
-    const DEFAULT_PAGE_SIZE = 30;
-
     /**
-     * @var array Array of template records.
+     * @var int templateid.
      */
-    protected $templates = array();
+    protected $templateid = null;
 
     /**
-     * manager_page constructor.
+     * editor_page constructor.
      * @param array $templates
      */
-    public function __construct(array $templates, templates_table $table, $returnurl) {
-        $this->templates = $templates;
-        $this->table = $table;
-        $this->returnurl = $returnurl;
+    public function __construct(editor_template_form $form, $templateid) {
+        $this->form = $form;
+        $this->templateid = $templateid;
     }
 
     /**
@@ -73,20 +68,27 @@ class manager_page implements renderable, templatable
      * @return stdClass|array
      */
     public function export_for_template(renderer_base $output) {
+        global $DB;
         
         $data = new stdClass();
-        $data->createtemplatelink = new \moodle_url(shortmath_urls::$editorpath);
+        if (!empty($this->templateid)) {
+            $data->templateid = $this->templateid;
+            $template = $DB->get_record('qtype_shortmath_templates', array('id' => $this->templateid));
+            $data->templatename = $template->name;
+            $data->templatedescription = $template->description;
+        } else {
+            $data->templateid = -1;
+            $data->templatename = "";
+        }
 
         ob_start();
-        $this->table->out(self::DEFAULT_PAGE_SIZE, true);
-        $templatestable = ob_get_contents();
+        $this->form->set_data($data);
+        $this->form->display();
+        $edittemplateform = ob_get_contents();
         ob_end_clean();
-
-        $data->templatestable = $templatestable;
-        $data->returnurl = $this->returnurl;
-        $data->editor_path = shortmath_urls::$editorpath;
-
+        
+        $data->edittemplateform = $edittemplateform;
+        
         return $data;
-
     }
 }

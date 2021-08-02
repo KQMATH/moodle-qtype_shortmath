@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @module     qtype_shortmath/api-helpers
+ * @module     qtype_shortmath/api_helpers
  * @package    qtype_shortmath
  * @author     Simen Wiik <simenwiik@hotmail.com>
  * @copyright  2021 NTNU
@@ -49,6 +49,31 @@ export const getShortmathTemplate = async (templateId) => {
 };
 
 /**
+ * Retrieves the editorconfig for the given shortmath question id.
+ *
+ * @param {int} questionId id of the question, according to mdl_qtype_shortmath_options
+ *                         table in the database
+ */
+export const getShortmathEditorconfig = async (questionId) => {
+
+  // Since "done" takes a callback function, we have to wait for the
+  // callback function to complete before the ajax call returns the result
+  const editorconfig = await new Promise(resolve => {
+
+    Ajax.call([{
+      methodname: "qtype_shortmath_get_editor_config",
+      args: { id: questionId },
+      done: foundTemplate => {
+        resolve(JSON.parse(foundTemplate.editorconfig));
+      },
+      fail: notification.exception || defaultFailCallback(`Couldn't get editor configuration for question with id ${questionId}`)
+    }]);
+  });
+
+  return editorconfig;
+};
+
+/**
  * Saves shortmath template
  * 
  * @param {string} name Name of the template
@@ -79,19 +104,16 @@ export const saveShortmathTemplate = async (name, template, templateId) => {
  * @param {int} templateId id of the template, according to mdl_qtype_shortmath_templates
  *                         table in the database
  */
-export function deleteShortmathTemplate(templateId) {
-  Ajax.call([{
-    methodname: "qtype_shortmath_delete_template",
-    args: { questionid: templateId },
-    done: () => {
-      // Reload webpage after 200 ms to ensure the template is deleted before
-      // the page is reloaded, or else the template will still show up
-      setTimeout(() => {
-        window.location = location;
-      }, 200);
-    },
-    fail: notification.exception
-  }]);
+export const deleteShortmathTemplate = async (templateId) => {
+  const succeeded = await new Promise(resolve => {
+    Ajax.call([{
+      methodname: "qtype_shortmath_delete_template",
+      args: { id: templateId },
+      done: resolve,
+      fail: notification.exception
+    }]);
+  });
+  return succeeded;
 }
 
 const defaultFailCallback = message => () => {

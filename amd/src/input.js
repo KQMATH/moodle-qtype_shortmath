@@ -21,7 +21,7 @@
  * @copyright  2018 NTNU
  */
 import VisualMath from "qtype_shortmath/visual-math-input";
-import { getShortmathTemplate } from "./api-helpers";
+import { getShortmathEditorconfig } from "./api_helpers";
 
 export const initialize = async (inputname, readonly, questionId) => {
     var readOnly = readonly;
@@ -32,8 +32,7 @@ export const initialize = async (inputname, readonly, questionId) => {
     var parent = shortanswerInput.parentElement;
 
     var input = new VisualMath.Input(shortanswerInput, parent);
-    // TODO: Uncomment to hide input element
-    // input.rawInput.style.display = "none";
+    input.rawInput.style.display = "none";
 
     if (!readonly) {
         input.onEdit = function ($input, field) {
@@ -47,13 +46,13 @@ export const initialize = async (inputname, readonly, questionId) => {
     }
 
     if (shortanswerInput.value.length > 0) {
-        input.field.write(
+        input.mathInput.write(
             shortanswerInput.value
         );
     }
 
     if (!readOnly) {
-        const template = await getShortmathTemplate(questionId);
+        const template = await getShortmathEditorconfig(parseInt(questionId));
         var controlsWrapper = shortanswerInput.closest('.shortmath').querySelector('.controls_wrapper');
         var controls = new VisualMath.ControlList(controlsWrapper);
         if (template === null) {

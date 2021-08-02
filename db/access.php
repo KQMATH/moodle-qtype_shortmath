@@ -19,17 +19,50 @@
  *
  * @package    qtype_shortmath
  * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2020 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $capabilities = array(
-  'qtype/shortmath:viewalltemplates' => array(
+  'qtype/shortmath:add' => array(
     'riskbitmask' => RISK_SPAM | RISK_XSS,
-    'captype' => 'read',
-    'contextlevel' => CONTEXT_SYSTEM,
+    'captype' => 'write',
+    'contextlevel' => CONTEXT_COURSE,
     'archetypes' => array(
+        'manager' => CAP_ALLOW
+    ),
+  ),
+  'qtype/shortmath:editmine' => array(
+    'riskbitmask' => RISK_SPAM | RISK_XSS,
+    'captype' => 'write',
+    'contextlevel' => CONTEXT_COURSE,
+    'archetypes' => array(
+      'user' => CAP_ALLOW
+    ),
+  ),
+  'qtype/shortmath:editall' => array(
+    'riskbitmask' => RISK_SPAM | RISK_XSS,
+    'captype' => 'write',
+    'contextlevel' => CONTEXT_COURSE,
+    'archetypes' => array(
+      'editingteacher' => CAP_ALLOW,
       'manager' => CAP_ALLOW
-    )
-  )
+    ),
+  ),
+  'qtype/shortmath:viewmine' => array(
+    'captype' => 'read',
+    'contextlevel' => CONTEXT_COURSE,
+    'archetypes' => array(
+      'user' => CAP_ALLOW
+    ),
+  ),
+  'qtype/shortmath:viewall' => array(
+    'captype' => 'read',
+    'contextlevel' => CONTEXT_COURSE,
+    'archetypes' => array(
+      'editingteacher' => CAP_ALLOW,
+      'manager' => CAP_ALLOW
+    ),
+  ),
 );
