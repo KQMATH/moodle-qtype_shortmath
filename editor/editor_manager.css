@@ -1,0 +1,17 @@
+/*
+ * Editor manager page css.
+ *
+ * @package    qtype_shortmath
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
+ */
+
+.template-box {
+    /* set box size */
+    max-width: 180px;
+    border: 1px #ccc solid;
+}
+
+.tooltip-inner {
+    white-space: nowrap;
+}

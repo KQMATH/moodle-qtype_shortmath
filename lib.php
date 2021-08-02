@@ -45,3 +45,51 @@ function qtype_shortmath_pluginfile($course, $cm, $context, $filearea, $args, $f
     require_once($CFG->libdir . '/questionlib.php');
     question_pluginfile($course, $context, 'qtype_shortmath', $filearea, $args, $forcedownload, $options);
 }
+
+/**
+ * Check capability on template
+ *
+ * @param mixed $templateorid object or id. If an object is passed,it should include ->contextid and ->userid.
+ * @param string $cap 'add', 'edit', 'view'.
+ * @return boolean this user has the capability $cap for this template $template?
+ */
+function template_has_capability_on($templateorid, $cap) {
+    global $USER, $DB;
+
+    if (is_numeric($templateorid)) {
+        $template = $DB->get_record('qtype_shortmath_templates', array('id' => (int)$templateorid));
+    } else if (is_object($templateorid)) {
+        if (isset($templateorid->contextid) && isset($templateorid->userid)) {
+            $template = $templateorid;
+        }
+
+        if (!isset($template) && isset($templateorid->id) && $templateorid->id != 0) {
+            $template = $DB->get_record('qtype_shortmath_templates', array('id' => $templateorid->id));
+        }
+    } else {
+        throw new coding_exception('$templateorid parameter needs to be an integer or an object.');
+    }
+
+    $context = context::instance_by_id($template->contextid);
+
+    // These are existing templates capabilities.
+    // Each of these has a 'mine' and 'all' version that is appended to the capability name.
+    $capabilitieswithallandmine = ['edit' => 1, 'view' => 1];
+
+    if (!isset($capabilitieswithallandmine[$cap])) {
+        return has_capability('qtype/shortmath:' . $cap, $context);
+    } else {
+        return has_capability('qtype/shortmath:' . $cap . 'all', $context) ||
+            ($template->userid == $USER->id && has_capability('qtype/shortmath:' . $cap . 'mine', $context));
+    }
+}
+
+/**
+ * Require capability on template.
+ */
+function template_require_capability_on($template, $cap) {
+    if (!template_has_capability_on($template, $cap)) {
+        print_error('nopermissions', '', '', $cap);
+    }
+    return true;
+}

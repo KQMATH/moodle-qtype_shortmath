@@ -48,7 +48,7 @@ class backup_qtype_shortmath_plugin extends backup_qtype_plugin {
         // to the tree before any other information that will use them.
         $this->add_question_question_answers($pluginwrapper);
         // Now create the qtype own structures.
-        $shortmath = new backup_nested_element('shortmath', ['id'], ['questionid', 'usecase']);
+        $shortmath = new backup_nested_element('shortmath', ['id'], ['questionid', 'usecase', 'editorconfig']);
         // Now the own qtype tree.
         $pluginwrapper->add_child($shortmath);
         // Set source to populate the data.

@@ -39,10 +39,16 @@ require_once($CFG->dirroot . '/question/type/shortanswer/renderer.php');
  */
 class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
 
+    /**
+     * fomulation_and_controls function
+     * @param question_attempt $qa
+     * @param question_display_options $options
+     * @return string
+     */
     public function formulation_and_controls(question_attempt $qa, question_display_options $options) {
-        global $PAGE;
         $result = '';
         $inputname = $qa->get_qt_field_name('answer');
+        $questionid = $qa->get_question()->id;
 
         $result .= html_writer::div('', '', ['class' => 'controls_wrapper']);
         $result .= parent::formulation_and_controls($qa, $options);
@@ -50,22 +56,28 @@ class qtype_shortmath_renderer extends qtype_shortanswer_renderer {
         $params = array(
             'inputname' => $inputname,
             'readonly' => false,
+            'questionid' => $questionid
         );
 
         if ($options->readonly) {
             $params['readonly'] = true;
         }
 
-        $PAGE->requires->js_call_amd('qtype_shortmath/input', 'initialize', $params);
+        $this->page->requires->js_call_amd('qtype_shortmath/input',
+                                           'initialize', $params);
         return $result;
     }
 
+    /**
+     * Return any HTML that needs to be included in the page's <head> when this
+     * question is used.
+     * @param question_attempt $qa
+     * @throws coding_exception
+     */
     public function head_code(question_attempt $qa) {
-        global $PAGE;
-
         parent::head_code($qa);
 
-        $PAGE->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
-        $PAGE->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
+        $this->page->requires->css('/question/type/shortmath/visualmathinput/mathquill.css');
+        $this->page->requires->css('/question/type/shortmath/visualmathinput/visual-math-input.css');
     }
 }

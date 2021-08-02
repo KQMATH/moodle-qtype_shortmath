@@ -15,48 +15,55 @@
 
 
 /**
+ * @module     qtype_shortmath/input
  * @package    qtype_shortmath
  * @author     André Storhaug <andr3.storhaug@gmail.com>
  * @copyright  2018 NTNU
  */
+import VisualMath from "qtype_shortmath/visual-math-input";
+import { getShortmathEditorconfig } from "./api_helpers";
 
-/**
- * @module qtype_shortmath/input
- */
-define(['jquery', 'qtype_shortmath/visual-math-input'], function($, VisualMath) {
-    return {
-        initialize: function(inputname, readonly) {
-            var readOnly = readonly;
-            var $shortanswerInput = $('#' + $.escapeSelector(inputname));
-            // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
-            $shortanswerInput.removeClass('d-inline');
-            var $parent = $('#' + $.escapeSelector(inputname)).parent('.answer');
+export const initialize = async (inputname, readonly, questionId) => {
+    var readOnly = readonly;
+    inputname = inputname.replace(":", "\\:");
+    var shortanswerInput = document.querySelector(`#${inputname}`);
+    // Remove class "d-inline" added in shortanswer renderer class, which prevents input from being hidden.
+    shortanswerInput.classList.remove('d-inline');
+    var parent = shortanswerInput.parentElement;
 
-            var input = new VisualMath.Input($shortanswerInput, $parent);
-            input.$input.hide();
+    var input = new VisualMath.Input(shortanswerInput, parent);
+    input.rawInput.style.display = "none";
 
-            if (!readonly) {
-                input.onEdit = function($input, field) {
-                    $input.val(field.latex());
-                    $input.get(0).dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
-                };
+    if (!readonly) {
+        input.onEdit = function ($input, field) {
+            $input.value = field.latex();
+            $input.dispatchEvent(new Event('change')); // Event firing needs to be on a vanilla dom object.
+        };
 
-            } else {
-                readOnly = true;
-                input.disable();
-            }
+    } else {
+        readOnly = true;
+        input.disabled = true;
+    }
 
-            if ($shortanswerInput.val()) {
-                input.field.write(
-                    $shortanswerInput.val()
-                );
-            }
+    if (shortanswerInput.value.length > 0) {
+        input.mathInput.write(
+            shortanswerInput.value
+        );
+    }
 
-            if (!readOnly) {
-                var controlsWrapper = $('#' + $.escapeSelector(inputname)).parents('.shortmath').find('.controls_wrapper');
-                var controls = new VisualMath.ControlList(controlsWrapper);
-                controls.enableAll();
-            }
+    if (!readOnly) {
+        const template = await getShortmathEditorconfig(parseInt(questionId));
+        var controlsWrapper = shortanswerInput.closest('.shortmath').querySelector('.controls_wrapper');
+        var controls = new VisualMath.ControlList(controlsWrapper);
+        if (template === null) {
+            controls.defineDefault();
+        } else {
+            template.forEach(value => {
+                let html = value['button'];
+                let command = value['expression'];
+                controls.define(command, html, field => field.write(command));
+            });
         }
-    };
-});
+        controls.enableAll();
+    }
+};

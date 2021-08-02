@@ -18,16 +18,17 @@
  * ShortMath question type version information.
  *
  * @package    qtype_shortmath
- * @author     André Storhaug <andr3.storhaug@gmail.com>, Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
- *             and Hans Georg Schaathun <hasc@ntnu.no>
+ * @author     André Storhaug <andr3.storhaug@gmail.com>
+ * @author     Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
+ * @author     Hans Georg Schaathun <hasc@ntnu.no>
  * @copyright  2018 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021020300;
+$plugin->version  = 2021080200;
 $plugin->requires = 2018051700; // Moodle version 3.5.
 $plugin->component = 'qtype_shortmath';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release = '0.4.2';
+$plugin->release = '1.0.0';
