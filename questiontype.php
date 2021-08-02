@@ -38,7 +38,34 @@ require_once($CFG->dirroot . '/question/type/shortanswer/questiontype.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath extends qtype_shortanswer {
+
+    /**
+     * extra_question_fields function
+     * @return array
+     */
     public function extra_question_fields() {
-        return ['qtype_shortmath_options', 'usecase'];
+        return ['qtype_shortmath_options', 'usecase', 'editorconfig'];
     }
+
+    public function save_question_options($question) {
+        global $DB;
+
+        if (is_numeric($question->editorconfig)) {
+            $templateid = $question->editorconfig;
+            $originalconfig = $question->originalconfig;
+            if ($templateid !== '-1') {
+                $template = $DB->get_record('qtype_shortmath_templates', array('id' => $templateid));
+                $question->editorconfig = $template->template;
+            } else {
+                $question->editorconfig = $originalconfig;
+            }
+        }
+
+        parent::save_question_options($question);
+
+        return true;
+    }
+
 }
+
+

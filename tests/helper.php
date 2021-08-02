@@ -33,6 +33,11 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath_test_helper extends question_test_helper {
+
+    /**
+     * Function qtype_shortmath_test_helper::get_test_questions
+     * @return array
+     */
     public function get_test_questions() {
         return array(
             'integration',

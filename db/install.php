@@ -1,4 +1,4 @@
-<?PHP
+<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,20 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * ShortMath question type version information.
+ * Inserts records into qtype_shortmath_templates table during installation.
  *
  * @package    qtype_shortmath
- * @author     André Storhaug <andr3.storhaug@gmail.com>
- * @author     Sebastian S. Gundersen <sebastsg@stud.ntnu.no>
- * @author     Hans Georg Schaathun <hasc@ntnu.no>
- * @copyright  2018 NTNU
+ * @author     Sushanth Kotyan <sushanthkotian.s@gmail.com>
+ * @copyright  2020 NTNU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021080200;
-$plugin->requires = 2018051700; // Moodle version 3.5.
-$plugin->component = 'qtype_shortmath';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release = '0.4.2';
+use qtype_shortmath\templates;
+
+/**
+ * Creates records for default editor template and empty template in the database.
+ *
+ * @return bool
+ * @throws dml_exception
+ */
+function xmldb_qtype_shortmath_install() {
+    global $DB;
+
+    $record = templates::default_template_obj();
+    $id = $DB->insert_record('qtype_shortmath_templates', $record);
+    // Set default template.
+    set_config('defaultconfiguration', $id, 'qtype_shortmath');
+
+    // Create empty template.
+    $record = templates::none_template_obj();
+    $DB->insert_record('qtype_shortmath_templates', $record);
+
+    return true;
+}

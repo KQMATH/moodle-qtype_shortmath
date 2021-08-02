@@ -39,11 +39,20 @@ require_once($CFG->dirroot . '/question/type/shortmath/edit_shortmath_form.php')
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_shortmath_test extends advanced_testcase {
+
+    /**
+     * Variable qtype_shortmath_test::$includecoverage
+     * @var array
+     */
     public static $includecoverage = array(
         'question/type/questiontypebase.php',
         'question/type/shortmath/questiontype.php',
     );
 
+    /**
+     * Variable qtype_shortmath_test::$qtype
+     * @var $qtype
+     */
     protected $qtype;
 
     protected function setUp(): void {
@@ -54,6 +63,10 @@ class qtype_shortmath_test extends advanced_testcase {
         $this->qtype = null;
     }
 
+    /**
+     * Function qtype_shortmath_test::get_test_question_data
+     * @return mixed
+     */
     protected function get_test_question_data() {
         return test_question_maker::get_question_data('shortmath');
     }

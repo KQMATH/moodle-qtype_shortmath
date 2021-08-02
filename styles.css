@@ -1,5 +1,35 @@
 /* Visual math input */
+
+.visual-math-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #1177d1;
+}
+
+.edit-form .visual-math-input-wrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    background-color: #1177d1;
+}
+
+.edit-form .visual-math-input-field {
+    background: #fcfcfc;
+    border: 1px solid #bbb;
+    min-width: unset;
+    min-height: unset;
+    width: unset;
+    max-width: 100%;
+    padding: 8px;
+}
+
+.edit-form .shortmath-blue {
+    background-color: #1177d1;
+    color: #fff;
+}
+
 .que.shortmath .visual-math-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
     margin: -12px -20px 20px -20px;
     background-color: #1177d1;
 }
