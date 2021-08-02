@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 ### Changed
-- 
+
+## [1.0.0] - 2021-08-02 
+### Added
+- Configurable toolbar controls with the help of templates.
+- Templates manager for managing toolbar templates.
+- Templates editor for creating/editting toolbar templates.
 
 ## [0.4.2] - 2021-02-03
 ### Fixed
@@ -36,7 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Added
 - 
 
-[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.2...v1.0.0
 [0.4.2]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.3.1...v0.4.0
