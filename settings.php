@@ -26,12 +26,9 @@ use qtype_shortmath\shortmath_urls;
 
 defined('MOODLE_INTERNAL') || die();
 
-$PAGE->set_url('/admin/settings.php', ['section' => 'qtypesettingshortmath']);
-
-if ($hassiteconfig) {
+if ($ADMIN->fulltree) {
 
     $menu = [];
-
     // Get all configuration templates from database.
     $templates = $DB->get_records('qtype_shortmath_templates', null, 'id', 'id, name');
     foreach ($templates as $template) {

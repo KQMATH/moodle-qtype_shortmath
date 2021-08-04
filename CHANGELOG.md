@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 ### Changed
 
+## [1.0.1] - 2021-08-04
+### Fixed
+- Fixed erroneous override of Admin pages urls.
+
 ## [1.0.0] - 2021-08-02 
 ### Added
 - Configurable toolbar controls with the help of templates.
@@ -41,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Added
 - 
 
-[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.2...v1.0.0
 [0.4.2]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/KQMATH/moodle-qtype_shortmath/compare/v0.4.0...v0.4.1
